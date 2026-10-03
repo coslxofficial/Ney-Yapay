@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10121a">
+<title>Ne Yapay</title>
+<style>
+:root{--ink:#10121a;--sur:#1b1e2b;--line:#2c3042;--tx:#eceaf4;--mut:#9a98ab;--a:#ffb84d;--b:#8f7bff;--bad:#ff6b6b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit;margin:0}
+html,body{min-height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--ink);color:var(--tx);overflow-x:hidden}
+.orb{position:fixed;z-index:-1;border-radius:50%;filter:blur(70px);pointer-events:none}
+.o1{width:60vmin;height:60vmin;background:var(--b);opacity:.35;top:-15vmin;left:-15vmin;animation:drift 16s ease-in-out infinite alternate}
+.o2{width:50vmin;height:50vmin;background:var(--a);opacity:.22;bottom:-15vmin;right:-10vmin;animation:drift 20s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(18vmin,12vmin) scale(1.3)}}
+.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.logo{font-size:clamp(2.8rem,14vw,5rem);font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:10px}
+.logo span{display:inline-block;animation:pop .7s cubic-bezier(.3,1.6,.5,1) both}
+.logo span:nth-child(even){color:var(--a)}
+@keyframes pop{from{opacity:0;transform:translateY(40px) rotate(-12deg) scale(.5)}}
+.sub{color:var(--mut);margin-bottom:26px;max-width:30ch}
+.box{width:100%;max-width:340px}
+button,input{font:inherit;border:0;border-radius:10px;padding:13px 16px;color:inherit}
+button{background:var(--a);color:#1a1200;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s}
+button:hover{transform:translateY(-2px);box-shadow:0 8px 24px #ffb84d44}
+button:active{transform:scale(.96)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+.w{width:100%}
+input{width:100%;background:var(--sur);border:1px solid var(--line);margin-bottom:12px;text-align:center;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+.err{color:var(--bad);min-height:1.3em;margin-top:12px;font-size:.9rem}
+.link{background:none;color:var(--mut);box-shadow:none;font-weight:400;margin-top:14px;padding:6px}
+.link:hover{box-shadow:none;color:var(--tx)}
+.panel{max-width:720px;margin:0 auto;padding:20px 16px 40px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.top h2{font-size:1.6rem;letter-spacing:-.02em}
+.tabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;color:var(--mut);border-radius:0;font-weight:600;padding:10px 14px;border-bottom:3px solid transparent;box-shadow:none}
+.tabs button.on{color:var(--tx);border-color:var(--a)}
+.tabs button:hover{transform:none;box-shadow:none;color:var(--tx)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--sur);border-left:4px solid var(--b);padding:11px 14px;margin-bottom:8px;border-radius:0 10px 10px 0;word-break:break-all;animation:in .35s both}
+.row.used{border-color:var(--line);opacity:.6}
+.row.ban{border-color:var(--bad)}
+.row small{display:block;color:var(--mut);margin-top:2px}
+.acts{display:flex;gap:6px;flex-shrink:0}
+.sm{padding:7px 12px;font-size:.85rem}
+.ghost{background:var(--line);color:var(--tx)}
+.red{background:var(--bad);color:#fff}
+@keyframes in{from{opacity:0;transform:translateX(-14px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.tabs{overflow-x:auto;white-space:nowrap}.tabs button{flex:none}
+.msgs{height:50vh;overflow-y:auto;margin-bottom:10px}
+.m{display:flex;gap:8px;margin-bottom:10px;animation:in .25s both}
+.m .t{background:var(--sur);padding:8px 12px;border-radius:12px;max-width:80%;white-space:pre-wrap;word-break:break-word}
+.m.me{flex-direction:row-reverse}.m.me .t{background:#3b3470}
+.av{width:36px;height:36px;border-radius:50%;object-fit:cover;flex:none;display:grid;place-items:center;font-weight:800;color:#1a1200}
+.bar{display:flex;gap:8px;align-items:flex-end}
+textarea,select{font:inherit;background:var(--sur);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:11px}
+textarea{flex:1;resize:none}select{width:100%;margin-bottom:10px}
+.small{color:var(--mut);font-size:.8rem;margin:6px 0}
+</style></head>
+<body>
+<i class="orb o1"></i><i class="orb o2"></i>
+<div id="app"><div class="wrap"><div class="sub">Yükleniyor…</div></div></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getDatabase,ref,get,set,update,remove,onValue,push,query,limitToLast} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+const cfg={apiKey:"AIzaSyAOA_EKD-uJQrQWxVO1zlVTrgxBbcCpKug",authDomain:"ne-yapay.firebaseapp.com",projectId:"ne-yapay",storageBucket:"ne-yapay.firebasestorage.app",messagingSenderId:"391460522060",appId:"1:391460522060:web:d8089bfcc5be0c6eba4ce9",databaseURL:"https://ne-yapay-default-rtdb.europe-west1.firebasedatabase.app"};
+const WORKER="https://neyapay.hafizselmankusutoglu.workers.dev"; // Cloudflare Worker adresi
+const FREE_DAILY=30,PRO_DAILY=4,MAXC=500; // worker.js'dekiyle aynı olsun
+const BAD=[]; // ortak sohbette yıldızlanacak kelimeler: ["kelime1","kelime2"]
+const MODELS=[["free","Ücretsiz model"],["pro","Pro model"]];
+
+const auth=getAuth(initializeApp(cfg)),db=getDatabase();
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s),app=$("#app");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let unsubs=[];const clean=()=>{unsubs.forEach(u=>u());unsubs=[]};
+const logo=()=>`<div class="logo">${[..."Ne Yapay?"].map((c,i)=>c==" "?"<span>&nbsp;</span>":`<span style="animation-delay:${i*.07}s">${c}</span>`).join("")}</div>`;
+const page=h=>{clean();app.innerHTML=`<div class="wrap">${logo()}${h}</div>`};
+const out=()=>signOut(auth);
+
+function login(msg=""){
+  page(`<p class="sub">Devam etmek için giriş yap.</p><div class="box"><button class="w" id="g">Google ile giriş yap</button><div class="err">${esc(msg)}</div></div>`);
+  $("#g").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>login("Giriş yapılamadı ("+e.code+")"));
+}
+function invite(u){
+  page(`<p class="sub">Bu uygulama davetlilere özel. Davet kodunu gir.</p><div class="box"><input id="c" placeholder="DAVET KODU" maxlength="16" autocomplete="off"><button class="w" id="go">Koda giriş yap</button><div class="err" id="e"></div><button class="link" id="out">Çıkış yap</button></div>`);
+  $("#out").onclick=out;
+  $("#go").onclick=async()=>{
+    const code=$("#c").value.trim().toUpperCase();if(!code)return;
+    try{
+      const s=await get(ref(db,"codes/"+code));
+      if(!s.exists()||s.val().used)throw 0;
+      await update(ref(db),{["codes/"+code+"/used"]:true,["codes/"+code+"/usedBy"]:u.uid,["users/"+u.uid]:{email:u.email,name:u.displayName||"",banned:false,code,createdAt:Date.now()}});
+      shell(u,false);
+    }catch{$("#e").textContent="Kod geçersiz ya da daha önce kullanılmış."}
+  };
+}
+function banned(){
+  page(`<p class="sub">Hesabın engellendi. Bunun bir hata olduğunu düşünüyorsan yöneticiyle iletişime geç.</p><button class="link" id="out">Çıkış yap</button>`);
+  $("#out").onclick=out;
+}
+let H=[],busy=false,P={},U,ADM=false;
+const av=(id,n)=>P[id]?.pp?`<img class="av" src="${esc(P[id].pp)}">`:`<div class="av" style="background:hsl(${[...id].reduce((a,c)=>a+c.charCodeAt(0),0)%360} 70% 65%)">${esc((n||"?")[0].toUpperCase())}</div>`;
+const day=()=>new Date(Date.now()+10800e3).toISOString().slice(0,10);
+const filt=t=>BAD.reduce((x,w)=>x.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi"),"***"),t);
+
+function shell(u,isA){
+  clean();U=u;ADM=isA;H=[];
+  const T=[["ai","AI"],["chat","Sohbet"],["me","Profil"]].concat(isA?[["codes","Kodlar"],["users","Kullanıcılar"],["set","Modeller"]]:[]);
+  app.innerHTML=`<div class="panel"><div class="top"><h2>Ne Yapay?</h2><button class="sm ghost" id="out">Çıkış yap</button></div><div class="tabs">${T.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("")}</div><div id="v"></div></div>`;
+  $("#out").onclick=out;
+  set(ref(db,"profiles/"+u.uid+"/name"),(u.displayName||u.email.split("@")[0]).slice(0,40));
+  const V={ai:aiV,chat:chatV,me:meV,codes:codesV,users:usersV,set:modelsV};
+  const show=t=>{clean();$$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t==t));V[t]()};
+  $$(".tabs button").forEach(b=>b.onclick=()=>show(b.dataset.t));
+  show("ai");
+}
+function aiV(){
+  $("#v").innerHTML=`<select id="tier"><option value="free">Ücretsiz model (günde ${FREE_DAILY} mesaj)</option><option value="pro">Pro model (günde ${PRO_DAILY} mesaj)</option></select><div class="msgs" id="ms"></div><div class="small" id="lim"></div><div class="bar"><textarea id="q" rows="2" maxlength="${MAXC}" placeholder="Mesajını yaz (en fazla ${MAXC} karakter)"></textarea><button id="s">Gönder</button></div>`;
+  const draw=()=>{const e=$("#ms");if(!e)return;e.innerHTML=H.map(m=>`<div class="m ${m.role=="user"?"me":""}"><div class="t">${esc(m.content)}</div></div>`).join("");e.scrollTop=1e9};
+  draw();
+  unsubs.push(onValue(ref(db,`usage/${U.uid}/${day()}`),s=>{const x=s.val()||{};$("#lim").textContent=`Bugün: ücretsiz ${x.free||0}/${FREE_DAILY} · pro ${x.pro||0}/${PRO_DAILY}`}));
+  const send=async()=>{
+    const text=$("#q").value.trim();if(!text||busy)return;
+    busy=true;H.push({role:"user",content:text},{role:"assistant",content:"…"});$("#q").value="";draw();
+    try{
+      const r=await fetch(WORKER,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+await U.getIdToken()},body:JSON.stringify({tier:$("#tier").value,messages:H.slice(0,-1).filter(m=>!m.content.startsWith("⚠"))})});
+      const j=await r.json();H[H.length-1].content=j.reply||"⚠ "+(j.error||"Hata");
+    }catch{H[H.length-1].content="⚠ Sunucuya ulaşılamadı"}
+    busy=false;draw();
+  };
+  $("#s").onclick=send;$("#q").onkeydown=e=>{if(e.key=="Enter"&&!e.shiftKey){e.preventDefault();send()}};
+}
+function chatV(){
+  $("#v").innerHTML=`<div class="msgs" id="ms"></div><div class="bar"><textarea id="q" rows="1" maxlength="300" placeholder="Herkese yaz (en fazla 300 karakter)"></textarea><button id="s">Gönder</button></div>`;
+  let M=[],last=0;
+  const draw=()=>{const e=$("#ms");if(!e)return;e.innerHTML=M.map(([id,m])=>`<div class="m ${m.uid==U.uid?"me":""}">${av(m.uid,m.name)}<div class="t"><small style="color:var(--mut)">${esc(m.name)}</small><br>${esc(m.text)}${ADM?` <button class="sm red" data-x="${id}">Sil</button>`:""}</div></div>`).join("");$$("[data-x]").forEach(b=>b.onclick=()=>remove(ref(db,"chat/"+b.dataset.x)));e.scrollTop=1e9};
+  unsubs.push(onValue(ref(db,"profiles"),s=>{P=s.val()||{};draw()}));
+  unsubs.push(onValue(query(ref(db,"chat"),limitToLast(100)),s=>{M=Object.entries(s.val()||{});draw()}));
+  const send=()=>{
+    const text=filt($("#q").value.trim()),n=Date.now();if(!text||n-last<2000)return;last=n;$("#q").value="";
+    push(ref(db,"chat"),{uid:U.uid,name:(P[U.uid]?.name||U.displayName||"?").slice(0,40),text,ts:n}).catch(()=>{});
+  };
+  $("#s").onclick=send;$("#q").onkeydown=e=>{if(e.key=="Enter"&&!e.shiftKey){e.preventDefault();send()}};
+}
+function meV(){
+  $("#v").innerHTML=`<div class="row"><div id="a"></div><div style="flex:1"><b>${esc(U.displayName||U.email)}</b><small id="st"></small></div></div><input type="file" id="f" accept="image/*" style="display:none"><button class="w" id="pick">Profil fotoğrafı seç</button>`;
+  unsubs.push(onValue(ref(db,"profiles/"+U.uid),s=>{P[U.uid]=s.val()||{};$("#a").innerHTML=av(U.uid,U.displayName)}));
+  unsubs.push(onValue(ref(db,"pending/"+U.uid),s=>{$("#st").textContent=s.exists()?"Yeni fotoğrafın yönetici onayında.":"Fotoğraf yönetici onayından sonra yayına girer."}));
+  $("#pick").onclick=()=>$("#f").click();
+  $("#f").onchange=e=>{const f=e.target.files[0];if(!f)return;const i=new Image();i.onload=()=>{const c=document.createElement("canvas");c.width=c.height=128;const z=Math.min(i.width,i.height);c.getContext("2d").drawImage(i,(i.width-z)/2,(i.height-z)/2,z,z,0,0,128,128);set(ref(db,"pending/"+U.uid),c.toDataURL("image/jpeg",.75))};i.src=URL.createObjectURL(f)};
+}
+function codesV(){
+  $("#v").innerHTML=`<button class="w" id="n" style="margin-bottom:14px">Yeni davet kodu üret</button><div id="l"></div>`;
+  $("#n").onclick=()=>{
+    const A="ABCDEFGHJKMNPQRSTUVWXYZ23456789",code=[...crypto.getRandomValues(new Uint8Array(10))].map(x=>A[x%A.length]).join("");
+    set(ref(db,"codes/"+code),{used:false,usedBy:"",createdAt:Date.now()});
+  };
+  unsubs.push(onValue(ref(db,"codes"),s=>{
+    const d=Object.entries(s.val()||{}).sort((a,b)=>b[1].createdAt-a[1].createdAt);
+    $("#l").innerHTML=d.map(([id,x])=>`<div class="row ${x.used?"used":""}"><div><b>${esc(id)}</b><small>${x.used?"kullanıldı":"kullanılabilir"}</small></div><div class="acts"><button class="sm ghost" data-c="${esc(id)}">Kopyala</button><button class="sm red" data-d="${esc(id)}">Sil</button></div></div>`).join("")||`<div class="sub">Henüz kod yok. Yukarıdan üret.</div>`;
+    $$("[data-c]").forEach(b=>b.onclick=()=>{navigator.clipboard.writeText(b.dataset.c);b.textContent="Kopyalandı"});
+    $$("[data-d]").forEach(b=>b.onclick=()=>remove(ref(db,"codes/"+b.dataset.d)));
+  }));
+}
+function usersV(){
+  $("#v").innerHTML=`<div id="pd"></div><div id="ul"></div>`;
+  unsubs.push(onValue(ref(db,"pending"),s=>{
+    const d=s.val()||{};
+    $("#pd").innerHTML=Object.keys(d).map(id=>`<div class="row"><img class="av" style="width:64px;height:64px" src="${esc(d[id])}"><b style="flex:1">Onay bekleyen fotoğraf</b><div class="acts"><button class="sm" data-ok="${id}">Onayla</button><button class="sm red" data-no="${id}">Reddet</button></div></div>`).join("");
+    $$("[data-ok]").forEach(b=>b.onclick=()=>update(ref(db),{["profiles/"+b.dataset.ok+"/pp"]:d[b.dataset.ok],["pending/"+b.dataset.ok]:null}));
+    $$("[data-no]").forEach(b=>b.onclick=()=>remove(ref(db,"pending/"+b.dataset.no)));
+  }));
+  unsubs.push(onValue(ref(db,"users"),s=>{
+    $("#ul").innerHTML=Object.entries(s.val()||{}).map(([id,d])=>`<div class="row ${d.banned?"ban":""}"><div><b>${esc(d.name||d.email)}</b><small>${esc(d.email)} · kod: ${esc(d.code)}</small></div><div class="acts"><button class="sm ${d.banned?"ghost":"red"}" data-u="${id}" data-b="${d.banned?1:0}">${d.banned?"Banı kaldır":"Banla"}</button></div></div>`).join("")||`<div class="sub">Henüz kullanıcı yok.</div>`;
+    $$("[data-u]").forEach(b=>b.onclick=()=>update(ref(db,"users/"+b.dataset.u),{banned:b.dataset.b!="1"}));
+  }));
+}
+function modelsV(){
+  const r=ref(db,"settings/global/models");
+  unsubs.push(onValue(r,s=>{
+    const m=s.val()||{};
+    $("#v").innerHTML=MODELS.map(([k,n])=>{const on=m[k]!==false;return `<div class="row ${on?"":"used"}"><div><b>${n}</b><small>${on?"kullanıcılara açık":"kapalı"}</small></div><div class="acts"><button class="sm ${on?"ghost":""}" data-m="${k}">${on?"Kapat":"Aç"}</button></div></div>`}).join("");
+    $$("[data-m]").forEach(b=>b.onclick=()=>update(r,{[b.dataset.m]:m[b.dataset.m]===false}));
+  }));
+}
+
+onAuthStateChanged(auth,async u=>{
+  if(!u)return login();
+  try{
+    try{await get(ref(db,"codes"));return shell(u,true)}catch{} // sadece admin kodları listeleyebilir (kurallar sunucuda)
+    const s=await get(ref(db,"users/"+u.uid));
+    if(!s.exists())return invite(u);
+    if(s.val().banned)return banned();
+    shell(u,false);
+  }catch(e){login("Hata: "+e.code)}
+});
+</script>
+</body></html>
