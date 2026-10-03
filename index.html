@@ -855,7 +855,7 @@ function renderAiView() {
     drawAi();
 
     try {
-      const token = await currentUser.getIdToken();
+      const token = await currentUser.getIdToken(true);
       const res = await fetch(WORKER, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
@@ -1334,7 +1334,7 @@ function renderChatView() {
       });
 
       try {
-        const token = await currentUser.getIdToken();
+        const token = await currentUser.getIdToken(true);
         const res = await fetch(WORKER, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
