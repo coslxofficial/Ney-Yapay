@@ -1,203 +1,1427 @@
 <!DOCTYPE html>
-<html lang="tr"><head>
+<html lang="tr">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#10121a">
-<title>Ne Yapay</title>
+<meta name="theme-color" content="#0d0f17">
+<title>Ne Yapay? — AI & Topluluk Portalı</title>
+<link rel="manifest" href="manifest.json">
 <style>
-:root{--ink:#10121a;--sur:#1b1e2b;--line:#2c3042;--tx:#eceaf4;--mut:#9a98ab;--a:#ffb84d;--b:#8f7bff;--bad:#ff6b6b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-*,*::before,*::after{box-sizing:inherit;margin:0}
-html,body{min-height:100%}
-body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--ink);color:var(--tx);overflow-x:hidden}
-.orb{position:fixed;z-index:-1;border-radius:50%;filter:blur(70px);pointer-events:none}
-.o1{width:60vmin;height:60vmin;background:var(--b);opacity:.35;top:-15vmin;left:-15vmin;animation:drift 16s ease-in-out infinite alternate}
-.o2{width:50vmin;height:50vmin;background:var(--a);opacity:.22;bottom:-15vmin;right:-10vmin;animation:drift 20s ease-in-out infinite alternate-reverse}
-@keyframes drift{to{transform:translate(18vmin,12vmin) scale(1.3)}}
-.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
-.logo{font-size:clamp(2.8rem,14vw,5rem);font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:10px}
-.logo span{display:inline-block;animation:pop .7s cubic-bezier(.3,1.6,.5,1) both}
-.logo span:nth-child(even){color:var(--a)}
-@keyframes pop{from{opacity:0;transform:translateY(40px) rotate(-12deg) scale(.5)}}
-.sub{color:var(--mut);margin-bottom:26px;max-width:30ch}
-.box{width:100%;max-width:340px}
-button,input{font:inherit;border:0;border-radius:10px;padding:13px 16px;color:inherit}
-button{background:var(--a);color:#1a1200;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s}
-button:hover{transform:translateY(-2px);box-shadow:0 8px 24px #ffb84d44}
-button:active{transform:scale(.96)}
-button:focus-visible,input:focus-visible{outline:2px solid var(--b);outline-offset:2px}
-.w{width:100%}
-input{width:100%;background:var(--sur);border:1px solid var(--line);margin-bottom:12px;text-align:center;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
-.err{color:var(--bad);min-height:1.3em;margin-top:12px;font-size:.9rem}
-.link{background:none;color:var(--mut);box-shadow:none;font-weight:400;margin-top:14px;padding:6px}
-.link:hover{box-shadow:none;color:var(--tx)}
-.panel{max-width:720px;margin:0 auto;padding:20px 16px 40px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.top h2{font-size:1.6rem;letter-spacing:-.02em}
-.tabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--line)}
-.tabs button{background:none;color:var(--mut);border-radius:0;font-weight:600;padding:10px 14px;border-bottom:3px solid transparent;box-shadow:none}
-.tabs button.on{color:var(--tx);border-color:var(--a)}
-.tabs button:hover{transform:none;box-shadow:none;color:var(--tx)}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--sur);border-left:4px solid var(--b);padding:11px 14px;margin-bottom:8px;border-radius:0 10px 10px 0;word-break:break-all;animation:in .35s both}
-.row.used{border-color:var(--line);opacity:.6}
-.row.ban{border-color:var(--bad)}
-.row small{display:block;color:var(--mut);margin-top:2px}
-.acts{display:flex;gap:6px;flex-shrink:0}
-.sm{padding:7px 12px;font-size:.85rem}
-.ghost{background:var(--line);color:var(--tx)}
-.red{background:var(--bad);color:#fff}
-@keyframes in{from{opacity:0;transform:translateX(-14px)}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:root {
+  --bg: #0b0d14;
+  --panel: #131722;
+  --surface: #1a1f30;
+  --surface-hover: #22293f;
+  --border: #283048;
+  --border-subtle: #1c2234;
+  --text: #f0f2fa;
+  --text-muted: #8e95ad;
+  --text-sub: #606882;
+  --accent: #ffb84d;
+  --accent-glow: rgba(255, 184, 77, 0.25);
+  --primary: #7c66dc;
+  --primary-glow: rgba(124, 102, 220, 0.25);
+  --success: #3dd68c;
+  --danger: #ff5263;
+  --danger-glow: rgba(255, 82, 99, 0.25);
+  --warning: #ffa940;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
 
-.tabs{overflow-x:auto;white-space:nowrap}.tabs button{flex:none}
-.msgs{height:50vh;overflow-y:auto;margin-bottom:10px}
-.m{display:flex;gap:8px;margin-bottom:10px;animation:in .25s both}
-.m .t{background:var(--sur);padding:8px 12px;border-radius:12px;max-width:80%;white-space:pre-wrap;word-break:break-word}
-.m.me{flex-direction:row-reverse}.m.me .t{background:#3b3470}
-.av{width:36px;height:36px;border-radius:50%;object-fit:cover;flex:none;display:grid;place-items:center;font-weight:800;color:#1a1200}
-.bar{display:flex;gap:8px;align-items:flex-end}
-textarea,select{font:inherit;background:var(--sur);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:11px}
-textarea{flex:1;resize:none}select{width:100%;margin-bottom:10px}
-.small{color:var(--mut);font-size:.8rem;margin:6px 0}
-</style></head>
+/* Arka plan ışık efektleri */
+.ambient {position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.ambient-glow {position:absolute;border-radius:50%;filter:blur(90px);opacity:0.22}
+.g1 {width:50vw;height:50vw;background:var(--primary);top:-15vw;left:-10vw;animation:orbit 24s ease-in-out infinite alternate}
+.g2 {width:45vw;height:45vw;background:var(--accent);bottom:-10vw;right:-10vw;animation:orbit 28s ease-in-out infinite alternate-reverse}
+@keyframes orbit {to{transform:translate(10vw, 8vw) scale(1.15)}}
+
+/* Ana Taşıyıcı */
+.app-container {max-width:1050px;margin:0 auto;padding:16px 14px 60px}
+
+/* Üst Bar & Marka */
+.header {display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(19,23,34,0.75);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;box-shadow:0 8px 30px rgba(0,0,0,0.35)}
+.brand {display:flex;align-items:center;gap:12px}
+.brand-icon {width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--primary));display:grid;place-items:center;font-weight:900;color:#0d0f17;font-size:1.3rem;box-shadow:0 4px 14px var(--accent-glow)}
+.brand-text h1 {font-size:1.3rem;font-weight:800;letter-spacing:-0.03em;display:flex;align-items:center;gap:6px}
+.brand-text span {color:var(--accent)}
+.brand-text p {font-size:0.75rem;color:var(--text-muted)}
+.header-actions {display:flex;align-items:center;gap:10px}
+
+/* Kullanıcı Çipi */
+.user-chip {display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--border);padding:5px 12px 5px 6px;border-radius:30px}
+.chip-av {width:30px;height:30px;border-radius:50%;object-fit:cover;display:grid;place-items:center;font-size:0.8rem;font-weight:800;color:#10121a}
+.chip-name {font-size:0.85rem;font-weight:600;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge-admin {background:var(--accent);color:#1a1300;font-size:0.65rem;font-weight:800;padding:2px 7px;border-radius:6px;text-transform:uppercase;letter-spacing:0.04em}
+
+/* Global Duyuru Şeridi */
+.banner-alert {display:none;background:linear-gradient(90deg,rgba(255,184,77,0.15),rgba(124,102,220,0.15));border:1px solid var(--accent);color:var(--text);padding:10px 16px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:0.88rem;align-items:center;gap:10px;animation:slideDown .3s ease}
+.banner-alert.active {display:flex}
+.banner-icon {font-size:1.1rem;color:var(--accent)}
+
+/* Sekmeler (Tabs) */
+.tabs {display:flex;gap:8px;background:var(--panel);border:1px solid var(--border);padding:6px;border-radius:var(--radius);margin-bottom:18px;overflow-x:auto}
+.tab-btn {flex:1;min-width:max-content;background:transparent;border:0;color:var(--text-muted);padding:10px 16px;border-radius:var(--radius-sm);font-weight:700;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease}
+.tab-btn:hover {color:var(--text);background:rgba(255,255,255,0.03)}
+.tab-btn.active {background:var(--surface);color:var(--accent);border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.25)}
+.tab-btn .badge-count {background:var(--danger);color:#fff;font-size:0.7rem;padding:2px 6px;border-radius:10px;font-weight:800}
+
+/* Genel Buton ve Giriş Elemanları */
+button {font:inherit;cursor:pointer;border:0;border-radius:var(--radius-sm);transition:all .18s ease}
+button:active {transform:scale(0.97)}
+.btn-primary {background:var(--accent);color:#181200;font-weight:700;padding:10px 16px;box-shadow:0 4px 14px var(--accent-glow)}
+.btn-primary:hover {transform:translateY(-1px);box-shadow:0 6px 18px var(--accent-glow)}
+.btn-primary:disabled {opacity:0.5;cursor:not-allowed;transform:none}
+.btn-ghost {background:var(--surface);color:var(--text);border:1px solid var(--border);padding:8px 14px;font-weight:600}
+.btn-ghost:hover {background:var(--surface-hover);border-color:var(--accent)}
+.btn-danger {background:rgba(255,82,99,0.15);color:var(--danger);border:1px solid rgba(255,82,99,0.3);padding:8px 12px;font-weight:600}
+.btn-danger:hover {background:var(--danger);color:#fff}
+.btn-sm {padding:6px 10px;font-size:0.8rem;border-radius:6px}
+
+input,textarea,select {font:inherit;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;transition:border-color .2s}
+input:focus,textarea:focus,select:focus {outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+
+/* Toast Bildirim */
+#toast {position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--panel);border:1px solid var(--border);color:var(--text);padding:12px 22px;border-radius:30px;font-size:0.9rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.5);display:flex;align-items:center;gap:10px;z-index:9999;transition:transform .3s cubic-bezier(0.18, 0.89, 0.32, 1.28);pointer-events:none}
+#toast.show {transform:translateX(-50%) translateY(0)}
+
+/* Modal / Diyalog Kutusu */
+.modal-overlay {position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);display:none;place-items:center;z-index:10000;padding:16px}
+.modal-overlay.active {display:grid}
+.modal-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:440px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,0.6);animation:slideDown .25s ease}
+
+/* Kartlar ve Mesajlaşma */
+.ai-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:0 12px 36px rgba(0,0,0,0.25)}
+.ai-topbar {display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border-subtle)}
+.model-select {display:flex;align-items:center;gap:8px}
+.quota-badge {font-size:0.82rem;color:var(--text-muted);background:var(--surface);padding:6px 12px;border-radius:20px;border:1px solid var(--border)}
+
+.chat-box {height:58vh;overflow-y:auto;padding-right:6px;display:flex;flex-direction:column;gap:14px;margin-bottom:14px;scroll-behavior:smooth}
+.msg-wrap {display:flex;gap:10px;max-width:85%;animation:fadeIn .25s ease both}
+.msg-wrap.me {align-self:flex-end;flex-direction:row-reverse}
+.msg-wrap.ai-bot {align-self:flex-start}
+.msg-av {width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:0.85rem;font-weight:800;flex-shrink:0;color:#0d0f17}
+.msg-bubble {padding:12px 16px;border-radius:14px;font-size:0.93rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;position:relative}
+.msg-wrap.me .msg-bubble {background:linear-gradient(135deg,#5e4cc4,#47389a);color:#fff;border-bottom-right-radius:3px}
+.msg-wrap:not(.me):not(.ai-bot) .msg-bubble {background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:3px}
+.msg-wrap.ai-bot .msg-bubble {background:rgba(255,184,77,0.08);border:1px solid rgba(255,184,77,0.35);border-bottom-left-radius:3px}
+.msg-meta {font-size:0.72rem;color:var(--text-sub);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+
+.input-bar {display:flex;gap:10px;align-items:flex-end}
+.input-bar textarea {flex:1;resize:none;max-height:120px;border-radius:var(--radius-sm)}
+
+/* Sohbet Kilit Çubuğu */
+.chat-locked-bar {background:rgba(255,82,99,0.12);border:1px solid var(--danger);color:var(--danger);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:0.88rem;font-weight:600;margin-bottom:12px;display:none}
+.chat-locked-bar.active {display:block}
+
+/* Admin Paneli */
+.admin-badge-strip {background:linear-gradient(90deg,rgba(255,184,77,0.1),rgba(124,102,220,0.1));border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem}
+.admin-subnav {display:flex;gap:6px;overflow-x:auto;margin-bottom:16px;padding-bottom:4px}
+.subnav-btn {background:var(--surface);color:var(--text-muted);border:1px solid var(--border);padding:8px 14px;border-radius:var(--radius-sm);font-size:0.84rem;font-weight:600;cursor:pointer}
+.subnav-btn.active {background:var(--accent);color:#181200;border-color:var(--accent)}
+
+.stats-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.stat-card {background:var(--panel);border:1px solid var(--border);padding:16px;border-radius:var(--radius);display:flex;flex-direction:column;gap:6px}
+.stat-card .val {font-size:1.8rem;font-weight:800;color:var(--text)}
+.stat-card .lbl {font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em}
+
+.data-table-wrap {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.table-header {padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.table-header h3 {font-size:1.05rem;font-weight:700}
+.list-item {display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--border-subtle);gap:12px;transition:background .15s}
+.list-item:hover {background:rgba(255,255,255,0.02)}
+.list-item:last-child {border-bottom:none}
+.item-info {display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.item-info b {display:block;font-size:0.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-info small {color:var(--text-muted);font-size:0.78rem}
+.item-actions {display:flex;gap:6px;flex-shrink:0}
+
+/* Rozetler */
+.badge {font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase}
+.badge-banned {background:rgba(255,82,99,0.2);color:var(--danger);border:1px solid var(--danger)}
+.badge-muted {background:rgba(255,169,64,0.2);color:var(--warning);border:1px solid var(--warning)}
+.badge-ok {background:rgba(61,214,140,0.15);color:var(--success);border:1px solid var(--success)}
+.badge-bonus {background:rgba(124,102,220,0.2);color:#b3a2ff;border:1px solid var(--primary)}
+.badge-flagged {background:rgba(255,82,99,0.25);color:var(--danger);border:1px solid var(--danger);font-weight:800}
+
+/* Switch */
+.switch {position:relative;display:inline-block;width:44px;height:24px}
+.switch input {opacity:0;width:0;height:0}
+.slider {position:absolute;cursor:pointer;inset:0;background-color:var(--surface);border:1px solid var(--border);border-radius:24px;transition:.25s}
+.slider:before {position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background-color:var(--text-muted);border-radius:50%;transition:.25s}
+input:checked + .slider {background-color:var(--accent);border-color:var(--accent)}
+input:checked + .slider:before {transform:translateX(20px);background-color:#181200}
+
+/* Giriş Ekranı */
+.auth-center {min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.auth-box {width:100%;max-width:380px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:30px 24px;box-shadow:0 16px 40px rgba(0,0,0,0.5)}
+.auth-title {font-size:2.2rem;font-weight:900;letter-spacing:-0.03em;margin-bottom:8px}
+.auth-title span {color:var(--accent)}
+.auth-desc {color:var(--text-muted);font-size:0.9rem;margin-bottom:24px}
+
+@keyframes fadeIn {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideDown {from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
 <body>
-<i class="orb o1"></i><i class="orb o2"></i>
-<div id="app"><div class="wrap"><div class="sub">Yükleniyor…</div></div></div>
+
+<div class="ambient">
+  <div class="ambient-glow g1"></div>
+  <div class="ambient-glow g2"></div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Kredi Verme Modalı -->
+<div class="modal-overlay" id="credit-modal">
+  <div class="modal-card">
+    <h3 style="margin-bottom:8px">🎁 Kullanıcıya Ekstra Kredi Tanımla</h3>
+    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:16px" id="modal-user-target">Kullanıcı seçiliyor...</p>
+    
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px">
+      <div>
+        <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Standart Model Ekstra Hak:</label>
+        <input type="number" id="input-bonus-free" min="0" placeholder="Örn: 20" style="width:100%">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Pro Model Ekstra Hak:</label>
+        <input type="number" id="input-bonus-pro" min="0" placeholder="Örn: 5" style="width:100%">
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:10px">
+      <button class="btn-ghost" id="btn-cancel-modal">İptal</button>
+      <button class="btn-primary" id="btn-save-credits">Kredileri Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="app-container">
+  <div class="auth-center"><div class="auth-desc">Yükleniyor…</div></div>
+</div>
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {getDatabase,ref,get,set,update,remove,onValue,push,query,limitToLast} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getDatabase, ref, get, set, update, remove, onValue, push, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
-const cfg={apiKey:"AIzaSyAOA_EKD-uJQrQWxVO1zlVTrgxBbcCpKug",authDomain:"ne-yapay.firebaseapp.com",projectId:"ne-yapay",storageBucket:"ne-yapay.firebasestorage.app",messagingSenderId:"391460522060",appId:"1:391460522060:web:d8089bfcc5be0c6eba4ce9",databaseURL:"https://ne-yapay-default-rtdb.europe-west1.firebasedatabase.app"};
-const WORKER="https://neyapay.hafizselmankusutoglu.workers.dev"; // Cloudflare Worker adresi
-const FREE_DAILY=30,PRO_DAILY=4,MAXC=500; // worker.js'dekiyle aynı olsun
-const BAD=[]; // ortak sohbette yıldızlanacak kelimeler: ["kelime1","kelime2"]
-const MODELS=[["free","Ücretsiz model"],["pro","Pro model"]];
+const cfg = {
+  apiKey: "AIzaSyAOA_EKD-uJQrQWxVO1zlVTrgxBbcCpKug",
+  authDomain: "ne-yapay.firebaseapp.com",
+  projectId: "ne-yapay",
+  storageBucket: "ne-yapay.firebasestorage.app",
+  messagingSenderId: "391460522060",
+  appId: "1:391460522060:web:d8089bfcc5be0c6eba4ce9",
+  databaseURL: "https://ne-yapay-default-rtdb.europe-west1.firebasedatabase.app"
+};
+const WORKER = "https://neyapay.hafizselmankusutoglu@workers.dev";
+const ADMIN_EMAIL = "hafizselmankusutoglu@gmail.com";
+const DEFAULT_LIMITS = { freeDaily: 30, proDaily: 4, maxChars: 500 };
 
-const auth=getAuth(initializeApp(cfg)),db=getDatabase();
-const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s),app=$("#app");
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let unsubs=[];const clean=()=>{unsubs.forEach(u=>u());unsubs=[]};
-const logo=()=>`<div class="logo">${[..."Ne Yapay?"].map((c,i)=>c==" "?"<span>&nbsp;</span>":`<span style="animation-delay:${i*.07}s">${c}</span>`).join("")}</div>`;
-const page=h=>{clean();app.innerHTML=`<div class="wrap">${logo()}${h}</div>`};
-const out=()=>signOut(auth);
+const auth = getAuth(initializeApp(cfg));
+const db = getDatabase();
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const app = $("#app");
 
-function login(msg=""){
-  page(`<p class="sub">Devam etmek için giriş yap.</p><div class="box"><button class="w" id="g">Google ile giriş yap</button><div class="err">${esc(msg)}</div></div>`);
-  $("#g").onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>login("Giriş yapılamadı ("+e.code+")"));
+let unsubs = [];
+const clean = () => { unsubs.forEach(u => typeof u === "function" && u()); unsubs = []; };
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+function showToast(msg, dur = 2800) {
+  const t = $("#toast");
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), dur);
 }
-function invite(u){
-  page(`<p class="sub">Bu uygulama davetlilere özel. Davet kodunu gir.</p><div class="box"><input id="c" placeholder="DAVET KODU" maxlength="16" autocomplete="off"><button class="w" id="go">Koda giriş yap</button><div class="err" id="e"></div><button class="link" id="out">Çıkış yap</button></div>`);
-  $("#out").onclick=out;
-  $("#go").onclick=async()=>{
-    const code=$("#c").value.trim().toUpperCase();if(!code)return;
-    try{
-      const s=await get(ref(db,"codes/"+code));
-      if(!s.exists()||s.val().used)throw 0;
-      await update(ref(db),{["codes/"+code+"/used"]:true,["codes/"+code+"/usedBy"]:u.uid,["users/"+u.uid]:{email:u.email,name:u.displayName||"",banned:false,code,createdAt:Date.now()}});
-      shell(u,false);
-    }catch{$("#e").textContent="Kod geçersiz ya da daha önce kullanılmış."}
+
+const av = (uid, name, pp) => pp
+  ? `<img class="chip-av" src="${esc(pp)}" alt="av">`
+  : `<div class="chip-av" style="background:hsl(${[...uid].reduce((a,c)=>a+c.charCodeAt(0),0)%360} 70% 65%)">${esc((name||"?")[0].toUpperCase())}</div>`;
+
+let currentUser = null;
+let isAdmin = false;
+let userProfiles = {};
+let myBonusCredits = { free: 0, pro: 0 };
+let appSettings = {
+  chatLocked: false,
+  slowmode: 0,
+  announcement: "",
+  badWords: [],
+  watchWords: [],
+  models: { free: true, pro: true }
+};
+
+// ----------------- GİRİŞ & YETKİLENDİRME -----------------
+function renderLogin(err = "") {
+  clean();
+  app.innerHTML = `
+    <div class="auth-center">
+      <div class="auth-box">
+        <div class="auth-title">Ne <span>Yapay?</span></div>
+        <p class="auth-desc">Kapalı devre yapay zeka & topluluk ağına hoş geldin.</p>
+        <button class="btn-primary" style="width:100%;margin-bottom:12px" id="btn-login">Google ile Giriş Yap</button>
+        ${err ? `<p style="color:var(--danger);font-size:0.85rem;margin-top:10px">${esc(err)}</p>` : ""}
+      </div>
+    </div>
+  `;
+  $("#btn-login").onclick = () => {
+    signInWithPopup(auth, new GoogleAuthProvider()).catch(e => renderLogin("Giriş başarısız (" + e.code + ")"));
   };
 }
-function banned(){
-  page(`<p class="sub">Hesabın engellendi. Bunun bir hata olduğunu düşünüyorsan yöneticiyle iletişime geç.</p><button class="link" id="out">Çıkış yap</button>`);
-  $("#out").onclick=out;
-}
-let H=[],busy=false,P={},U,ADM=false;
-const av=(id,n)=>P[id]?.pp?`<img class="av" src="${esc(P[id].pp)}">`:`<div class="av" style="background:hsl(${[...id].reduce((a,c)=>a+c.charCodeAt(0),0)%360} 70% 65%)">${esc((n||"?")[0].toUpperCase())}</div>`;
-const day=()=>new Date(Date.now()+10800e3).toISOString().slice(0,10);
-const filt=t=>BAD.reduce((x,w)=>x.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi"),"***"),t);
 
-function shell(u,isA){
-  clean();U=u;ADM=isA;H=[];
-  const T=[["ai","AI"],["chat","Sohbet"],["me","Profil"]].concat(isA?[["codes","Kodlar"],["users","Kullanıcılar"],["set","Modeller"]]:[]);
-  app.innerHTML=`<div class="panel"><div class="top"><h2>Ne Yapay?</h2><button class="sm ghost" id="out">Çıkış yap</button></div><div class="tabs">${T.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("")}</div><div id="v"></div></div>`;
-  $("#out").onclick=out;
-  set(ref(db,"profiles/"+u.uid+"/name"),(u.displayName||u.email.split("@")[0]).slice(0,40));
-  const V={ai:aiV,chat:chatV,me:meV,codes:codesV,users:usersV,set:modelsV};
-  const show=t=>{clean();$$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t==t));V[t]()};
-  $$(".tabs button").forEach(b=>b.onclick=()=>show(b.dataset.t));
-  show("ai");
-}
-function aiV(){
-  $("#v").innerHTML=`<select id="tier"><option value="free">Ücretsiz model (günde ${FREE_DAILY} mesaj)</option><option value="pro">Pro model (günde ${PRO_DAILY} mesaj)</option></select><div class="msgs" id="ms"></div><div class="small" id="lim"></div><div class="bar"><textarea id="q" rows="2" maxlength="${MAXC}" placeholder="Mesajını yaz (en fazla ${MAXC} karakter)"></textarea><button id="s">Gönder</button></div>`;
-  const draw=()=>{const e=$("#ms");if(!e)return;e.innerHTML=H.map(m=>`<div class="m ${m.role=="user"?"me":""}"><div class="t">${esc(m.content)}</div></div>`).join("");e.scrollTop=1e9};
-  draw();
-  unsubs.push(onValue(ref(db,`usage/${U.uid}/${day()}`),s=>{const x=s.val()||{};$("#lim").textContent=`Bugün: ücretsiz ${x.free||0}/${FREE_DAILY} · pro ${x.pro||0}/${PRO_DAILY}`}));
-  const send=async()=>{
-    const text=$("#q").value.trim();if(!text||busy)return;
-    busy=true;H.push({role:"user",content:text},{role:"assistant",content:"…"});$("#q").value="";draw();
-    try{
-      const r=await fetch(WORKER,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+await U.getIdToken()},body:JSON.stringify({tier:$("#tier").value,messages:H.slice(0,-1).filter(m=>!m.content.startsWith("⚠"))})});
-      const j=await r.json();H[H.length-1].content=j.reply||"⚠ "+(j.error||"Hata");
-    }catch{H[H.length-1].content="⚠ Sunucuya ulaşılamadı"}
-    busy=false;draw();
+function renderInvite(u) {
+  clean();
+  app.innerHTML = `
+    <div class="auth-center">
+      <div class="auth-box">
+        <div class="auth-title">Davet <span>Kodu</span></div>
+        <p class="auth-desc">Bu platform yalnızca özel davetiyeyle çalışır. Sana verilen 10 haneli kodu gir.</p>
+        <input id="inv-code" placeholder="Örn: 9X7K2M4P" maxlength="16" style="width:100%;text-align:center;text-transform:uppercase;letter-spacing:0.2em;font-weight:700;margin-bottom:12px">
+        <button class="btn-primary" style="width:100%;margin-bottom:12px" id="btn-check-code">Kodu Onayla ve Başla</button>
+        <div id="inv-err" style="color:var(--danger);font-size:0.85rem;min-height:1.2em"></div>
+        <button class="btn-ghost btn-sm" style="width:100%;margin-top:10px" id="btn-logout-inv">Çıkış Yap</button>
+      </div>
+    </div>
+  `;
+  $("#btn-logout-inv").onclick = () => signOut(auth);
+  $("#btn-check-code").onclick = async () => {
+    const code = $("#inv-code").value.trim().toUpperCase();
+    if (!code) return;
+    try {
+      const snap = await get(ref(db, "codes/" + code));
+      if (!snap.exists() || snap.val().used) {
+        $("#inv-err").textContent = "Bu kod geçersiz ya da daha önce kullanılmış.";
+        return;
+      }
+      await update(ref(db), {
+        [`codes/${code}/used`]: true,
+        [`codes/${code}/usedBy`]: u.uid,
+        [`codes/${code}/usedAt`]: Date.now(),
+        [`users/${u.uid}`]: {
+          email: u.email,
+          name: u.displayName || u.email.split("@")[0],
+          banned: false,
+          mutedUntil: 0,
+          bonusCredits: { free: 0, pro: 0 },
+          code: code,
+          createdAt: Date.now()
+        }
+      });
+      initAppShell(u, false);
+    } catch (e) {
+      $("#inv-err").textContent = "Bağlantı hatası oluştu.";
+    }
   };
-  $("#s").onclick=send;$("#q").onkeydown=e=>{if(e.key=="Enter"&&!e.shiftKey){e.preventDefault();send()}};
-}
-function chatV(){
-  $("#v").innerHTML=`<div class="msgs" id="ms"></div><div class="bar"><textarea id="q" rows="1" maxlength="300" placeholder="Herkese yaz (en fazla 300 karakter)"></textarea><button id="s">Gönder</button></div>`;
-  let M=[],last=0;
-  const draw=()=>{const e=$("#ms");if(!e)return;e.innerHTML=M.map(([id,m])=>`<div class="m ${m.uid==U.uid?"me":""}">${av(m.uid,m.name)}<div class="t"><small style="color:var(--mut)">${esc(m.name)}</small><br>${esc(m.text)}${ADM?` <button class="sm red" data-x="${id}">Sil</button>`:""}</div></div>`).join("");$$("[data-x]").forEach(b=>b.onclick=()=>remove(ref(db,"chat/"+b.dataset.x)));e.scrollTop=1e9};
-  unsubs.push(onValue(ref(db,"profiles"),s=>{P=s.val()||{};draw()}));
-  unsubs.push(onValue(query(ref(db,"chat"),limitToLast(100)),s=>{M=Object.entries(s.val()||{});draw()}));
-  const send=()=>{
-    const text=filt($("#q").value.trim()),n=Date.now();if(!text||n-last<2000)return;last=n;$("#q").value="";
-    push(ref(db,"chat"),{uid:U.uid,name:(P[U.uid]?.name||U.displayName||"?").slice(0,40),text,ts:n}).catch(()=>{});
-  };
-  $("#s").onclick=send;$("#q").onkeydown=e=>{if(e.key=="Enter"&&!e.shiftKey){e.preventDefault();send()}};
-}
-function meV(){
-  $("#v").innerHTML=`<div class="row"><div id="a"></div><div style="flex:1"><b>${esc(U.displayName||U.email)}</b><small id="st"></small></div></div><input type="file" id="f" accept="image/*" style="display:none"><button class="w" id="pick">Profil fotoğrafı seç</button>`;
-  unsubs.push(onValue(ref(db,"profiles/"+U.uid),s=>{P[U.uid]=s.val()||{};$("#a").innerHTML=av(U.uid,U.displayName)}));
-  unsubs.push(onValue(ref(db,"pending/"+U.uid),s=>{$("#st").textContent=s.exists()?"Yeni fotoğrafın yönetici onayında.":"Fotoğraf yönetici onayından sonra yayına girer."}));
-  $("#pick").onclick=()=>$("#f").click();
-  $("#f").onchange=e=>{const f=e.target.files[0];if(!f)return;const i=new Image();i.onload=()=>{const c=document.createElement("canvas");c.width=c.height=128;const z=Math.min(i.width,i.height);c.getContext("2d").drawImage(i,(i.width-z)/2,(i.height-z)/2,z,z,0,0,128,128);set(ref(db,"pending/"+U.uid),c.toDataURL("image/jpeg",.75))};i.src=URL.createObjectURL(f)};
-}
-function codesV(){
-  $("#v").innerHTML=`<button class="w" id="n" style="margin-bottom:14px">Yeni davet kodu üret</button><div id="l"></div>`;
-  $("#n").onclick=()=>{
-    const A="ABCDEFGHJKMNPQRSTUVWXYZ23456789",code=[...crypto.getRandomValues(new Uint8Array(10))].map(x=>A[x%A.length]).join("");
-    set(ref(db,"codes/"+code),{used:false,usedBy:"",createdAt:Date.now()});
-  };
-  unsubs.push(onValue(ref(db,"codes"),s=>{
-    const d=Object.entries(s.val()||{}).sort((a,b)=>b[1].createdAt-a[1].createdAt);
-    $("#l").innerHTML=d.map(([id,x])=>`<div class="row ${x.used?"used":""}"><div><b>${esc(id)}</b><small>${x.used?"kullanıldı":"kullanılabilir"}</small></div><div class="acts"><button class="sm ghost" data-c="${esc(id)}">Kopyala</button><button class="sm red" data-d="${esc(id)}">Sil</button></div></div>`).join("")||`<div class="sub">Henüz kod yok. Yukarıdan üret.</div>`;
-    $$("[data-c]").forEach(b=>b.onclick=()=>{navigator.clipboard.writeText(b.dataset.c);b.textContent="Kopyalandı"});
-    $$("[data-d]").forEach(b=>b.onclick=()=>remove(ref(db,"codes/"+b.dataset.d)));
-  }));
-}
-function usersV(){
-  $("#v").innerHTML=`<div id="pd"></div><div id="ul"></div>`;
-  unsubs.push(onValue(ref(db,"pending"),s=>{
-    const d=s.val()||{};
-    $("#pd").innerHTML=Object.keys(d).map(id=>`<div class="row"><img class="av" style="width:64px;height:64px" src="${esc(d[id])}"><b style="flex:1">Onay bekleyen fotoğraf</b><div class="acts"><button class="sm" data-ok="${id}">Onayla</button><button class="sm red" data-no="${id}">Reddet</button></div></div>`).join("");
-    $$("[data-ok]").forEach(b=>b.onclick=()=>update(ref(db),{["profiles/"+b.dataset.ok+"/pp"]:d[b.dataset.ok],["pending/"+b.dataset.ok]:null}));
-    $$("[data-no]").forEach(b=>b.onclick=()=>remove(ref(db,"pending/"+b.dataset.no)));
-  }));
-  unsubs.push(onValue(ref(db,"users"),s=>{
-    $("#ul").innerHTML=Object.entries(s.val()||{}).map(([id,d])=>`<div class="row ${d.banned?"ban":""}"><div><b>${esc(d.name||d.email)}</b><small>${esc(d.email)} · kod: ${esc(d.code)}</small></div><div class="acts"><button class="sm ${d.banned?"ghost":"red"}" data-u="${id}" data-b="${d.banned?1:0}">${d.banned?"Banı kaldır":"Banla"}</button></div></div>`).join("")||`<div class="sub">Henüz kullanıcı yok.</div>`;
-    $$("[data-u]").forEach(b=>b.onclick=()=>update(ref(db,"users/"+b.dataset.u),{banned:b.dataset.b!="1"}));
-  }));
-}
-function modelsV(){
-  const r=ref(db,"settings/global/models");
-  unsubs.push(onValue(r,s=>{
-    const m=s.val()||{};
-    $("#v").innerHTML=MODELS.map(([k,n])=>{const on=m[k]!==false;return `<div class="row ${on?"":"used"}"><div><b>${n}</b><small>${on?"kullanıcılara açık":"kapalı"}</small></div><div class="acts"><button class="sm ${on?"ghost":""}" data-m="${k}">${on?"Kapat":"Aç"}</button></div></div>`}).join("");
-    $$("[data-m]").forEach(b=>b.onclick=()=>update(r,{[b.dataset.m]:m[b.dataset.m]===false}));
-  }));
 }
 
-onAuthStateChanged(auth,async u=>{
-  if(!u)return login();
-  try{
-    try{await get(ref(db,"codes"));return shell(u,true)}catch{} // sadece admin kodları listeleyebilir (kurallar sunucuda)
-    const s=await get(ref(db,"users/"+u.uid));
-    if(!s.exists())return invite(u);
-    if(s.val().banned)return banned();
-    shell(u,false);
-  }catch(e){login("Hata: "+e.code)}
+function renderBanned() {
+  clean();
+  app.innerHTML = `
+    <div class="auth-center">
+      <div class="auth-box">
+        <div class="auth-title" style="color:var(--danger)">Erişim <span>Engellendi</span></div>
+        <p class="auth-desc">Topluluk kurallarını ihlal ettiğin için bu hesaba erişim yönetici tarafından durdurulmuştur.</p>
+        <button class="btn-ghost" style="width:100%" id="btn-banned-out">Çıkış Yap</button>
+      </div>
+    </div>
+  `;
+  $("#btn-banned-out").onclick = () => signOut(auth);
+}
+
+// ----------------- ANA UYGULAMA İSKELETİ -----------------
+function initAppShell(u, admin) {
+  clean();
+  currentUser = u;
+  isAdmin = admin;
+
+  update(ref(db, `profiles/${u.uid}`), {
+    name: (u.displayName || u.email.split("@")[0]).slice(0, 40)
+  });
+
+  // Kullanıcının kendi hediye kredisini dinle
+  unsubs.push(onValue(ref(db, `users/${u.uid}/bonusCredits`), snap => {
+    myBonusCredits = snap.val() || { free: 0, pro: 0 };
+    refreshAiQuotaDisplay();
+  }));
+
+  // Genel ayarları dinle
+  unsubs.push(onValue(ref(db, "settings/global"), snap => {
+    const data = snap.val() || {};
+    appSettings.chatLocked = !!data.chatLocked;
+    appSettings.slowmode = Number(data.slowmode || 0);
+    appSettings.announcement = data.announcement || "";
+    appSettings.badWords = Array.isArray(data.badWords) ? data.badWords : [];
+    appSettings.watchWords = Array.isArray(data.watchWords) ? data.watchWords : [];
+    appSettings.models = data.models || { free: true, pro: true };
+    updateAnnouncementUI();
+  }));
+
+  unsubs.push(onValue(ref(db, "profiles"), snap => {
+    userProfiles = snap.val() || {};
+  }));
+
+  const navItems = [
+    { id: "ai", label: "🤖 AI Asistan" },
+    { id: "chat", label: "💬 Genel Sohbet & AI" },
+    { id: "me", label: "👤 Profilim" }
+  ];
+  if (isAdmin) {
+    navItems.push({ id: "admin", label: "🛡️ Admin Masası", badge: true });
+  }
+
+  app.innerHTML = `
+    <div class="header">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>Ne <span>Yapay?</span></h1>
+          <p>Yapay Zeka & Topluluk Portalı</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="user-chip">
+          <div id="header-avatar">${av(u.uid, u.displayName)}</div>
+          <span class="chip-name">${esc(u.displayName || u.email)}</span>
+          ${isAdmin ? `<span class="badge-admin">Admin</span>` : ""}
+        </div>
+        <button class="btn-ghost btn-sm" id="btn-logout" title="Çıkış Yap">Çıkış</button>
+      </div>
+    </div>
+
+    <div class="banner-alert" id="banner-alert">
+      <span class="banner-icon">📢</span>
+      <span id="banner-text" style="flex:1"></span>
+    </div>
+
+    <div class="tabs">
+      ${navItems.map(t => `
+        <button class="tab-btn" data-tab="${t.id}">
+          ${t.label}
+          ${t.badge ? `<span class="badge-count" id="admin-notif-count" style="display:none">0</span>` : ""}
+        </button>
+      `).join("")}
+    </div>
+
+    <div id="tab-content"></div>
+  `;
+
+  $("#btn-logout").onclick = () => signOut(auth);
+
+  const switchTab = tabId => {
+    $$(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tabId));
+    const views = { ai: renderAiView, chat: renderChatView, me: renderProfileView, admin: renderAdminView };
+    if (views[tabId]) views[tabId]();
+  };
+
+  $$(".tab-btn").forEach(b => b.onclick = () => switchTab(b.dataset.tab));
+  switchTab("ai");
+
+  if (isAdmin) {
+    unsubs.push(onValue(ref(db, "pending"), snap => {
+      const count = Object.keys(snap.val() || {}).length;
+      const b = $("#admin-notif-count");
+      if (b) {
+        b.style.display = count > 0 ? "inline-block" : "none";
+        b.textContent = count;
+      }
+    }));
+  }
+}
+
+function updateAnnouncementUI() {
+  const b = $("#banner-alert");
+  const t = $("#banner-text");
+  if (!b || !t) return;
+  if (appSettings.announcement && appSettings.announcement.trim()) {
+    t.textContent = appSettings.announcement;
+    b.classList.add("active");
+  } else {
+    b.classList.remove("active");
+  }
+}
+
+// ----------------- VİEW 1: AI ASİSTAN -----------------
+let aiHistory = [];
+let aiBusy = false;
+let currentUsageToday = { free: 0, pro: 0 };
+
+function refreshAiQuotaDisplay() {
+  const qBadge = $("#ai-quota-badge");
+  if (!qBadge) return;
+  const freeBonus = myBonusCredits.free || 0;
+  const proBonus = myBonusCredits.pro || 0;
+  const totalFree = DEFAULT_LIMITS.freeDaily + freeBonus;
+  const totalPro = DEFAULT_LIMITS.proDaily + proBonus;
+  
+  qBadge.innerHTML = `Bugün: Standart ${currentUsageToday.free || 0}/${totalFree} ${freeBonus ? `<b style="color:var(--accent)">(+${freeBonus} Ek)</b>` : ''} · Pro ${currentUsageToday.pro || 0}/${totalPro} ${proBonus ? `<b style="color:var(--accent)">(+${proBonus} Ek)</b>` : ''}`;
+}
+
+function renderAiView() {
+  const c = $("#tab-content");
+  c.innerHTML = `
+    <div class="ai-card">
+      <div class="ai-topbar">
+        <div class="model-select">
+          <label style="font-size:0.85rem;font-weight:700;color:var(--text-muted)">Model:</label>
+          <select id="ai-tier" style="font-size:0.88rem;padding:6px 12px">
+            <option value="free">DeepSeek Chat (Hızlı · Ücretsiz)</option>
+            <option value="pro">DeepSeek Reasoner (Düşünce / Akıl Yürütme · Pro)</option>
+          </select>
+        </div>
+        <div class="quota-badge" id="ai-quota-badge">Kotalar yükleniyor…</div>
+        <button class="btn-ghost btn-sm" id="btn-clear-ai">Sohbeti Temizle</button>
+      </div>
+
+      <div class="chat-box" id="ai-chat-box"></div>
+
+      <div class="input-bar">
+        <textarea id="ai-input" rows="2" maxlength="500" placeholder="Sorunu sor veya bir görev ver (En fazla 500 karakter)..."></textarea>
+        <button class="btn-primary" id="btn-send-ai" style="height:48px;padding:0 22px">Gönder</button>
+      </div>
+    </div>
+  `;
+
+  const drawAi = () => {
+    const box = $("#ai-chat-box");
+    if (!box) return;
+    box.innerHTML = aiHistory.map(m => `
+      <div class="msg-wrap ${m.role === 'user' ? 'me' : ''}">
+        <div class="msg-av" style="background:${m.role === 'user' ? 'var(--primary)' : 'var(--accent)'}">
+          ${m.role === 'user' ? 'Sen' : 'AI'}
+        </div>
+        <div class="msg-bubble">${esc(m.content)}</div>
+      </div>
+    `).join("");
+    box.scrollTop = box.scrollHeight;
+  };
+  drawAi();
+
+  const todayStr = new Date(Date.now() + 10800e3).toISOString().slice(0, 10);
+  unsubs.push(onValue(ref(db, `usage/${currentUser.uid}/${todayStr}`), snap => {
+    currentUsageToday = snap.val() || { free: 0, pro: 0 };
+    refreshAiQuotaDisplay();
+  }));
+
+  const sendAi = async () => {
+    const input = $("#ai-input");
+    const text = input.value.trim();
+    if (!text || aiBusy) return;
+
+    const tier = $("#ai-tier").value;
+    if (!isAdmin && appSettings.models[tier] === false) {
+      showToast("Bu model şu an yönetici tarafından bakıma alındı.");
+      return;
+    }
+
+    aiBusy = true;
+    aiHistory.push({ role: "user", content: text }, { role: "assistant", content: "Düşünüyor…" });
+    input.value = "";
+    drawAi();
+
+    try {
+      const token = await currentUser.getIdToken();
+      const res = await fetch(WORKER, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({
+          tier,
+          messages: aiHistory.slice(0, -1).map(m => ({ role: m.role, content: m.content }))
+        })
+      });
+      const data = await res.json();
+      aiHistory[aiHistory.length - 1].content = data.reply || ("⚠ " + (data.error || "Bilinmeyen hata"));
+    } catch (err) {
+      aiHistory[aiHistory.length - 1].content = "⚠ Sunucuya ulaşılamadı veya bağlantı koptu.";
+    }
+    aiBusy = false;
+    drawAi();
+  };
+
+  $("#btn-send-ai").onclick = sendAi;
+  $("#ai-input").onkeydown = e => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendAi();
+    }
+  };
+  $("#btn-clear-ai").onclick = () => {
+    aiHistory = [];
+    drawAi();
+    showToast("AI sohbet geçmişi temizlendi.");
+  };
+}
+
+// ----------------- VİEW 2: GENEL SOHBET & ORTAK AI -----------------
+let lastMsgTime = 0;
+let groupAiBusy = false;
+
+function filterBadWords(t) {
+  let res = t;
+  const list = appSettings.badWords || [];
+  list.forEach(w => {
+    if (!w) return;
+    const reg = new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+    res = res.replace(reg, "***");
+  });
+  return res;
+}
+
+function renderChatView() {
+  const c = $("#tab-content");
+  c.innerHTML = `
+    <div class="ai-card">
+      <div class="ai-topbar" style="margin-bottom:10px">
+        <div style="font-size:0.88rem;color:var(--text-muted)">
+          💡 <b>Ortak Yapay Zeka:</b> Mesajında <code style="color:var(--accent);font-weight:700">@ai</code> etiketi kullanırsan yapay zeka sohbete doğrudan katılıp yanıt verir!
+        </div>
+        <button class="btn-ghost btn-sm" id="btn-quick-ai">🤖 @ai'ya Sor</button>
+      </div>
+
+      <div class="chat-locked-bar ${appSettings.chatLocked && !isAdmin ? 'active' : ''}" id="chat-lock-msg">
+        🔒 Sohbet şu anda yönetici tarafından geçici olarak kilitlenmiştir.
+      </div>
+
+      <div class="chat-box" id="group-chat-box" style="height:60vh"></div>
+
+      <div class="input-bar">
+        <textarea id="group-input" rows="1" maxlength="300" placeholder="Topluluğa yaz veya @ai ile yapay zekaya sor..."></textarea>
+        <button class="btn-primary" id="btn-send-group">Gönder</button>
+      </div>
+      <div id="slowmode-hint" style="font-size:0.75rem;color:var(--text-sub);margin-top:6px"></div>
+    </div>
+  `;
+
+  $("#btn-quick-ai").onclick = () => {
+    const input = $("#group-input");
+    input.value = "@ai " + input.value.replace(/^@ai\s*/i, "");
+    input.focus();
+  };
+
+  let messages = [];
+  const drawChat = () => {
+    const box = $("#group-chat-box");
+    if (!box) return;
+    box.innerHTML = messages.map(([id, m]) => {
+      const isMe = m.uid === currentUser.uid;
+      const isAi = !!m.isAi;
+      const userPic = isAi ? null : userProfiles[m.uid]?.pp;
+      return `
+        <div class="msg-wrap ${isMe ? 'me' : ''} ${isAi ? 'ai-bot' : ''}">
+          ${isAi ? `<div class="msg-av" style="background:var(--accent)">🤖</div>` : av(m.uid, m.name, userPic)}
+          <div class="msg-bubble">
+            <div class="msg-meta">
+              <b>${esc(m.name)} ${isAi ? '<span class="badge" style="background:var(--accent);color:#10121a">Bot</span>' : ''}</b>
+              <span>${new Date(m.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>
+            </div>
+            <div>${esc(m.text)}</div>
+            ${isAdmin ? `
+              <div style="margin-top:8px;border-top:1px solid var(--border-subtle);padding-top:4px;display:flex;gap:6px">
+                <button class="btn-danger btn-sm" data-del-msg="${id}">Mesajı Sil</button>
+                ${!isAi ? `<button class="btn-ghost btn-sm" data-purge-user="${m.uid}" style="font-size:0.75rem">Tümünü Sil</button>` : ''}
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join("");
+    box.scrollTop = box.scrollHeight;
+
+    if (isAdmin) {
+      $$("[data-del-msg]").forEach(b => b.onclick = () => remove(ref(db, "chat/" + b.dataset.delMsg)));
+      $$("[data-purge-user]").forEach(b => b.onclick = async () => {
+        if (!confirm("Bu kullanıcının attığı tüm mesajları silmek istediğine emin misin?")) return;
+        const uid = b.dataset.purgeUser;
+        const snap = await get(ref(db, "chat"));
+        const all = snap.val() || {};
+        const updates = {};
+        Object.entries(all).forEach(([mid, msg]) => {
+          if (msg.uid === uid) updates[`chat/${mid}`] = null;
+        });
+        await update(ref(db), updates);
+        showToast("Kullanıcının mesajları temizlendi.");
+      });
+    }
+  };
+
+  unsubs.push(onValue(query(ref(db, "chat"), limitToLast(120)), snap => {
+    messages = Object.entries(snap.val() || {});
+    drawChat();
+  }));
+
+  const sendGroup = async () => {
+    if (appSettings.chatLocked && !isAdmin) {
+      showToast("Sohbet şu anda kilitli.");
+      return;
+    }
+
+    const userSnap = await get(ref(db, "users/" + currentUser.uid));
+    const userData = userSnap.val() || {};
+    if (userData.mutedUntil && userData.mutedUntil > Date.now()) {
+      const remainingMin = Math.ceil((userData.mutedUntil - Date.now()) / 60000);
+      showToast(`Susturuldunuz! Kalan süre: ${remainingMin} dakika.`);
+      return;
+    }
+
+    const now = Date.now();
+    const interval = (appSettings.slowmode || 0) * 1000;
+    if (!isAdmin && now - lastMsgTime < Math.max(interval, 2000)) {
+      const waitSec = Math.ceil((Math.max(interval, 2000) - (now - lastMsgTime)) / 1000);
+      showToast(`Lütfen ${waitSec} saniye bekleyin.`);
+      return;
+    }
+
+    const input = $("#group-input");
+    const rawText = input.value.trim();
+    if (!rawText) return;
+
+    const filtered = filterBadWords(rawText);
+    lastMsgTime = now;
+    input.value = "";
+
+    // 1. Kullanıcının mesajını gruba gönder
+    await push(ref(db, "chat"), {
+      uid: currentUser.uid,
+      name: (userProfiles[currentUser.uid]?.name || currentUser.displayName || "Kullanıcı").slice(0, 40),
+      text: filtered,
+      ts: now
+    });
+
+    // 2. @ai Etiketi Var mı? (Ortak Yapay Zeka Çağrısı)
+    if (/\b@ai\b/i.test(filtered) || /\b@yapay\b/i.test(filtered)) {
+      if (groupAiBusy) return;
+      groupAiBusy = true;
+      const question = filtered.replace(/@ai|@yapay/gi, "").trim();
+
+      // Geçici düşünme mesajı
+      const tempRef = await push(ref(db, "chat"), {
+        uid: "system_ai",
+        isAi: true,
+        name: "Ne Yapay (AI)",
+        text: "Grup sorusunu düşünüyor… 💭",
+        ts: Date.now()
+      });
+
+      try {
+        const token = await currentUser.getIdToken();
+        const res = await fetch(WORKER, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+          body: JSON.stringify({
+            tier: "free",
+            isGroup: true,
+            messages: [{ role: "user", content: question || "Merhaba" }]
+          })
+        });
+        const d = await res.json();
+        const reply = d.reply || "Üzgünüm, şu anda yanıt üretemedim.";
+        await update(ref(db, `chat/${tempRef.key}`), { text: reply });
+      } catch {
+        await update(ref(db, `chat/${tempRef.key}`), { text: "⚠ AI sunucusuna ulaşılamadı." });
+      }
+      groupAiBusy = false;
+    }
+  };
+
+  $("#btn-send-group").onclick = sendGroup;
+  $("#group-input").onkeydown = e => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendGroup();
+    }
+  };
+}
+
+// ----------------- VİEW 3: PROFİLİM -----------------
+function renderProfileView() {
+  const c = $("#tab-content");
+  c.innerHTML = `
+    <div class="ai-card" style="max-width:550px;margin:0 auto">
+      <div style="text-align:center;padding:20px 0">
+        <div id="profile-pic-large" style="margin-bottom:14px;display:flex;justify-content:center"></div>
+        <h2 style="font-size:1.3rem;margin-bottom:4px">${esc(currentUser.displayName || currentUser.email)}</h2>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:16px">${esc(currentUser.email)}</p>
+        
+        <div id="avatar-status-box" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;font-size:0.85rem;color:var(--text-muted);margin-bottom:18px"></div>
+        
+        <input type="file" id="avatar-file-input" accept="image/*" style="display:none">
+        <button class="btn-primary" style="width:100%" id="btn-pick-avatar">Yeni Profil Fotoğrafı Yükle</button>
+      </div>
+    </div>
+  `;
+
+  const drawPic = () => {
+    const picDiv = $("#profile-pic-large");
+    if (!picDiv) return;
+    const pp = userProfiles[currentUser.uid]?.pp;
+    picDiv.innerHTML = pp
+      ? `<img src="${esc(pp)}" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)">`
+      : `<div style="width:96px;height:96px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:2.2rem;font-weight:900">${(currentUser.displayName||"?")[0].toUpperCase()}</div>`;
+  };
+  drawPic();
+
+  unsubs.push(onValue(ref(db, "pending/" + currentUser.uid), snap => {
+    const stBox = $("#avatar-status-box");
+    if (!stBox) return;
+    if (snap.exists()) {
+      stBox.innerHTML = `⏳ <b style="color:var(--warning)">Fotoğraf Onayda:</b> Yüklediğin fotoğraf yönetici onayından sonra toplulukta yayınlanacaktır.`;
+    } else {
+      stBox.innerHTML = `Fotoğrafını değiştirdiğinde troll veya uygunsuz görselleri önlemek için yönetici onayından geçer.`;
+    }
+  }));
+
+  $("#btn-pick-avatar").onclick = () => $("#avatar-file-input").click();
+  $("#avatar-file-input").onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 160;
+      const minDim = Math.min(img.width, img.height);
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, (img.width - minDim) / 2, (img.height - minDim) / 2, minDim, minDim, 0, 0, 160, 160);
+      const b64 = canvas.toDataURL("image/jpeg", 0.78);
+      set(ref(db, "pending/" + currentUser.uid), b64);
+      showToast("Fotoğraf yönetici onayına gönderildi!");
+    };
+    img.src = URL.createObjectURL(file);
+  };
+}
+
+// ----------------- VİEW 4: GELİŞMİŞ ADMİN MASASI -----------------
+function renderAdminView() {
+  if (!isAdmin) return;
+  const c = $("#tab-content");
+
+  c.innerHTML = `
+    <div class="admin-badge-strip">
+      <span>🛡️ <b>Yönetim Masası Aktif:</b> Oturum ${esc(ADMIN_EMAIL)} ile doğrulandı.</span>
+      <span class="badge badge-ok">Tam Yetki</span>
+    </div>
+
+    <!-- İstatistikler -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="lbl">Toplam Kullanıcı</span>
+        <span class="val" id="stat-total-users">-</span>
+      </div>
+      <div class="stat-card">
+        <span class="lbl">🚨 Şüpheli / Alarmlar</span>
+        <span class="val" id="stat-flagged-count" style="color:var(--danger)">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="lbl">Bekleyen Fotoğraflar</span>
+        <span class="val" id="stat-pending-photos" style="color:var(--warning)">-</span>
+      </div>
+      <div class="stat-card">
+        <span class="lbl">Kullanılabilir Kodlar</span>
+        <span class="val" id="stat-active-codes" style="color:var(--accent)">-</span>
+      </div>
+    </div>
+
+    <!-- Alt Sekmeler -->
+    <div class="admin-subnav">
+      <button class="subnav-btn active" data-sub="logs">🚨 Kelime Alarmları & Loglar</button>
+      <button class="subnav-btn" data-sub="users">👥 Kullanıcılar & Kredi</button>
+      <button class="subnav-btn" data-sub="mod">🛑 Troll & Sohbet Kalkanı</button>
+      <button class="subnav-btn" data-sub="photos">🖼️ Fotoğraf Onayları</button>
+      <button class="subnav-btn" data-sub="codes">🎟️ Davet Kodları</button>
+      <button class="subnav-btn" data-sub="ai-set">⚙️ Modeller & Duyuru</button>
+    </div>
+
+    <div id="admin-sub-content"></div>
+  `;
+
+  const switchSub = subId => {
+    $$(".subnav-btn").forEach(b => b.classList.toggle("active", b.dataset.sub === subId));
+    const views = {
+      logs: renderAdminLogsAndAlerts,
+      users: renderAdminUsers,
+      mod: renderAdminModeration,
+      photos: renderAdminPhotos,
+      codes: renderAdminCodes,
+      "ai-set": renderAdminSettings
+    };
+    if (views[subId]) views[subId]();
+  };
+
+  $$(".subnav-btn").forEach(b => b.onclick = () => switchSub(b.dataset.sub));
+
+  unsubs.push(onValue(ref(db, "users"), s => {
+    $("#stat-total-users").textContent = Object.keys(s.val() || {}).length;
+  }));
+  unsubs.push(onValue(ref(db, "pending"), s => {
+    $("#stat-pending-photos").textContent = Object.keys(s.val() || {}).length;
+  }));
+  unsubs.push(onValue(ref(db, "codes"), s => {
+    const list = Object.values(s.val() || {});
+    $("#stat-active-codes").textContent = list.filter(x => !x.used).length;
+  }));
+  unsubs.push(onValue(ref(db, "logs/ai"), s => {
+    const list = Object.values(s.val() || {});
+    const flagged = list.filter(x => x.flagged).length;
+    $("#stat-flagged-count").textContent = flagged;
+  }));
+
+  switchSub("logs");
+}
+
+// 4.1. Kelime Alarmları & AI Prompt Denetim Masası
+function renderAdminLogsAndAlerts() {
+  const c = $("#admin-sub-content");
+  c.innerHTML = `
+    <!-- Alarm Kelimeleri Listesi -->
+    <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
+      <h3 style="margin-bottom:8px">🎯 Tetikleyici Kelime Alarmı (Watchlist)</h3>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">
+        Kullanıcılar yapay zekaya veya sohbete bu kelimelerden birini yazarsa anında aşağıdaki listede <b>KIRMIZI ALARM</b> olarak işaretlenir ve bildirilir.
+      </p>
+
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <input id="input-watch-word" placeholder="Takibe alınacak kelime (Örn: admin, şifre, küfür, para, tel)..." style="flex:1">
+        <button class="btn-primary" id="btn-add-watch-word">Alarm Listesine Ekle</button>
+      </div>
+
+      <div id="watch-words-chips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+
+    <!-- Canlı Log ve Alarm Akışı -->
+    <div class="data-table-wrap">
+      <div class="table-header">
+        <h3>🔍 Ne Yazdılar? (Yapay Zeka ve Sohbet Logları)</h3>
+        <div style="display:flex;gap:8px">
+          <button class="btn-ghost btn-sm" id="btn-filter-flagged">Yalnızca Alarmları Göster</button>
+          <button class="btn-danger btn-sm" id="btn-clear-logs">Tüm Logları Temizle</button>
+        </div>
+      </div>
+      <div id="ai-logs-list" style="max-height:550px;overflow-y:auto"></div>
+    </div>
+  `;
+
+  // Alarm Kelimeleri
+  const drawWatchWords = () => {
+    const div = $("#watch-words-chips");
+    if (!div) return;
+    const words = appSettings.watchWords || [];
+    div.innerHTML = words.map(w => `
+      <div style="background:rgba(255,82,99,0.15);border:1px solid var(--danger);color:var(--danger);padding:4px 10px;border-radius:20px;font-size:0.82rem;display:flex;align-items:center;gap:6px">
+        <span>🚨 ${esc(w)}</span>
+        <button data-del-watch="${esc(w)}" style="background:none;border:none;color:var(--danger);cursor:pointer;font-weight:900">&times;</button>
+      </div>
+    `).join("") || `<span style="color:var(--text-sub);font-size:0.82rem">Henüz takip edilen kelime yok.</span>`;
+
+    $$("[data-del-watch]").forEach(b => b.onclick = () => {
+      const target = b.dataset.delWatch;
+      const updated = words.filter(x => x !== target);
+      set(ref(db, "settings/global/watchWords"), updated);
+    });
+  };
+  drawWatchWords();
+
+  $("#btn-add-watch-word").onclick = () => {
+    const input = $("#input-watch-word");
+    const val = input.value.trim().toLowerCase();
+    if (!val) return;
+    const words = appSettings.watchWords || [];
+    if (!words.includes(val)) {
+      words.push(val);
+      set(ref(db, "settings/global/watchWords"), words);
+    }
+    input.value = "";
+    drawWatchWords();
+  };
+
+  // Logları Çiz
+  let onlyFlagged = false;
+  let allLogs = [];
+
+  const drawLogs = () => {
+    const list = $("#ai-logs-list");
+    if (!list) return;
+
+    const filtered = onlyFlagged ? allLogs.filter(([_, l]) => l.flagged) : allLogs;
+    if (!filtered.length) {
+      list.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-sub)">Henüz kaydedilmiş log bulunmuyor.</div>`;
+      return;
+    }
+
+    list.innerHTML = filtered.map(([id, l]) => `
+      <div class="list-item" style="align-items:flex-start;${l.flagged ? 'background:rgba(255,82,99,0.06);border-left:4px solid var(--danger)' : ''}">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <div>
+              <b>${esc(l.name || l.email)}</b>
+              <small>${esc(l.email)} · ${new Date(l.ts).toLocaleString()} · ${l.isGroup ? '<b style="color:var(--accent)">Grup AI</b>' : 'Özel AI'}</small>
+            </div>
+            <div>
+              ${l.flagged ? `<span class="badge badge-flagged">🚨 ALARM: ${esc(l.triggeredWord)}</span>` : `<span class="badge badge-ok">Temiz</span>`}
+            </div>
+          </div>
+          <div style="background:var(--surface);padding:8px 12px;border-radius:var(--radius-sm);font-size:0.88rem;margin-bottom:6px;border:1px solid var(--border)">
+            <b style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase">Kullanıcının Yazdığı:</b><br>
+            ${esc(l.prompt)}
+          </div>
+          <div style="font-size:0.8rem;color:var(--text-muted)">
+            <b>AI Yanıtı (Özet):</b> ${esc(l.replySnippet || "")}
+          </div>
+        </div>
+        <div class="item-actions" style="margin-left:12px">
+          <button class="btn-danger btn-sm" data-quick-ban="${l.uid}">Banla</button>
+        </div>
+      </div>
+    `).join("");
+
+    $$("[data-quick-ban]").forEach(b => b.onclick = () => {
+      const uid = b.dataset.quickBan;
+      if (!confirm("Bu kullanıcıyı banlamak istediğine emin misin?")) return;
+      update(ref(db, "users/" + uid), { banned: true });
+      showToast("Kullanıcı banlandı!");
+    });
+  };
+
+  unsubs.push(onValue(query(ref(db, "logs/ai"), limitToLast(80)), snap => {
+    allLogs = Object.entries(snap.val() || {}).sort((a,b) => b[1].ts - a[1].ts);
+    drawLogs();
+  }));
+
+  $("#btn-filter-flagged").onclick = () => {
+    onlyFlagged = !onlyFlagged;
+    $("#btn-filter-flagged").textContent = onlyFlagged ? "Tüm Logları Göster" : "Yalnızca Alarmları Göster";
+    drawLogs();
+  };
+
+  $("#btn-clear-logs").onclick = async () => {
+    if (!confirm("Tüm logları silmek istediğine emin misin?")) return;
+    await remove(ref(db, "logs/ai"));
+    showToast("Loglar temizlendi.");
+  };
+}
+
+// 4.2. Kullanıcı Masası (Kredi Verme + Ban + Susturma)
+let targetCreditUid = null;
+
+function renderAdminUsers() {
+  const c = $("#admin-sub-content");
+  c.innerHTML = `
+    <div class="data-table-wrap">
+      <div class="table-header">
+        <h3>Kayıtlı Kullanıcılar & Kredi Tanımlama</h3>
+        <input id="search-users" placeholder="İsim veya e-posta ara..." style="max-width:240px;padding:6px 12px;font-size:0.85rem">
+      </div>
+      <div id="users-table-list"></div>
+    </div>
+  `;
+
+  let users = [];
+  const drawUsers = (filter = "") => {
+    const list = $("#users-table-list");
+    if (!list) return;
+
+    const filtered = users.filter(([id, u]) => {
+      const q = filter.toLowerCase();
+      return (u.name || "").toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q);
+    });
+
+    list.innerHTML = filtered.map(([id, u]) => {
+      const isMuted = u.mutedUntil && u.mutedUntil > Date.now();
+      const userPic = userProfiles[id]?.pp;
+      const bFree = u.bonusCredits?.free || 0;
+      const bPro = u.bonusCredits?.pro || 0;
+      return `
+        <div class="list-item">
+          <div class="item-info">
+            ${av(id, u.name, userPic)}
+            <div>
+              <b>${esc(u.name || "İsimsiz")} ${u.banned ? `<span class="badge badge-banned">Banlı</span>` : ''} ${isMuted ? `<span class="badge badge-muted">Susturuldu</span>` : ''}</b>
+              <small>${esc(u.email)} · Kod: ${esc(u.code || "-")}</small>
+              <div style="margin-top:3px">
+                <span class="badge badge-bonus">Ekstra Hak: +${bFree} Free · +${bPro} Pro</span>
+              </div>
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="btn-ghost btn-sm" data-grant-credit="${id}" style="color:var(--accent);border-color:var(--accent)">
+              🎁 Kredi Ver
+            </button>
+            <button class="btn-ghost btn-sm" data-mute-user="${id}" data-muted="${isMuted ? 1 : 0}">
+              ${isMuted ? "Susturmayı Aç" : "1 Sa Sustur"}
+            </button>
+            <button class="${u.banned ? 'btn-ghost' : 'btn-danger'} btn-sm" data-ban-user="${id}" data-banned="${u.banned ? 1 : 0}">
+              ${u.banned ? "Banı Kaldır" : "Banla"}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("") || `<div style="padding:20px;text-align:center;color:var(--text-sub)">Kullanıcı bulunamadı.</div>`;
+
+    // Kredi Modalı Açma
+    $$("[data-grant-credit]").forEach(b => b.onclick = () => {
+      const uid = b.dataset.grantCredit;
+      const u = users.find(x => x[0] === uid)?.[1];
+      targetCreditUid = uid;
+      $("#modal-user-target").textContent = `${u.name || u.email} (${u.email})`;
+      $("#input-bonus-free").value = u.bonusCredits?.free || 0;
+      $("#input-bonus-pro").value = u.bonusCredits?.pro || 0;
+      $("#credit-modal").classList.add("active");
+    });
+
+    $$("[data-ban-user]").forEach(b => b.onclick = () => {
+      const uid = b.dataset.banUser;
+      const willBan = b.dataset.banned !== "1";
+      update(ref(db, "users/" + uid), { banned: willBan });
+      showToast(willBan ? "Kullanıcı banlandı!" : "Kullanıcının banı kaldırıldı!");
+    });
+
+    $$("[data-mute-user]").forEach(b => b.onclick = () => {
+      const uid = b.dataset.muteUser;
+      const isMuted = b.dataset.muted === "1";
+      const mutedUntil = isMuted ? 0 : (Date.now() + 3600 * 1000);
+      update(ref(db, "users/" + uid), { mutedUntil });
+      showToast(isMuted ? "Susturma kaldırıldı." : "Kullanıcı 1 saat susturuldu.");
+    });
+  };
+
+  unsubs.push(onValue(ref(db, "users"), snap => {
+    users = Object.entries(snap.val() || {}).sort((a,b) => (b[1].createdAt||0) - (a[1].createdAt||0));
+    drawUsers($("#search-users")?.value || "");
+  }));
+
+  $("#search-users").oninput = e => drawUsers(e.target.value);
+}
+
+// Modal Kapatma & Kaydetme
+$("#btn-cancel-modal").onclick = () => $("#credit-modal").classList.remove("active");
+$("#btn-save-credits").onclick = async () => {
+  if (!targetCreditUid) return;
+  const freeVal = parseInt($("#input-bonus-free").value) || 0;
+  const proVal = parseInt($("#input-bonus-pro").value) || 0;
+
+  await update(ref(db, `users/${targetCreditUid}/bonusCredits`), {
+    free: Math.max(0, freeVal),
+    pro: Math.max(0, proVal)
+  });
+
+  $("#credit-modal").classList.remove("active");
+  showToast("Kullanıcı kredileri başarıyla güncellendi!");
+};
+
+// 4.3. Troll Kalkanı
+function renderAdminModeration() {
+  const c = $("#admin-sub-content");
+  c.innerHTML = `
+    <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
+      <h3 style="margin-bottom:14px">🛡️ Acil Durum & Hız Kısıtlamaları</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:16px">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <label class="switch">
+            <input type="checkbox" id="toggle-lock-chat" ${appSettings.chatLocked ? "checked" : ""}>
+            <span class="slider"></span>
+          </label>
+          <b>Sohbeti Tamamen Kilitle (Sadece Admin Yazabilir)</b>
+        </label>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <label style="font-size:0.85rem;color:var(--text-muted);display:block;margin-bottom:6px">Yavaş Mod (Slowmode):</label>
+        <select id="select-slowmode" style="padding:8px 12px">
+          <option value="0" ${appSettings.slowmode === 0 ? "selected" : ""}>Kapalı (Varsayılan 2 sn)</option>
+          <option value="5" ${appSettings.slowmode === 5 ? "selected" : ""}>5 Saniye Arayla</option>
+          <option value="10" ${appSettings.slowmode === 10 ? "selected" : ""}>10 Saniye Arayla</option>
+          <option value="30" ${appSettings.slowmode === 30 ? "selected" : ""}>30 Saniye Arayla (Spam Koruması)</option>
+          <option value="60" ${appSettings.slowmode === 60 ? "selected" : ""}>1 Dakika Arayla</option>
+        </select>
+      </div>
+
+      <div style="display:flex;gap:10px">
+        <button class="btn-danger" id="btn-nuke-chat">💣 Tüm Sohbeti Sıfırla (Temizle)</button>
+      </div>
+    </div>
+
+    <!-- Yasaklı Kelime Listesi -->
+    <div class="data-table-wrap" style="padding:18px">
+      <h3 style="margin-bottom:10px">🚫 Sansürlenecek Kelimeler (Sohbette *** Olur)</h3>
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <input id="input-bad-word" placeholder="Sansürlenecek kelime ekle..." style="flex:1">
+        <button class="btn-primary" id="btn-add-bad-word">Ekle</button>
+      </div>
+      <div id="bad-words-chips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    </div>
+  `;
+
+  $("#toggle-lock-chat").onchange = e => {
+    update(ref(db, "settings/global"), { chatLocked: e.target.checked });
+    showToast(e.target.checked ? "Sohbet kilitlendi!" : "Sohbet kilidi kaldırıldı!");
+  };
+
+  $("#select-slowmode").onchange = e => {
+    update(ref(db, "settings/global"), { slowmode: Number(e.target.value) });
+    showToast("Yavaş mod güncellendi.");
+  };
+
+  $("#btn-nuke-chat").onclick = async () => {
+    if (!confirm("DİKKAT: Sohbetteki TÜM mesajlar kalıcı olarak silinecek! Onaylıyor musun?")) return;
+    await remove(ref(db, "chat"));
+    showToast("Sohbet tamamen temizlendi!");
+  };
+
+  const drawWords = () => {
+    const div = $("#bad-words-chips");
+    if (!div) return;
+    const words = appSettings.badWords || [];
+    div.innerHTML = words.map(w => `
+      <div style="background:var(--surface);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:0.82rem;display:flex;align-items:center;gap:6px">
+        <span>${esc(w)}</span>
+        <button data-del-word="${esc(w)}" style="background:none;border:none;color:var(--danger);cursor:pointer;font-weight:900">&times;</button>
+      </div>
+    `).join("") || `<span style="color:var(--text-sub);font-size:0.82rem">Henüz sansür kelimesi eklenmedi.</span>`;
+
+    $$("[data-del-word]").forEach(b => b.onclick = () => {
+      const target = b.dataset.delWord;
+      const updated = words.filter(x => x !== target);
+      set(ref(db, "settings/global/badWords"), updated);
+    });
+  };
+  drawWords();
+
+  $("#btn-add-bad-word").onclick = () => {
+    const input = $("#input-bad-word");
+    const val = input.value.trim().toLowerCase();
+    if (!val) return;
+    const words = appSettings.badWords || [];
+    if (!words.includes(val)) {
+      words.push(val);
+      set(ref(db, "settings/global/badWords"), words);
+    }
+    input.value = "";
+    drawWords();
+  };
+}
+
+// 4.4. Fotoğraf Onay Masası
+function renderAdminPhotos() {
+  const c = $("#admin-sub-content");
+  c.innerHTML = `
+    <div class="data-table-wrap">
+      <div class="table-header">
+        <h3>Onay Bekleyen Profil Fotoğrafları</h3>
+      </div>
+      <div id="pending-photos-list"></div>
+    </div>
+  `;
+
+  unsubs.push(onValue(ref(db, "pending"), snap => {
+    const list = $("#pending-photos-list");
+    if (!list) return;
+    const data = Object.entries(snap.val() || {});
+    if (!data.length) {
+      list.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-sub)">Onay bekleyen yeni fotoğraf yok. Hepsi temiz! 🎉</div>`;
+      return;
+    }
+
+    list.innerHTML = data.map(([uid, imgB64]) => {
+      const uName = userProfiles[uid]?.name || "Bilinmeyen Kullanıcı";
+      return `
+        <div class="list-item">
+          <div class="item-info">
+            <img src="${esc(imgB64)}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--border)">
+            <div>
+              <b>${esc(uName)}</b>
+              <small>UID: ${esc(uid)}</small>
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="btn-primary btn-sm" data-approve-photo="${uid}">Onayla</button>
+            <button class="btn-danger btn-sm" data-reject-photo="${uid}">Reddet</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    $$("[data-approve-photo]").forEach(b => b.onclick = () => {
+      const uid = b.dataset.approvePhoto;
+      get(ref(db, "pending/" + uid)).then(s => {
+        if (!s.exists()) return;
+        update(ref(db), {
+          [`profiles/${uid}/pp`]: s.val(),
+          [`pending/${uid}`]: null
+        });
+        showToast("Fotoğraf onaylandı ve yayına alındı.");
+      });
+    });
+
+    $$("[data-reject-photo]").forEach(b => b.onclick = () => {
+      remove(ref(db, "pending/" + b.dataset.rejectPhoto));
+      showToast("Fotoğraf reddedildi.");
+    });
+  }));
+}
+
+// 4.5. Davet Kodları Masası
+function renderAdminCodes() {
+  const c = $("#admin-sub-content");
+  c.innerHTML = `
+    <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
+      <h3 style="margin-bottom:12px">🎟️ Yeni Davet Kodu Üret</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <button class="btn-primary" id="btn-gen-single">1 Adet Kod Üret</button>
+        <button class="btn-ghost" id="btn-gen-5">5 Adet Kod Paketi Üret</button>
+        <button class="btn-ghost" id="btn-copy-unused">Kullanılmayan Kodları Kopyala</button>
+      </div>
+    </div>
+
+    <div class="data-table-wrap">
+      <div class="table-header">
+        <h3>Mevcut Davet Kodları</h3>
+      </div>
+      <div id="codes-table-list"></div>
+    </div>
+  `;
+
+  const makeCode = () => {
+    const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    return [...crypto.getRandomValues(new Uint8Array(10))].map(x => chars[x % chars.length]).join("");
+  };
+
+  $("#btn-gen-single").onclick = () => {
+    const c = makeCode();
+    set(ref(db, "codes/" + c), { used: false, usedBy: "", createdAt: Date.now() });
+    showToast("Kod üretildi: " + c);
+  };
+
+  $("#btn-gen-5").onclick = () => {
+    const updates = {};
+    for (let i = 0; i < 5; i++) {
+      const c = makeCode();
+      updates["codes/" + c] = { used: false, usedBy: "", createdAt: Date.now() };
+    }
+    update(ref(db), updates);
+    showToast("5 adet yeni kod başarıyla üretildi.");
+  };
+
+  let cachedCodes = [];
+  unsubs.push(onValue(ref(db, "codes"), snap => {
+    const list = $("#codes-table-list");
+    if (!list) return;
+    cachedCodes = Object.entries(snap.val() || {}).sort((a,b) => b[1].createdAt - a[1].createdAt);
+
+    list.innerHTML = cachedCodes.map(([code, d]) => `
+      <div class="list-item">
+        <div class="item-info">
+          <div style="font-family:monospace;font-size:1.1rem;font-weight:800;letter-spacing:0.1em;color:var(--accent)">${esc(code)}</div>
+          <div>
+            ${d.used ? `<span class="badge" style="background:var(--surface)">Kullanıldı (${esc(userProfiles[d.usedBy]?.name || d.usedBy)})</span>` : `<span class="badge badge-ok">Kullanılabilir</span>`}
+          </div>
+        </div>
+        <div class="item-actions">
+          <button class="btn-ghost btn-sm" data-copy-c="${esc(code)}">Kopyala</button>
+          <button class="btn-danger btn-sm" data-del-c="${esc(code)}">Sil</button>
+        </div>
+      </div>
+    `).join("") || `<div style="padding:20px;text-align:center;color:var(--text-sub)">Henüz kod üretilmedi.</div>`;
+
+    $$("[data-copy-c]").forEach(b => b.onclick = () => {
+      navigator.clipboard.writeText(b.dataset.copyC);
+      showToast("Kod panoya kopyalandı!");
+    });
+    $$("[data-del-c]").forEach(b => b.onclick = () => {
+      remove(ref(db, "codes/" + b.dataset.delC));
+    });
+  }));
+
+  $("#btn-copy-unused").onclick = () => {
+    const unused = cachedCodes.filter(([_, d]) => !d.used).map(([c]) => c);
+    if (!unused.length) {
+      showToast("Kullanılmayan kod bulunmuyor.");
+      return;
+    }
+    navigator.clipboard.writeText(unused.join("\n"));
+    showToast(`${unused.length} adet kod panoya kopyalandı!`);
+  };
+}
+
+// 4.6. Model & Duyuru Ayarları
+function renderAdminSettings() {
+  const c = $("#admin-sub-content");
+  c.innerHTML = `
+    <!-- Global Duyuru -->
+    <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
+      <h3 style="margin-bottom:10px">📢 Tüm Kullanıcılara Canlı Duyuru Yayınla</h3>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">Buraya yazacağınız duyuru tüm kullanıcıların ekranının en üstünde sarı şerit olarak görünür. Kaldırmak için boş bırakıp kaydedin.</p>
+      <div style="display:flex;gap:10px">
+        <input id="input-announcement" value="${esc(appSettings.announcement)}" placeholder="Örn: Akşam saat 22:00'de planlı sistem güncellemesi yapılacaktır." style="flex:1">
+        <button class="btn-primary" id="btn-save-announcement">Kaydet</button>
+      </div>
+    </div>
+
+    <!-- Modelleri Aç / Kapat -->
+    <div class="data-table-wrap" style="padding:18px">
+      <h3 style="margin-bottom:12px">🤖 Model Kullanım İzinleri</h3>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <b>DeepSeek Chat (Standart Model)</b>
+            <small style="display:block;color:var(--text-muted)">Varsayılan günlük 30 mesaj hakkı</small>
+          </div>
+          <button class="btn-sm ${appSettings.models.free !== false ? 'btn-ghost' : 'btn-primary'}" id="btn-toggle-free">
+            ${appSettings.models.free !== false ? "Kullanıma Kapat" : "Kullanıma Aç"}
+          </button>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-subtle);padding-top:14px">
+          <div>
+            <b>DeepSeek Reasoner (Pro Model)</b>
+            <small style="display:block;color:var(--text-muted)">Varsayılan günlük 4 mesaj hakkı · Akıl yürütme</small>
+          </div>
+          <button class="btn-sm ${appSettings.models.pro !== false ? 'btn-ghost' : 'btn-primary'}" id="btn-toggle-pro">
+            ${appSettings.models.pro !== false ? "Kullanıma Kapat" : "Kullanıma Aç"}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  $("#btn-save-announcement").onclick = () => {
+    const val = $("#input-announcement").value.trim();
+    set(ref(db, "settings/global/announcement"), val);
+    showToast(val ? "Duyuru yayına alındı!" : "Duyuru kaldırıldı.");
+  };
+
+  $("#btn-toggle-free").onclick = () => {
+    const curr = appSettings.models.free !== false;
+    update(ref(db, "settings/global/models"), { free: !curr });
+    showToast(`Standart model ${!curr ? 'açıldı' : 'kapatıldı'}.`);
+  };
+
+  $("#btn-toggle-pro").onclick = () => {
+    const curr = appSettings.models.pro !== false;
+    update(ref(db, "settings/global/models"), { pro: !curr });
+    showToast(`Pro model ${!curr ? 'açıldı' : 'kapatıldı'}.`);
+  };
+}
+
+// ----------------- BAŞLATMA DÖNGÜSÜ -----------------
+onAuthStateChanged(auth, async u => {
+  if (!u) return renderLogin();
+  try {
+    const adminMode = (u.email === ADMIN_EMAIL);
+    if (adminMode) {
+      return initAppShell(u, true);
+    }
+
+    const snap = await get(ref(db, "users/" + u.uid));
+    if (!snap.exists()) return renderInvite(u);
+    if (snap.val().banned) return renderBanned();
+
+    initAppShell(u, false);
+  } catch (err) {
+    renderLogin("Bağlantı hatası: " + err.message);
+  }
 });
 </script>
-</body></html>
+</body>
+</html>
+
