@@ -32,54 +32,216 @@
   --warning: #ffa940;
   --radius: 14px;
   --radius-sm: 8px;
+  --sidebar-w: 280px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
 }
+
+/* 🌌 UZAY VE KOZMİK TEMALAR (PRO & ADMİN) */
+body[data-theme="nebula"] {
+  --bg: #0b0816;
+  --panel: #130f24;
+  --surface: #1d1736;
+  --surface-hover: #29204c;
+  --border: #36265e;
+  --border-subtle: #231840;
+  --accent: #d28cff;
+  --accent-glow: rgba(210, 140, 255, 0.3);
+  --primary: #9d4edd;
+  --primary-glow: rgba(157, 78, 221, 0.3);
+}
+body[data-theme="galaxy"] {
+  --bg: #040c17;
+  --panel: #0a1728;
+  --surface: #11233b;
+  --surface-hover: #193354;
+  --border: #1d3b64;
+  --border-subtle: #0f243f;
+  --accent: #00f0ff;
+  --accent-glow: rgba(0, 240, 255, 0.3);
+  --primary: #ff007f;
+  --primary-glow: rgba(255, 0, 127, 0.3);
+}
+body[data-theme="mars"] {
+  --bg: #14080a;
+  --panel: #1f0d11;
+  --surface: #2d1419;
+  --surface-hover: #3e1b23;
+  --border: #50212a;
+  --border-subtle: #301319;
+  --accent: #ff6b4a;
+  --accent-glow: rgba(255, 107, 74, 0.3);
+  --primary: #ffaa40;
+  --primary-glow: rgba(255, 170, 64, 0.3);
+}
+body[data-theme="obsidian"] {
+  --bg: #000000;
+  --panel: #0a0a0c;
+  --surface: #141418;
+  --surface-hover: #1f1f26;
+  --border: #262630;
+  --border-subtle: #181820;
+  --accent: #ffffff;
+  --accent-glow: rgba(255, 255, 255, 0.25);
+  --primary: #9a9ab0;
+  --primary-glow: rgba(154, 154, 176, 0.25);
+}
+body[data-theme="aurora"] {
+  --bg: #031210;
+  --panel: #081d1a;
+  --surface: #0f2e29;
+  --surface-hover: #164039;
+  --border: #1d4f45;
+  --border-subtle: #10332d;
+  --accent: #2de2b6;
+  --accent-glow: rgba(45, 226, 182, 0.3);
+  --primary: #8347ff;
+  --primary-glow: rgba(131, 71, 255, 0.3);
+}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;min-height:100dvh;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;overflow-x:hidden;touch-action:manipulation}
+html,body{height:100%;height:100dvh;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;overflow:hidden;touch-action:manipulation}
 
-.ambient {position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
-.ambient-glow {position:absolute;border-radius:50%;filter:blur(90px);opacity:0.2}
-.g1 {width:50vw;height:50vw;background:var(--primary);top:-15vw;left:-10vw;animation:orbit 24s ease-in-out infinite alternate}
-.g2 {width:45vw;height:45vw;background:var(--accent);bottom:-10vw;right:-10vw;animation:orbit 28s ease-in-out infinite alternate-reverse}
-@keyframes orbit {to{transform:translate(10vw, 8vw) scale(1.15)}}
+/* Arka Plan Uzay Işıltısı */
+.ambient {position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.ambient-glow {position:absolute;border-radius:50%;filter:blur(95px);opacity:0.25}
+.g1 {width:55vw;height:55vw;background:var(--primary);top:-15vw;left:-10vw;animation:orbit 26s ease-in-out infinite alternate}
+.g2 {width:50vw;height:50vw;background:var(--accent);bottom:-15vw;right:-10vw;animation:orbit 30s ease-in-out infinite alternate-reverse}
+@keyframes orbit {to{transform:translate(12vw, 10vw) scale(1.15)}}
 
-.app-container {max-width:1050px;margin:0 auto;padding:max(12px, var(--safe-top)) max(12px, var(--safe-right)) max(34px, var(--safe-bottom)) max(12px, var(--safe-left))}
+/* Ana Uygulama Sarıcı (Sidebar + Koca Chat Alanı) */
+.app-wrapper {display:flex;height:100%;height:100dvh;width:100%;position:relative;z-index:1}
 
-/* Header */
-.header {display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(19,23,34,0.75);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;box-shadow:0 8px 30px rgba(0,0,0,0.35)}
-.brand {display:flex;align-items:center;gap:12px}
-.brand-icon {width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--primary));display:grid;place-items:center;font-weight:900;color:#0d0f17;font-size:1.3rem;box-shadow:0 4px 14px var(--accent-glow);flex-shrink:0}
-.brand-text h1 {font-size:1.3rem;font-weight:800;letter-spacing:-0.03em;display:flex;align-items:center;gap:6px}
+/* YAN PANEL (SIDEBAR) */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  height: 100%;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform .25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  padding-top: max(12px, var(--safe-top));
+  padding-bottom: max(14px, var(--safe-bottom));
+  padding-left: max(12px, var(--safe-left));
+  padding-right: 12px;
+}
+
+.sidebar-header {display:flex;align-items:center;justify-content:space-between;padding:8px 6px 14px;border-bottom:1px solid var(--border-subtle)}
+.brand {display:flex;align-items:center;gap:10px}
+.brand-icon {width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--primary));display:grid;place-items:center;font-weight:900;color:#0d0f17;font-size:1.2rem;box-shadow:0 4px 14px var(--accent-glow);flex-shrink:0}
+.brand-text h1 {font-size:1.15rem;font-weight:800;letter-spacing:-0.03em}
 .brand-text span {color:var(--accent)}
-.brand-text p {font-size:0.75rem;color:var(--text-muted)}
-.header-actions {display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.brand-text p {font-size:0.7rem;color:var(--text-muted)}
 
-.credit-chip {display:flex;align-items:center;gap:6px;background:rgba(255,184,77,0.12);border:1px solid var(--accent);color:var(--accent);padding:5px 12px;border-radius:20px;font-size:0.83rem;font-weight:700;white-space:nowrap}
-.user-chip {display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);padding:4px 10px 4px 5px;border-radius:30px}
-.chip-av {width:28px;height:28px;border-radius:50%;object-fit:cover;display:grid;place-items:center;font-size:0.8rem;font-weight:800;color:#10121a;flex-shrink:0}
-.chip-name {font-size:0.85rem;font-weight:600;max-width:105px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.user-id-tag {font-family:monospace;font-size:0.72rem;background:rgba(255,184,77,0.15);color:var(--accent);padding:2px 6px;border-radius:6px;border:1px solid var(--accent);cursor:pointer;white-space:nowrap}
-.badge-admin {background:var(--accent);color:#1a1300;font-size:0.65rem;font-weight:800;padding:2px 7px;border-radius:6px;text-transform:uppercase;letter-spacing:0.04em}
+.btn-sidebar-close {display:none;background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;padding:4px}
 
-.banner-alert {display:none;background:linear-gradient(90deg,rgba(255,184,77,0.15),rgba(124,102,220,0.15));border:1px solid var(--accent);color:var(--text);padding:10px 14px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:0.88rem;align-items:center;gap:10px;animation:slideDown .3s ease}
-.banner-alert.active {display:flex}
-.banner-icon {font-size:1.1rem;color:var(--accent);flex-shrink:0}
+/* Kullanıcı Profil Kartı (Sidebar) */
+.user-profile-card {display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);padding:10px;border-radius:var(--radius-sm);margin:12px 0}
+.chip-av {width:38px;height:38px;border-radius:50%;object-fit:cover;display:grid;place-items:center;font-size:0.95rem;font-weight:800;color:#10121a;flex-shrink:0;border:2px solid var(--border)}
+.user-info-text {flex:1;min-width:0}
+.user-info-text b {display:block;font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-id-tag {font-family:monospace;font-size:0.7rem;background:rgba(255,184,77,0.15);color:var(--accent);padding:2px 6px;border-radius:5px;border:1px solid var(--accent);cursor:pointer;display:inline-block;margin-top:2px}
 
-/* Sekmeler */
-.tabs {display:flex;gap:6px;background:var(--panel);border:1px solid var(--border);padding:6px;border-radius:var(--radius);margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.tabs::-webkit-scrollbar {display:none}
-.tab-btn {flex:1;min-width:max-content;background:transparent;border:0;color:var(--text-muted);padding:9px 14px;border-radius:var(--radius-sm);font-weight:700;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s ease;-webkit-tap-highlight-color:transparent}
-.tab-btn:hover {color:var(--text);background:rgba(255,255,255,0.03)}
-.tab-btn.active {background:var(--surface);color:var(--accent);border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.25)}
-.tab-btn .badge-count {background:var(--danger);color:#fff;font-size:0.7rem;padding:2px 6px;border-radius:10px;font-weight:800}
+.credit-badge-wrap {display:flex;align-items:center;justify-content:space-between;background:rgba(255,184,77,0.1);border:1px solid var(--accent);padding:8px 10px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:0.8rem;font-weight:700;color:var(--accent)}
+
+/* Sidebar Menü Tuşları */
+.sidebar-nav {display:flex;flex-direction:column;gap:6px;flex:1;overflow-y:auto;padding-right:4px}
+.nav-item-btn {display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);background:transparent;border:0;color:var(--text-muted);font-weight:700;font-size:0.88rem;text-align:left;cursor:pointer;transition:all .18s ease;position:relative}
+.nav-item-btn:hover {background:rgba(255,255,255,0.03);color:var(--text)}
+.nav-item-btn.active {background:var(--surface);color:var(--accent);border:1px solid var(--border);box-shadow:0 4px 12px rgba(0,0,0,0.25)}
+.nav-item-btn .nav-icon {font-size:1.15rem}
+.nav-badge-count {margin-left:auto;background:var(--danger);color:#fff;font-size:0.68rem;padding:2px 6px;border-radius:10px;font-weight:800}
+
+/* Pro & Nitro Özel Rozet */
+.badge-pro {background:linear-gradient(135deg,#ff007f,#7c4dff);color:#fff;font-size:0.65rem;font-weight:900;padding:2px 6px;border-radius:6px;text-transform:uppercase;letter-spacing:0.04em;box-shadow:0 2px 8px rgba(255,0,127,0.3)}
+.badge-admin {background:var(--accent);color:#1a1300;font-size:0.65rem;font-weight:900;padding:2px 6px;border-radius:6px;text-transform:uppercase}
+
+.sidebar-footer {padding-top:10px;border-top:1px solid var(--border-subtle);display:flex;flex-direction:column;gap:8px}
+
+/* KOCA CHAT ALANI (MAIN CONTENT CANVAS) */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  position: relative;
+  background: var(--bg);
+  overflow: hidden;
+  padding-top: max(8px, var(--safe-top));
+  padding-bottom: max(10px, var(--safe-bottom));
+  padding-right: max(10px, var(--safe-right));
+}
+
+.main-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(19, 23, 34, 0.65);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  gap: 10px;
+  z-index: 10;
+}
+
+.topbar-left {display:flex;align-items:center;gap:12px;min-width:0}
+.btn-hamburger {display:none;background:var(--surface);border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:var(--radius-sm);place-items:center;font-size:1.2rem;cursor:pointer}
+.current-title-wrap {display:flex;align-items:center;gap:8px;min-width:0}
+.current-title-wrap b {font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Model Seçici Butonu */
+.model-picker-wrap {display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);padding:6px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:border-color .2s}
+.model-picker-wrap:hover {border-color:var(--accent)}
+.model-cost-tag {font-size:0.7rem;font-weight:800;background:rgba(255,184,77,0.15);color:var(--accent);padding:2px 6px;border-radius:4px;white-space:nowrap}
+
+/* KOCA CHAT PENCERESİ */
+.chat-container {flex:1;display:flex;flex-direction:column;height:100%;min-height:0;padding:12px 16px 8px;position:relative}
+.chat-box {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 10px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.msg-wrap {display:flex;gap:10px;max-width:88%;animation:fadeIn .25s ease both}
+.msg-wrap.me {align-self:flex-end;flex-direction:row-reverse}
+.msg-wrap.ai-bot {align-self:flex-start}
+.msg-bubble {padding:12px 16px;border-radius:14px;font-size:0.94rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;position:relative}
+.msg-wrap.me .msg-bubble {background:linear-gradient(135deg,#5e4cc4,#47389a);color:#fff;border-bottom-right-radius:3px}
+.msg-wrap:not(.me):not(.ai-bot) .msg-bubble {background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:3px}
+.msg-wrap.ai-bot .msg-bubble {background:rgba(255,184,77,0.08);border:1px solid rgba(255,184,77,0.35);border-bottom-left-radius:3px}
+.msg-meta {font-size:0.72rem;color:var(--text-sub);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+
+.msg-media-pdf {display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.3);border:1px solid var(--border);padding:8px 12px;border-radius:8px;margin-top:6px;text-decoration:none;color:inherit}
+.msg-media-pdf .pdf-icon {font-size:1.4rem}
+.msg-media-pdf .pdf-meta b {font-size:0.84rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.msg-media-pdf .pdf-meta small {font-size:0.72rem;color:var(--text-muted)}
+
+/* ALT GİRİŞ ÇUBUĞU */
+.input-area {display:flex;flex-direction:column;gap:6px;padding-top:4px}
+.attachment-preview {display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;align-items:center;justify-content:space-between;font-size:0.82rem}
+.attachment-preview.active {display:flex}
+
+.input-bar {display:flex;gap:8px;align-items:flex-end}
+.input-bar textarea {flex:1;resize:none;max-height:120px;border-radius:var(--radius-sm);font-size:16px;padding:10px 14px}
+.btn-attach {width:46px;height:46px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-muted);font-size:1.25rem;cursor:pointer;flex-shrink:0}
+.btn-attach:hover {color:var(--accent);border-color:var(--accent)}
 
 /* Buton ve Girdiler */
 button {font:inherit;cursor:pointer;border:0;border-radius:var(--radius-sm);transition:all .18s ease;touch-action:manipulation}
 button:active {transform:scale(0.97)}
-.btn-primary {background:var(--accent);color:#181200;font-weight:700;padding:10px 16px;box-shadow:0 4px 14px var(--accent-glow)}
+.btn-primary {background:var(--accent);color:#181200;font-weight:700;padding:10px 18px;box-shadow:0 4px 14px var(--accent-glow)}
 .btn-primary:hover {transform:translateY(-1px);box-shadow:0 6px 18px var(--accent-glow)}
 .btn-primary:disabled {opacity:0.5;cursor:not-allowed;transform:none}
 .btn-ghost {background:var(--surface);color:var(--text);border:1px solid var(--border);padding:8px 14px;font-weight:600}
@@ -88,101 +250,33 @@ button:active {transform:scale(0.97)}
 .btn-danger:hover {background:var(--danger);color:#fff}
 .btn-sm {padding:6px 10px;font-size:0.8rem;border-radius:6px}
 
-/* iOS Safari auto-zoom engellemek için font-size: 16px */
 input,textarea,select {font:inherit;font-size:16px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;transition:border-color .2s;width:100%}
 input:focus,textarea:focus,select:focus {outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 
-#toast {position:fixed;bottom:max(24px, env(safe-area-inset-bottom, 24px));left:50%;transform:translateX(-50%) translateY(100px);background:var(--panel);border:1px solid var(--border);color:var(--text);padding:10px 20px;border-radius:30px;font-size:0.88rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.5);display:flex;align-items:center;gap:8px;z-index:99999;transition:transform .3s cubic-bezier(0.18, 0.89, 0.32, 1.28);pointer-events:none;max-width:90vw;text-align:center}
+#toast {position:fixed;bottom:max(24px, env(safe-area-inset-bottom, 24px));left:50%;transform:translateX(-50%) translateY(100px);background:var(--panel);border:1px solid var(--border);color:var(--text);padding:10px 22px;border-radius:30px;font-size:0.88rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.5);display:flex;align-items:center;gap:8px;z-index:99999;transition:transform .3s cubic-bezier(0.18, 0.89, 0.32, 1.28);pointer-events:none;max-width:90vw;text-align:center}
 #toast.show {transform:translateX(-50%) translateY(0)}
 
 /* Modallar */
 .modal-overlay {position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:none;place-items:center;z-index:10000;padding:14px}
 .modal-overlay.active {display:grid}
-.modal-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:480px;padding:22px 20px;box-shadow:0 20px 50px rgba(0,0,0,0.6);animation:slideDown .25s ease;max-height:90dvh;overflow-y:auto}
+.modal-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:520px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,0.6);animation:slideDown .25s ease;max-height:90dvh;overflow-y:auto}
 
-/* Kartlar & Mesajlaşma */
-.ai-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:0 12px 36px rgba(0,0,0,0.25)}
-.ai-topbar {display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border-subtle)}
+/* Sidebar Mobil Karartma Overlay */
+.sidebar-backdrop {position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:99;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.sidebar-backdrop.active {opacity:1;pointer-events:auto}
 
-/* Model Seçici Kartı */
-.model-picker-wrap {display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);padding:6px 12px;border-radius:var(--radius-sm);cursor:pointer;transition:border-color .2s}
-.model-picker-wrap:hover {border-color:var(--accent)}
-.model-brand-icon {font-size:1.1rem}
-.model-cost-tag {font-size:0.7rem;font-weight:800;background:rgba(255,184,77,0.15);color:var(--accent);padding:2px 6px;border-radius:4px;white-space:nowrap}
-
-.chat-box {height:52vh;min-height:300px;overflow-y:auto;padding-right:4px;display:flex;flex-direction:column;gap:12px;margin-bottom:12px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
-.msg-wrap {display:flex;gap:8px;max-width:85%;animation:fadeIn .25s ease both}
-.msg-wrap.me {align-self:flex-end;flex-direction:row-reverse}
-.msg-wrap.ai-bot {align-self:flex-start}
-.msg-av {width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:0.85rem;font-weight:800;flex-shrink:0;color:#0d0f17}
-.msg-bubble {padding:10px 14px;border-radius:14px;font-size:0.92rem;line-height:1.45;white-space:pre-wrap;word-break:break-word;position:relative}
-.msg-wrap.me .msg-bubble {background:linear-gradient(135deg,#5e4cc4,#47389a);color:#fff;border-bottom-right-radius:3px}
-.msg-wrap:not(.me):not(.ai-bot) .msg-bubble {background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:3px}
-.msg-wrap.ai-bot .msg-bubble {background:rgba(255,184,77,0.08);border:1px solid rgba(255,184,77,0.35);border-bottom-left-radius:3px}
-.msg-meta {font-size:0.72rem;color:var(--text-sub);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
-
-/* Medya & Dosya Ekleri */
-.msg-media-img {max-width:240px;max-height:200px;border-radius:8px;object-fit:cover;margin-top:6px;cursor:pointer;border:1px solid var(--border)}
-.msg-media-pdf {display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.25);border:1px solid var(--border);padding:8px 12px;border-radius:8px;margin-top:6px;text-decoration:none;color:inherit}
-.msg-media-pdf .pdf-icon {font-size:1.4rem}
-.msg-media-pdf .pdf-meta b {font-size:0.82rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
-.msg-media-pdf .pdf-meta small {font-size:0.72rem;color:var(--text-muted)}
-
-/* Grup / Oda Seçici Çubuğu */
-.room-selector {display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;border-bottom:1px solid var(--border-subtle);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.room-selector {display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .room-selector::-webkit-scrollbar {display:none}
-.room-pill {background:var(--surface);color:var(--text-muted);border:1px solid var(--border);padding:6px 12px;border-radius:20px;font-size:0.82rem;font-weight:600;white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:6px}
+.room-pill {background:var(--surface);color:var(--text-muted);border:1px solid var(--border);padding:6px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:6px}
 .room-pill.active {background:var(--accent);color:#10121a;border-color:var(--accent)}
 
-.input-bar {display:flex;gap:6px;align-items:flex-end}
-.input-bar textarea {flex:1;resize:none;max-height:120px;border-radius:var(--radius-sm);font-size:16px}
-
-.btn-attach {width:44px;height:44px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-muted);font-size:1.2rem;cursor:pointer;flex-shrink:0}
-.btn-attach:hover {color:var(--accent);border-color:var(--accent)}
-
-.attachment-preview {display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:8px;align-items:center;justify-content:space-between;font-size:0.82rem}
-.attachment-preview.active {display:flex}
-
-.chat-locked-bar {display:none;background:rgba(255,82,99,0.12);border:1px solid var(--danger);color:var(--danger);padding:10px 14px;border-radius:var(--radius-sm);text-align:center;font-size:0.85rem;font-weight:600;margin-bottom:12px}
-.chat-locked-bar.active {display:block}
-
-/* Rozetler & Tablo */
-.badge {font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase}
-.badge-banned {background:rgba(255,82,99,0.2);color:var(--danger);border:1px solid var(--danger)}
-.badge-muted {background:rgba(255,169,64,0.2);color:var(--warning);border:1px solid var(--warning)}
-.badge-ok {background:rgba(61,214,140,0.15);color:var(--success);border:1px solid var(--success)}
-.badge-bonus {background:rgba(124,102,220,0.2);color:#b3a2ff;border:1px solid var(--primary)}
-.badge-flagged {background:rgba(255,82,99,0.25);color:var(--danger);border:1px solid var(--danger);font-weight:800}
-
-.data-table-wrap {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
-.table-header {padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.table-header h3 {font-size:1rem;font-weight:700}
-.list-item {display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border-subtle);gap:12px;transition:background .15s}
-.list-item:hover {background:rgba(255,255,255,0.02)}
-.list-item:last-child {border-bottom:none}
-.item-info {display:flex;align-items:center;gap:10px;min-width:0;flex:1}
-.item-info b {display:block;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-info small {color:var(--text-muted);font-size:0.78rem}
-.item-actions {display:flex;gap:6px;flex-shrink:0}
-
-/* Admin */
-.admin-badge-strip {background:linear-gradient(90deg,rgba(255,184,77,0.1),rgba(124,102,220,0.1));border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem}
-.admin-subnav {display:flex;gap:6px;overflow-x:auto;margin-bottom:16px;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.admin-subnav::-webkit-scrollbar {display:none}
-.subnav-btn {background:var(--surface);color:var(--text-muted);border:1px solid var(--border);padding:7px 12px;border-radius:var(--radius-sm);font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap}
-.subnav-btn.active {background:var(--accent);color:#181200;border-color:var(--accent)}
-
-.stats-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
-.stat-card {background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:var(--radius);display:flex;flex-direction:column;gap:4px}
-.stat-card .val {font-size:1.6rem;font-weight:800;color:var(--text)}
-.stat-card .lbl {font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em}
-
-.switch {position:relative;display:inline-block;width:44px;height:24px}
-.switch input {opacity:0;width:0;height:0}
-.slider {position:absolute;cursor:pointer;inset:0;background-color:var(--surface);border:1px solid var(--border);border-radius:24px;transition:.25s}
-.slider:before {position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background-color:var(--text-muted);border-radius:50%;transition:.25s}
-input:checked + .slider {background-color:var(--accent);border-color:var(--accent)}
-input:checked + .slider:before {transform:translateX(20px);background-color:#181200}
+/* Pro Kartı ve Tema Seçici Grid */
+.pro-hero {text-align:center;padding:20px 10px;background:linear-gradient(135deg,rgba(255,0,127,0.1),rgba(124,77,255,0.1));border:1px solid rgba(255,0,127,0.3);border-radius:var(--radius);margin-bottom:16px}
+.theme-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px}
+.theme-card {padding:12px;border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center;transition:all .2s ease}
+.theme-card:hover {border-color:var(--accent);transform:translateY(-2px)}
+.theme-card.active {border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+.theme-dot {width:24px;height:24px;border-radius:50%;border:2px solid #fff}
 
 .auth-center {min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .auth-box {width:100%;max-width:380px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:30px 24px;box-shadow:0 16px 40px rgba(0,0,0,0.5)}
@@ -193,99 +287,39 @@ input:checked + .slider:before {transform:translateX(20px);background-color:#181
 @keyframes fadeIn {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideDown {from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ----------------- MOBİL VE TABLET UYUMU (RESPONSIVE) ----------------- */
-@media (max-width: 768px) {
-  .app-container {
-    padding-left: 8px;
-    padding-right: 8px;
+/* 📱 MOBİL VE TABLET UYUMU */
+@media (max-width: 850px) {
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 285px;
+    max-width: 84vw;
+    transform: translateX(-100%);
+    box-shadow: 10px 0 35px rgba(0,0,0,0.7);
   }
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    padding: 10px 14px;
+  .sidebar.open {
+    transform: translateX(0);
   }
-  .brand {
-    justify-content: space-between;
+  .btn-sidebar-close {
+    display: block;
   }
-  .header-actions {
-    justify-content: space-between;
-    gap: 6px;
+  .btn-hamburger {
+    display: grid;
   }
-  .user-chip {
-    padding: 3px 8px 3px 4px;
-    gap: 6px;
+  .main-content {
+    padding-left: max(8px, var(--safe-left));
+    padding-right: max(8px, var(--safe-right));
   }
-  .chip-name {
-    max-width: 80px;
-  }
-  .chat-box {
-    height: calc(100dvh - 310px) !important;
-    min-height: 290px;
+  .chat-container {
+    padding: 8px 10px 6px;
   }
   .msg-wrap {
-    max-width: 90%;
-  }
-  .input-bar {
-    gap: 5px;
-  }
-  .btn-attach {
-    width: 40px;
-    height: 40px;
-  }
-  #btn-ask-ai-direct {
-    padding: 8px 10px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-  }
-  #btn-send-group, #btn-send-ai {
-    padding: 8px 16px;
-    font-size: 0.88rem;
-  }
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .list-item {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-  .item-actions {
-    justify-content: flex-end;
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 480px) {
-  .brand-text h1 {
-    font-size: 1.15rem;
-  }
-  .brand-text p {
-    display: none;
-  }
-  .brand-icon {
-    width: 34px;
-    height: 34px;
-    font-size: 1.1rem;
-  }
-  .credit-chip {
-    font-size: 0.74rem;
-    padding: 4px 8px;
-  }
-  .tab-btn {
-    padding: 8px 10px;
-    font-size: 0.82rem;
-  }
-  .user-id-tag {
-    font-size: 0.68rem;
-  }
-  .modal-card {
-    padding: 18px 14px;
+    max-width: 92%;
   }
 }
 </style>
 </head>
-<body>
+<body data-theme="default">
 
 <div class="ambient">
   <div class="ambient-glow g1"></div>
@@ -294,159 +328,117 @@ input:checked + .slider:before {transform:translateX(20px);background-color:#181
 
 <div id="toast"></div>
 
-<!-- 1. YENİ ÜYE KARŞILAMA VE REHBER MODALI -->
-<div class="modal-overlay" id="welcome-modal">
-  <div class="modal-card">
-    <div style="text-align:center;margin-bottom:16px">
-      <div style="font-size:2.5rem;margin-bottom:8px">🎉</div>
-      <h2 style="font-size:1.4rem;font-weight:900">Ne Yapay?'a Hoş Geldin!</h2>
-      <p style="font-size:0.85rem;color:var(--text-muted)">Topluluğumuza katıldığın için teşekkürler. İşte hızlı başlangıç rehberin:</p>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:12px;background:var(--surface);padding:14px;border-radius:var(--radius-sm);font-size:0.85rem;margin-bottom:16px;border:1px solid var(--border)">
-      <div>🤖 <b>Çoklu Model Desteği:</b> OpenAI (GPT-4o), Anthropic (Claude 3.5), Google (Gemini) ve DeepSeek modellerini tek tıkla seçip kullanabilirsin.</div>
-      <div>💬 <b>Grup & Özel Sohbetler:</b> Profilindeki benzersiz <b>#NY-XXXX</b> ID'n ile arkadaşlarınla özel sohbet açabilir, <code style="color:var(--accent)">@ai</code> yazarak veya butona basarak yapay zekayı dahil edebilirsin.</div>
-      <div>📄 <b>100 Sayfaya Kadar PDF:</b> Kapsamlı PDF belgelerini yükleyip Pro modellerle baştan sona analiz ettirebilirsin.</div>
-      <div>⏰ <b>Kotalar Sabah 09:00'da Yenilenir:</b> Günlük 100 kredin her sabah saat <b>09:00'da</b> sıfırlanır.</div>
-      <div style="border-top:1px solid var(--border-subtle);padding-top:8px;color:var(--accent)">
-        📩 <b>Destek & İletişim:</b> Bir sorun, öneri veya hata ile karşılaşırsan <b>coslxofficial@gmail.com</b> adresine e-posta atabilirsin.
-      </div>
-    </div>
-
-    <button class="btn-primary" style="width:100%" id="btn-close-welcome">Anladım, Uygulamayı Başlat! 🚀</button>
-  </div>
-</div>
-
-<!-- 2. MODEL SEÇİM MODALI (MARKA LOGOLARI & FİYAT KATSAYISI) -->
+<!-- MODEL SEÇİM MODALI -->
 <div class="modal-overlay" id="model-select-modal">
-  <div class="modal-card" style="max-width:540px">
+  <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
       <h3>🤖 Yapay Zeka Modelini Seç</h3>
       <button id="btn-close-model-modal" style="background:none;border:none;color:var(--text-muted);font-size:1.6rem;cursor:pointer">&times;</button>
     </div>
-    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:14px">
-      İhtiyacına uygun zekayı seç. Modeller harcadıkları kredi miktarına göre kategorize edilmiştir (Günlük 100 Kredi).
-    </p>
-
-    <div style="display:flex;flex-direction:column;gap:10px;max-height:360px;overflow-y:auto;padding-right:4px" id="models-list-container">
-      <!-- JS ile dinamik çizilecek -->
-    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto;padding-right:4px" id="models-list-container"></div>
   </div>
 </div>
 
-<!-- 3. ARKADAŞ EKLE VE DM BAŞLAT MODALI -->
+<!-- ARKADAŞ EKLE VE DM BAŞLAT MODALI -->
 <div class="modal-overlay" id="add-friend-modal">
   <div class="modal-card">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
       <span style="font-size:1.8rem">🔍</span>
       <div>
-        <h3 style="font-size:1.15rem">Arkadaş Ekle & Özel Sohbet (DM)</h3>
-        <small style="color:var(--text-muted)">Arkadaşının ID'sini girerek doğrudan 1'e 1 özel sohbet başlat.</small>
+        <h3 style="font-size:1.15rem">Arkadaş Ekle & DM Başlat</h3>
+        <small style="color:var(--text-muted)">Arkadaşının ID'sini girerek 1'e 1 özel sohbet aç.</small>
       </div>
     </div>
-
     <div style="margin-bottom:14px">
-      <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Arkadaşının Kullanıcı ID'si veya İsmi:</label>
       <div style="display:flex;gap:8px">
         <input type="text" id="input-search-friend-id" placeholder="Örn: #NY-80072 veya isim..." style="flex:1">
         <button class="btn-primary" id="btn-search-friend">Ara</button>
       </div>
     </div>
-
-    <div id="friend-search-results" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
-      <div style="padding:16px;text-align:center;color:var(--text-sub);font-size:0.85rem">Aramak için yukarıya arkadaşının ID'sini yazın.</div>
-    </div>
-
+    <div id="friend-search-results" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
     <div style="display:flex;justify-content:flex-end">
       <button class="btn-ghost" id="btn-close-friend-modal">Kapat</button>
     </div>
   </div>
 </div>
 
-<!-- 4. YENİ GRUP KURMA MODALI -->
+<!-- YENİ GRUP KURMA MODALI -->
 <div class="modal-overlay" id="new-group-modal">
   <div class="modal-card">
-    <h3 style="margin-bottom:8px">👥 Yeni Özel Grup / Sohbet Kur</h3>
-    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:14px">Arkadaşlarının ID'lerini girerek sadece grubunuza özel oda oluşturun.</p>
-    
+    <h3 style="margin-bottom:8px">👥 Yeni Özel Grup Kur</h3>
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
       <div>
         <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Grup Adı:</label>
-        <input type="text" id="input-group-name" placeholder="Örn: Proje Ekibi, Kahve Grubu..." style="width:100%">
+        <input type="text" id="input-group-name" placeholder="Örn: Proje Grubu..." style="width:100%">
       </div>
       <div>
-        <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Eklenecek Üye ID'leri (Virgülle ayır):</label>
+        <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Üye ID'leri (Virgülle ayır):</label>
         <input type="text" id="input-group-member-ids" placeholder="Örn: #NY-9482, #NY-1102" style="width:100%">
       </div>
       <div style="display:flex;align-items:center;gap:10px;background:var(--surface);padding:10px;border-radius:var(--radius-sm)">
         <input type="checkbox" id="check-group-ai" checked style="width:18px;height:18px">
-        <label for="check-group-ai" style="font-size:0.85rem;cursor:pointer">
-          <b>🤖 Yapay Zeka (AI) Gruba Dahil Edilsin</b>
-          <small style="display:block;color:var(--text-muted)">Grupta @ai ile doğrudan yapay zekaya danışabilirsiniz.</small>
-        </label>
+        <label for="check-group-ai" style="font-size:0.85rem;cursor:pointer"><b>🤖 Yapay Zeka (AI) Gruba Dahil Edilsin</b></label>
       </div>
     </div>
-
     <div style="display:flex;justify-content:flex-end;gap:10px">
       <button class="btn-ghost" id="btn-cancel-group">İptal</button>
-      <button class="btn-primary" id="btn-create-group">Grubu Oluştur</button>
+      <button class="btn-primary" id="btn-create-group">Grubu Kur</button>
     </div>
   </div>
 </div>
 
-<!-- 5. PDF ANALİZ KREDİ ONAY MODALI -->
+<!-- PDF ONAY MODALI (100 SAYFA ANALİZ) -->
 <div class="modal-overlay" id="pdf-confirm-modal">
   <div class="modal-card">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-      <span style="font-size:1.8rem">⚠️</span>
-      <h3 style="font-size:1.15rem">Kapsamlı PDF Analiz Uyarısı</h3>
+      <span style="font-size:1.8rem">📄</span>
+      <h3 style="font-size:1.15rem">Kapsamlı PDF Belgesi Taraması</h3>
     </div>
-    <p style="font-size:0.88rem;color:var(--text);margin-bottom:12px" id="pdf-modal-desc">
-      Bu PDF belgesi baştan sona taranacak ve işlenecektir.
-    </p>
+    <p style="font-size:0.88rem;color:var(--text);margin-bottom:12px" id="pdf-modal-desc"></p>
     <div style="background:rgba(255,184,77,0.12);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:12px;margin-bottom:16px;font-size:0.84rem">
       <b style="color:var(--accent)">📌 Kredi Bilgilendirmesi:</b><br>
-      Kapsamlı 100 sayfa analiz yüksek token gücü tükettiği için <b>25 KREDİ</b> harcayacaktır.
-      <div style="margin-top:6px" id="pdf-pro-status">Mevcut Krediniz: Yükleniyor...</div>
+      Kapsamlı 100 sayfa analiz <b>25 KREDİ</b> harcar.
+      <div style="margin-top:6px" id="pdf-pro-status"></div>
     </div>
-
     <div style="display:flex;flex-direction:column;gap:8px">
       <button class="btn-primary" id="btn-confirm-pdf-pro">Onayla ve Analiz Et (25 Kredi) 🚀</button>
       <button class="btn-ghost" id="btn-upload-pdf-only">Yalnızca Sohbete Yükle (AI Analizi Yapma)</button>
-      <button class="btn-danger btn-sm" id="btn-cancel-pdf-modal" style="margin-top:4px">İptal Et</button>
+      <button class="btn-danger btn-sm" id="btn-cancel-pdf-modal">İptal</button>
     </div>
   </div>
 </div>
 
-<!-- 6. KREDİ VERME MODALI (ADMİN) -->
-<div class="modal-overlay" id="credit-modal">
+<!-- HAREKETLİ GIF AVATAR MODALI (PRO / ADMİN) -->
+<div class="modal-overlay" id="gif-avatar-modal">
   <div class="modal-card">
-    <h3 style="margin-bottom:8px">🎁 Kullanıcıya Ekstra Kredi Tanımla</h3>
-    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:16px" id="modal-user-target">Kullanıcı seçiliyor...</p>
-    
-    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px">
-      <div>
-        <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Tanımlanacak Ekstra Kredi Miktarı:</label>
-        <input type="number" id="input-bonus-credits" min="0" placeholder="Örn: 100" style="width:100%">
-      </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3>🎬 Hareketli GIF Avatar Belirle</h3>
+      <button id="btn-close-gif-modal" style="background:none;border:none;color:var(--text-muted);font-size:1.6rem;cursor:pointer">&times;</button>
     </div>
+    <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:14px">
+      Ne Yapay Pro veya Admin ayrıcalığıyla profilinize doğrudan hareketli bir GIF tanımlayabilirsiniz.
+    </p>
+
+    <div style="margin-bottom:14px">
+      <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Doğrudan GIF URL'si (Tenor, Giphy, Discord vb.):</label>
+      <input type="url" id="input-gif-url" placeholder="https://media.tenor.com/.../example.gif" style="width:100%">
+    </div>
+
+    <div style="text-align:center;margin-bottom:14px;color:var(--text-sub);font-size:0.8rem">— VEYA DOSYA YÜKLE —</div>
+    <input type="file" id="gif-file-input" accept="image/gif" style="display:none">
+    <button class="btn-ghost" style="width:100%;margin-bottom:16px" id="btn-pick-gif-file">📂 Cihazdan .GIF Dosyası Seç</button>
 
     <div style="display:flex;justify-content:flex-end;gap:10px">
-      <button class="btn-ghost" id="btn-cancel-modal">İptal</button>
-      <button class="btn-primary" id="btn-save-credits">Kredileri Kaydet</button>
+      <button class="btn-ghost" id="btn-cancel-gif">Vazgeç</button>
+      <button class="btn-primary" id="btn-save-gif">GIF Avatarı Kaydet</button>
     </div>
   </div>
 </div>
 
-<!-- 7. MEDYA BÜYÜTME MODALI -->
-<div class="modal-overlay" id="media-viewer-modal">
-  <div style="max-width:90vw;max-height:90vh;position:relative">
-    <button id="btn-close-viewer" style="position:absolute;top:-40px;right:0;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer">&times;</button>
-    <img id="viewer-img" style="max-width:100%;max-height:85vh;border-radius:10px;object-fit:contain">
-  </div>
-</div>
+<!-- SİDEBAR MOBİL OVERLAY KARARTMASI -->
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
-<div id="app" class="app-container">
+<div id="app" class="app-wrapper">
   <div class="auth-center"><div class="auth-desc">Yükleniyor…</div></div>
 </div>
 
@@ -468,14 +460,26 @@ const cfg = {
   appId: "1:391460522060:web:d8089bfcc5be0c6eba4ce9",
   databaseURL: "https://ne-yapay-default-rtdb.europe-west1.firebasedatabase.app"
 };
-const WORKER = "https://neyapay.hafizselmankusutoglu.workers.dev";
+const WORKER = "https://neyapay.hafizselmankusutoglu@gmail.com.workers.dev" || "https://neyapay.hafizselmankusutoglu.workers.dev";
 const ADMIN_EMAIL = "hafizselmankusutoglu@gmail.com";
 const DEFAULT_DAILY_CREDITS = 100;
+const PRO_DAILY_COST = 25;
+
+// Harika Uzay & Kozmik Temalar
+const THEMES = [
+  { id: "default", name: "Klasik Gece", color: "#ffb84d", desc: "Varsayılan şık karanlık tema" },
+  { id: "nebula", name: "🌌 Kozmik Nebula", color: "#d28cff", desc: "Derin uzay moru & yıldız tozu" },
+  { id: "galaxy", name: "🌠 Siber Galaksi", color: "#00f0ff", desc: "Siyanür mavisi & pembe pulsar" },
+  { id: "mars", name: "🪐 Kızıl Mars", color: "#ff6b4a", desc: "Mars kızılı & kehribar kozmik ışıltı" },
+  { id: "obsidian", name: "🌑 Karanlık Madde", color: "#ffffff", desc: "Saf OLED siyahı & kristal starlight" },
+  { id: "aurora", name: "🔮 Kuzey Işıkları", color: "#2de2b6", desc: "Zümrüt & menekşe kutup aurası" }
+];
 
 // Markalı Model Kataloğu
 const AVAILABLE_MODELS = [
   // 1 Kredi
-  { id: "google/gemini-2.0-flash-001", name: "Gemini 2.0 Flash", brand: "Google", logo: "🔵", cost: 1, desc: "Işık hızında genel asistan & bilgi" },
+  { id: "google/gemini-2.0-flash-001", name: "Gemini 2.0 Flash", brand: "Google", logo: "🔵", cost: 1, desc: "Işık hızında Google asistanı & bilgi" },
+  { id: "google/gemini-2.0-flash-exp:free", name: "Gemini 2.0 Flash (Free)", brand: "Google", logo: "🔵", cost: 1, desc: "Alternatif Google uç noktası" },
   { id: "openai/gpt-4o-mini", name: "GPT-4o Mini", brand: "OpenAI", logo: "🟢", cost: 1, desc: "Hızlı, zeki günlük ChatGPT modeli" },
   { id: "deepseek/deepseek-chat", name: "DeepSeek V3", brand: "DeepSeek", logo: "🐋", cost: 1, desc: "Yüksek başarımlı genel sohbet modeli" },
   { id: "meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3 70B", brand: "Meta", logo: "🦙", cost: 1, desc: "Meta'nın en güçlü açık kaynak modeli" },
@@ -519,18 +523,21 @@ const getUsageDay = () => new Date(Date.now() - 6 * 3600 * 1000).toISOString().s
 
 let currentUser = null;
 let isAdmin = false;
+let isPro = false;
 let userProfiles = {};
 let allUsersData = {};
 let myBonusCredits = 0;
 let currentRoomId = "global";
 let currentUsageToday = { spentCredits: 0 };
-let appSettings = {
-  chatLocked: false,
-  slowmode: 0,
-  announcement: "",
-  badWords: [],
-  watchWords: []
-};
+let currentTab = "ai";
+let appSettings = { chatLocked: false, slowmode: 0, announcement: "", badWords: [], watchWords: [] };
+
+// Tema Değiştirme Fonksiyonu
+function applyTheme(themeId) {
+  document.body.dataset.theme = themeId;
+  localStorage.setItem("user_theme", themeId);
+}
+applyTheme(localStorage.getItem("user_theme") || "default");
 
 // ----------------- GİRİŞ & YETKİLENDİRME -----------------
 function renderLogin(err = "") {
@@ -612,7 +619,7 @@ function renderBanned() {
   $("#btn-banned-out").onclick = () => signOut(auth);
 }
 
-// ----------------- ANA UYGULAMA İSKELETİ -----------------
+// ----------------- ANA UYGULAMA İSKELETİ (SIDEBAR + KOCA CHAT ALANI) -----------------
 function initAppShell(u, admin) {
   clean();
   currentUser = u;
@@ -624,15 +631,7 @@ function initAppShell(u, admin) {
     tag: myTag
   });
 
-  const welcomeKey = "welcome_seen_" + u.uid;
-  if (!localStorage.getItem(welcomeKey)) {
-    $("#welcome-modal").classList.add("active");
-  }
-  $("#btn-close-welcome").onclick = () => {
-    localStorage.setItem(welcomeKey, "true");
-    $("#welcome-modal").classList.remove("active");
-  };
-
+  // Kredi Dinleyicileri
   unsubs.push(onValue(ref(db, `users/${u.uid}/bonusCredits`), snap => {
     const b = snap.val() || {};
     myBonusCredits = b.total || b.free || 0;
@@ -645,6 +644,18 @@ function initAppShell(u, admin) {
     updateCreditBadge();
   }));
 
+  // Pro Durumu Dinleyicisi (Admin daima PRO'dur)
+  unsubs.push(onValue(ref(db, `users/${u.uid}/isPro`), snap => {
+    isPro = isAdmin || !!snap.val();
+    updateProStatusUI();
+  }));
+
+  // Tema Tercihi Dinleyicisi
+  unsubs.push(onValue(ref(db, `profiles/${u.uid}/theme`), snap => {
+    const savedTheme = snap.val() || localStorage.getItem("user_theme") || "default";
+    applyTheme(savedTheme);
+  }));
+
   unsubs.push(onValue(ref(db, "settings/global"), snap => {
     const data = snap.val() || {};
     appSettings.chatLocked = !!data.chatLocked;
@@ -652,11 +663,11 @@ function initAppShell(u, admin) {
     appSettings.announcement = data.announcement || "";
     appSettings.badWords = Array.isArray(data.badWords) ? data.badWords : [];
     appSettings.watchWords = Array.isArray(data.watchWords) ? data.watchWords : [];
-    updateAnnouncementUI();
   }));
 
   unsubs.push(onValue(ref(db, "profiles"), snap => {
     userProfiles = snap.val() || {};
+    updateUserAvatarUI();
   }));
 
   unsubs.push(onValue(ref(db, "users"), snap => {
@@ -664,65 +675,152 @@ function initAppShell(u, admin) {
   }));
 
   const navItems = [
-    { id: "ai", label: "🤖 Bireysel AI" },
-    { id: "chat", label: "💬 Topluluk & Gruplar" },
-    { id: "me", label: "👤 Profilim" }
+    { id: "ai", label: "Bireysel AI", icon: "🤖" },
+    { id: "chat", label: "Topluluk & Gruplar", icon: "💬" },
+    { id: "pro", label: "Ne Yapay Pro", icon: "💎", badge: "Nitro" },
+    { id: "me", label: "Profilim", icon: "👤" }
   ];
   if (isAdmin) {
-    navItems.push({ id: "admin", label: "🛡️ Admin Masası", badge: true });
+    navItems.push({ id: "admin", label: "Admin Masası", icon: "🛡️", notif: true });
   }
 
   app.innerHTML = `
-    <div class="header">
-      <div class="brand">
-        <div class="brand-icon">⚡</div>
-        <div class="brand-text">
-          <h1>Ne <span>Yapay?</span></h1>
-          <p>Çok Modelli AI & Topluluk Ağı</p>
+    <!-- YAN PANEL (SIDEBAR) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-icon">⚡</div>
+          <div class="brand-text">
+            <h1>Ne <span>Yapay?</span></h1>
+            <p>Çok Modelli AI Topluluğu</p>
+          </div>
+        </div>
+        <button class="btn-sidebar-close" id="btn-sidebar-close" title="Paneli Kapat">&times;</button>
+      </div>
+
+      <!-- Kullanıcı Mini Profil Kartı -->
+      <div class="user-profile-card">
+        <div id="sidebar-user-avatar">${av(u.uid, u.displayName)}</div>
+        <div class="user-info-text">
+          <b>${esc(u.displayName || u.email)}</b>
+          <div style="display:flex;align-items:center;gap:4px">
+            <span class="user-id-tag" id="btn-sidebar-copy-id" title="ID'yi Kopyala">${esc(myTag)}</span>
+            <span id="sidebar-pro-badge" style="display:${isPro ? 'inline-block' : 'none'}"><span class="badge-pro">PRO</span></span>
+            ${isAdmin ? `<span class="badge-admin">Admin</span>` : ""}
+          </div>
         </div>
       </div>
-      <div class="header-actions">
-        <div class="credit-chip" id="top-credit-badge">🪙 100 / 100 Kredi</div>
-        <div class="user-chip">
-          <div id="header-avatar">${av(u.uid, u.displayName)}</div>
-          <span class="chip-name">${esc(u.displayName || u.email)}</span>
-          <span class="user-id-tag" id="btn-copy-my-tag" title="ID'yi Kopyala">${esc(myTag)}</span>
-          ${isAdmin ? `<span class="badge-admin">Admin</span>` : ""}
-        </div>
-        <button class="btn-ghost btn-sm" id="btn-logout" title="Çıkış Yap">Çıkış</button>
+
+      <!-- Kredi Rozeti -->
+      <div class="credit-badge-wrap" id="sidebar-credit-badge">
+        <span>Kredi Bakiyesi:</span>
+        <b id="credit-num-text">100 / 100</b>
       </div>
-    </div>
 
-    <div class="banner-alert" id="banner-alert">
-      <span class="banner-icon">📢</span>
-      <span id="banner-text" style="flex:1"></span>
-    </div>
+      <!-- Menü Butonları -->
+      <div class="sidebar-nav">
+        ${navItems.map(item => `
+          <button class="nav-item-btn" data-nav-tab="${item.id}">
+            <span class="nav-icon">${item.icon}</span>
+            <span>${item.label}</span>
+            ${item.badge ? `<span class="badge-pro" style="margin-left:auto">${item.badge}</span>` : ""}
+            ${item.notif ? `<span class="nav-badge-count" id="admin-notif-count" style="display:none">0</span>` : ""}
+          </button>
+        `).join("")}
+      </div>
 
-    <div class="tabs">
-      ${navItems.map(t => `
-        <button class="tab-btn" data-tab="${t.id}">
-          ${t.label}
-          ${t.badge ? `<span class="badge-count" id="admin-notif-count" style="display:none">0</span>` : ""}
+      <div class="sidebar-footer">
+        <button class="btn-ghost btn-sm" id="btn-quick-theme" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">
+          <span>🎨</span> <span>Uzay Temaları</span>
         </button>
-      `).join("")}
-    </div>
+        <button class="btn-danger btn-sm" id="btn-logout" style="width:100%">Çıkış Yap</button>
+      </div>
+    </aside>
 
-    <div id="tab-content"></div>
+    <!-- KOCA CHAT & İÇERİK ALANI -->
+    <main class="main-content">
+      <!-- Üst Bar -->
+      <div class="main-topbar">
+        <div class="topbar-left">
+          <button class="btn-hamburger" id="btn-hamburger" title="Menüyü Aç">☰</button>
+          <div class="current-title-wrap" id="main-top-title">
+            <b>🤖 Bireysel AI</b>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="model-picker-wrap" id="btn-top-model-picker" style="display:none">
+            <span id="top-model-logo">🔵</span>
+            <b id="top-model-name" style="font-size:0.85rem">Gemini 2.0 Flash</b>
+            <span class="model-cost-tag" id="top-model-cost">1 Kredi</span>
+          </div>
+          <button class="btn-ghost btn-sm" id="btn-top-clear-ai" style="display:none">Temizle</button>
+        </div>
+      </div>
+
+      <div id="tab-canvas" style="flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden"></div>
+    </main>
   `;
 
+  // Mobil Hamburger & Sidebar Kontrolleri
+  const sidebar = $("#sidebar");
+  const backdrop = $("#sidebar-backdrop");
+  const openSidebar = () => { sidebar.classList.add("open"); backdrop.classList.add("active"); };
+  const closeSidebar = () => { sidebar.classList.remove("open"); backdrop.classList.remove("active"); };
+
+  $("#btn-hamburger").onclick = openSidebar;
+  $("#btn-sidebar-close").onclick = closeSidebar;
+  backdrop.onclick = closeSidebar;
+
   $("#btn-logout").onclick = () => signOut(auth);
-  $("#btn-copy-my-tag").onclick = () => {
+  $("#btn-sidebar-copy-id").onclick = () => {
     navigator.clipboard.writeText(myTag);
-    showToast(`ID panoya kopyalandı: ${myTag}`);
+    showToast(`ID kopyalandı: ${myTag}`);
+  };
+
+  $("#btn-quick-theme").onclick = () => {
+    switchTab("pro");
+    closeSidebar();
   };
 
   const switchTab = tabId => {
-    $$(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tabId));
-    const views = { ai: renderAiView, chat: renderChatView, me: renderProfileView, admin: renderAdminView };
-    if (views[tabId]) views[tabId]();
+    currentTab = tabId;
+    closeSidebar();
+    $$("[data-nav-tab]").forEach(b => b.classList.toggle("active", b.dataset.navTab === tabId));
+
+    const modelPickerBtn = $("#btn-top-model-picker");
+    const clearAiBtn = $("#btn-top-clear-ai");
+    const topTitle = $("#main-top-title");
+
+    if (tabId === "ai") {
+      topTitle.innerHTML = `<b>🤖 Bireysel AI Çalışma Alanı</b>`;
+      if (modelPickerBtn) modelPickerBtn.style.display = "flex";
+      if (clearAiBtn) clearAiBtn.style.display = "block";
+      renderAiView();
+    } else if (tabId === "chat") {
+      topTitle.innerHTML = `<b>💬 Topluluk & Grup Sohbeti</b>`;
+      if (modelPickerBtn) modelPickerBtn.style.display = "none";
+      if (clearAiBtn) clearAiBtn.style.display = "none";
+      renderChatView();
+    } else if (tabId === "pro") {
+      topTitle.innerHTML = `<b>💎 Ne Yapay Pro (Nitro & Uzay Temaları)</b>`;
+      if (modelPickerBtn) modelPickerBtn.style.display = "none";
+      if (clearAiBtn) clearAiBtn.style.display = "none";
+      renderProView();
+    } else if (tabId === "me") {
+      topTitle.innerHTML = `<b>👤 Profilim & Ayarlar</b>`;
+      if (modelPickerBtn) modelPickerBtn.style.display = "none";
+      if (clearAiBtn) clearAiBtn.style.display = "none";
+      renderProfileView();
+    } else if (tabId === "admin" && isAdmin) {
+      topTitle.innerHTML = `<b>🛡️ Yönetim & Güvenlik Masası</b>`;
+      if (modelPickerBtn) modelPickerBtn.style.display = "none";
+      if (clearAiBtn) clearAiBtn.style.display = "none";
+      renderAdminView();
+    }
   };
 
-  $$(".tab-btn").forEach(b => b.onclick = () => switchTab(b.dataset.tab));
+  $$("[data-nav-tab]").forEach(b => b.onclick = () => switchTab(b.dataset.navTab));
   switchTab("ai");
 
   if (isAdmin) {
@@ -738,76 +836,101 @@ function initAppShell(u, admin) {
 }
 
 function updateCreditBadge() {
-  const badge = $("#top-credit-badge");
-  if (!badge) return;
+  const numText = $("#credit-num-text");
+  const costTag = $("#top-model-cost");
+  if (!numText) return;
   if (isAdmin) {
-    badge.innerHTML = `🪙 <span style="font-weight:900;letter-spacing:0.03em">♾️ Sınırsız Kredi (Admin)</span>`;
-    badge.style.borderColor = "var(--accent)";
-    badge.style.background = "linear-gradient(90deg, rgba(255,184,77,0.2), rgba(124,102,220,0.2))";
+    numText.innerHTML = `♾️ Sınırsız (Admin)`;
+    if (costTag) {
+      costTag.textContent = "♾️ Sınırsız";
+      costTag.style.background = "rgba(61,214,140,0.18)";
+      costTag.style.color = "var(--success)";
+    }
     return;
   }
   const total = DEFAULT_DAILY_CREDITS + myBonusCredits;
   const spent = currentUsageToday.spentCredits || 0;
   const remaining = Math.max(0, total - spent);
-  badge.innerHTML = `🪙 ${remaining} / ${total} Kredi ${myBonusCredits ? `<small style="color:var(--accent)">(+${myBonusCredits})</small>` : ''}`;
+  numText.innerHTML = `${remaining} / ${total} Kredi ${myBonusCredits ? `(+${myBonusCredits})` : ''}`;
 }
 
-function updateAnnouncementUI() {
-  const b = $("#banner-alert");
-  const t = $("#banner-text");
-  if (!b || !t) return;
-  if (appSettings.announcement && appSettings.announcement.trim()) {
-    t.textContent = appSettings.announcement;
-    b.classList.add("active");
-  } else {
-    b.classList.remove("active");
-  }
+function updateProStatusUI() {
+  const badge = $("#sidebar-pro-badge");
+  if (badge) badge.style.display = (isAdmin || isPro) ? "inline-block" : "none";
 }
 
-// ----------------- VİEW 1: BİREYSEL AI ASİSTAN -----------------
+function updateUserAvatarUI() {
+  const pic = userProfiles[currentUser?.uid]?.pp;
+  const wrap = $("#sidebar-user-avatar");
+  if (wrap) wrap.innerHTML = av(currentUser.uid, currentUser.displayName, pic);
+}
+
+// ----------------- 1. BİREYSEL AI ASİSTAN (KOCA CHAT ALANI + PDF) -----------------
 let aiHistory = [];
 let aiBusy = false;
+let pendingAiPdf = null;
+
+async function extractTextFromPdf(file) {
+  if (!window.pdfjsLib) throw new Error("PDF kütüphanesi yüklenemedi.");
+  const arrayBuffer = await file.arrayBuffer();
+  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+  const pdf = await loadingTask.promise;
+  const totalPages = Math.min(pdf.numPages, 100);
+  let text = `[Belge Adı: ${file.name} | Toplam Sayfa: ${pdf.numPages} (${totalPages} sayfa tarandı)]\n\n`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageStrings = content.items.map(it => it.str);
+    text += `--- Sayfa ${i} ---\n` + pageStrings.join(" ") + "\n\n";
+  }
+  return { numPages: pdf.numPages, text: text.slice(0, 28000) };
+}
 
 function renderAiView() {
-  const c = $("#tab-content");
+  const canvas = $("#tab-canvas");
   const currModel = AVAILABLE_MODELS.find(m => m.id === selectedModelId) || AVAILABLE_MODELS[0];
 
-  c.innerHTML = `
-    <div class="ai-card">
-      <div class="ai-topbar">
-        <!-- Model Seçici Butonu -->
-        <div class="model-picker-wrap" id="btn-open-model-modal" title="Model Değiştir">
-          <span class="model-brand-icon">${currModel.logo}</span>
-          <b style="font-size:0.9rem">${esc(currModel.name)}</b>
-          <span class="model-cost-tag" style="${isAdmin ? 'background:rgba(61,214,140,0.18);color:var(--success)' : ''}">${isAdmin ? '♾️ Sınırsız' : currModel.cost + ' Kredi'}</span>
-          <small style="color:var(--text-muted);font-size:0.8rem">▼ Değiştir</small>
-        </div>
+  $("#top-model-logo").textContent = currModel.logo;
+  $("#top-model-name").textContent = currModel.name;
+  $("#top-model-cost").textContent = isAdmin ? "♾️ Sınırsız" : currModel.cost + " Kredi";
 
-        <button class="btn-ghost btn-sm" id="btn-clear-ai">Sohbeti Sıfırla</button>
-      </div>
-
+  canvas.innerHTML = `
+    <div class="chat-container">
+      <!-- Koca Chat Akışı -->
       <div class="chat-box" id="ai-chat-box"></div>
 
-      <div class="input-bar">
-        <textarea id="ai-input" rows="2" ${isAdmin ? 'maxlength="20000"' : 'maxlength="1500"'} placeholder="${esc(currModel.name)} modeline sorunuzu yazın..."></textarea>
-        <button class="btn-primary" id="btn-send-ai" style="height:48px;padding:0 22px">Gönder</button>
+      <!-- Alt PDF Önizleme ve Girdi Alanı -->
+      <div class="input-area">
+        <div class="attachment-preview" id="ai-attachment-preview">
+          <span id="ai-attachment-preview-text">📄 Seçilen PDF</span>
+          <button id="btn-remove-ai-attachment" style="background:none;border:none;color:var(--danger);cursor:pointer;font-weight:900">&times; Kaldır</button>
+        </div>
+
+        <input type="file" id="ai-file-input" accept="application/pdf" style="display:none">
+
+        <div class="input-bar">
+          <button class="btn-attach" id="btn-open-ai-file" title="PDF Belgesi Ekle (100 Sayfaya Kadar Destekler)">📎</button>
+          <textarea id="ai-input" rows="2" ${isAdmin ? 'maxlength="20000"' : 'maxlength="1500"'} placeholder="${esc(currModel.name)} modeline sorunuzu yazın veya PDF analizi yaptırın..."></textarea>
+          <button class="btn-primary" id="btn-send-ai" style="height:46px;padding:0 22px">Gönder</button>
+        </div>
       </div>
     </div>
   `;
 
-  // Model Seçim Modalını Doldur
+  // Model Seçici Modalını Doldur
   const drawModelModalList = () => {
     const list = $("#models-list-container");
     if (!list) return;
     list.innerHTML = AVAILABLE_MODELS.map(m => {
       const isSel = m.id === selectedModelId;
       return `
-        <div class="list-item" style="cursor:pointer;border-radius:var(--radius-sm);background:${isSel ? 'rgba(255,184,77,0.1)' : 'var(--surface)'};border:1px solid ${isSel ? 'var(--accent)' : 'var(--border)'}" data-pick-model="${esc(m.id)}">
-          <div class="item-info">
+        <div class="list-item" style="cursor:pointer;border-radius:var(--radius-sm);background:${isSel ? 'rgba(255,184,77,0.1)' : 'var(--surface)'};border:1px solid ${isSel ? 'var(--accent)' : 'var(--border)'};display:flex;align-items:center;justify-content:space-between;padding:12px 14px" data-pick-model="${esc(m.id)}">
+          <div style="display:flex;align-items:center;gap:12px">
             <span style="font-size:1.6rem">${m.logo}</span>
             <div>
               <b>${esc(m.name)} <span class="badge" style="background:var(--panel)">${esc(m.brand)}</span></b>
-              <small>${esc(m.desc)}</small>
+              <small style="color:var(--text-muted);display:block">${esc(m.desc)}</small>
             </div>
           </div>
           <span class="model-cost-tag" style="${isAdmin ? 'background:rgba(61,214,140,0.18);color:var(--success)' : ''}">${isAdmin ? '♾️ Sınırsız' : m.cost + ' Kredi'}</span>
@@ -822,11 +945,51 @@ function renderAiView() {
     });
   };
 
-  $("#btn-open-model-modal").onclick = () => {
+  $("#btn-top-model-picker").onclick = () => {
     drawModelModalList();
     $("#model-select-modal").classList.add("active");
   };
   $("#btn-close-model-modal").onclick = () => $("#model-select-modal").classList.remove("active");
+
+  $("#btn-open-ai-file").onclick = () => $("#ai-file-input").click();
+  $("#btn-remove-ai-attachment").onclick = () => {
+    pendingAiPdf = null;
+    $("#ai-attachment-preview").classList.remove("active");
+    $("#ai-file-input").value = "";
+  };
+
+  $("#ai-file-input").onchange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      showToast("Yalnızca PDF belgeleri kabul edilmektedir.");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > 15 * 1024 * 1024) {
+      showToast("Lütfen 15 MB'tan küçük bir PDF belgesi seçin.");
+      e.target.value = "";
+      return;
+    }
+
+    showToast("PDF taranıyor (100 sayfaya kadar)...");
+    try {
+      const { numPages, text: pdfText } = await extractTextFromPdf(file);
+      pendingAiPdf = {
+        name: file.name,
+        numPages,
+        text: pdfText,
+        size: Math.round(file.size / 1024) + " KB"
+      };
+      $("#ai-attachment-preview-text").innerHTML = `📄 <b>PDF Eklendi (${numPages} sayfa):</b> ${esc(file.name)} (${pendingAiPdf.size})`;
+      $("#ai-attachment-preview").classList.add("active");
+      showToast(`PDF hazır (${numPages} sayfa). Sorunuzu yazıp Gönder'e basın.`);
+    } catch (err) {
+      showToast("PDF taranamadı veya açılamadı.");
+    }
+  };
 
   const drawAi = () => {
     const box = $("#ai-chat-box");
@@ -836,7 +999,18 @@ function renderAiView() {
         <div class="msg-av" style="background:${m.role === 'user' ? 'var(--primary)' : 'var(--accent)'}">
           ${m.role === 'user' ? 'Sen' : currModel.logo}
         </div>
-        <div class="msg-bubble">${esc(m.content)}</div>
+        <div class="msg-bubble">
+          ${m.pdfName ? `
+            <div class="msg-media-pdf" style="margin-bottom:8px">
+              <span class="pdf-icon">📄</span>
+              <div class="pdf-meta">
+                <b>${esc(m.pdfName)}</b>
+                <small>${m.pdfPages} Sayfa Belge Eklendi</small>
+              </div>
+            </div>
+          ` : ''}
+          <div>${esc(m.content)}</div>
+        </div>
       </div>
     `).join("");
     box.scrollTop = box.scrollHeight;
@@ -845,12 +1019,30 @@ function renderAiView() {
 
   const sendAi = async () => {
     const input = $("#ai-input");
-    const text = input.value.trim();
-    if (!text || aiBusy) return;
+    const rawVal = input.value.trim();
+    if (!rawVal && !pendingAiPdf) return;
+    if (aiBusy) return;
 
     aiBusy = true;
     $("#btn-send-ai").disabled = true;
-    aiHistory.push({ role: "user", content: text }, { role: "assistant", content: "Düşünüyor… 💭" });
+
+    let userPromptToSend = rawVal;
+    let isPdfMode = false;
+    let pdfMetaForUi = null;
+
+    if (pendingAiPdf) {
+      isPdfMode = true;
+      pdfMetaForUi = { name: pendingAiPdf.name, pages: pendingAiPdf.numPages };
+      userPromptToSend = `Belge Adı: ${pendingAiPdf.name} (${pendingAiPdf.numPages} sayfa)\nKullanıcı Sorusu: ${rawVal || "Lütfen bu belgeyi detaylıca incele ve özetle."}\n\nBelge Metni:\n${pendingAiPdf.text}`;
+      pendingAiPdf = null;
+      $("#ai-attachment-preview").classList.remove("active");
+      $("#ai-file-input").value = "";
+    }
+
+    aiHistory.push(
+      { role: "user", content: rawVal || "Belgeyi özetle", pdfName: pdfMetaForUi?.name, pdfPages: pdfMetaForUi?.pages },
+      { role: "assistant", content: isPdfMode ? "100 sayfaya kadar PDF inceleniyor… ⏳" : "Düşünüyor… 💭" }
+    );
     input.value = "";
     drawAi();
 
@@ -861,7 +1053,13 @@ function renderAiView() {
         headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
         body: JSON.stringify({
           model: selectedModelId,
-          messages: aiHistory.slice(0, -1).map(m => ({ role: m.role, content: m.content }))
+          isPdfAnalysis: isPdfMode,
+          messages: aiHistory.slice(0, -1).map((m, idx, arr) => {
+            if (idx === arr.length - 1 && isPdfMode) {
+              return { role: "user", content: userPromptToSend };
+            }
+            return { role: m.role, content: m.content };
+          })
         })
       });
       const data = await res.json();
@@ -882,14 +1080,14 @@ function renderAiView() {
       sendAi();
     }
   };
-  $("#btn-clear-ai").onclick = () => {
+  $("#btn-top-clear-ai").onclick = () => {
     aiHistory = [];
     drawAi();
     showToast("AI sohbet geçmişi temizlendi.");
   };
 }
 
-// ----------------- VİEW 2: TOPLULUK, GRUPLAR & DM -----------------
+// ----------------- 2. TOPLULUK & GRUP SOHBETİ -----------------
 let lastMsgTime = 0;
 let groupAiBusy = false;
 let pendingAttachment = null;
@@ -908,98 +1106,51 @@ function filterBadWords(t) {
   return res;
 }
 
-async function extractTextFromPdf(file) {
-  if (!window.pdfjsLib) throw new Error("PDF kütüphanesi yüklenemedi.");
-  const arrayBuffer = await file.arrayBuffer();
-  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
-  const pdf = await loadingTask.promise;
-  const totalPages = Math.min(pdf.numPages, 100);
-  let text = `[Belge Adı: ${file.name} | Toplam Sayfa: ${pdf.numPages} (${totalPages} sayfa tarandı)]\n\n`;
-
-  for (let i = 1; i <= totalPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    const pageStrings = content.items.map(it => it.str);
-    text += `--- Sayfa ${i} ---\n` + pageStrings.join(" ") + "\n\n";
-  }
-  return { numPages: pdf.numPages, text: text.slice(0, 28000) };
-}
-
 function renderChatView() {
-  const c = $("#tab-content");
+  const canvas = $("#tab-canvas");
   const myTag = genUserTag(currentUser.uid);
 
-  c.innerHTML = `
-    <div class="ai-card">
-      <!-- ID ve Hızlı Aksiyon Çubuğu -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:0.85rem;color:var(--text-muted)">Senin ID'n:</span>
-          <b style="font-family:monospace;color:var(--accent);font-size:0.95rem;background:rgba(255,184,77,0.12);padding:2px 8px;border-radius:6px;border:1px solid var(--accent)">${esc(myTag)}</b>
-          <button class="btn-ghost btn-sm" id="btn-copy-id-chat" style="padding:4px 8px;font-size:0.75rem">Kopyala</button>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn-primary btn-sm" id="btn-open-add-friend" style="display:flex;align-items:center;gap:6px">
-            <span>➕</span> <b>Arkadaş Ekle / DM Başlat</b>
-          </button>
-          <button class="btn-ghost btn-sm" id="btn-open-create-group-top" style="display:flex;align-items:center;gap:6px">
-            <span>👥</span> <b>Yeni Grup Kur</b>
-          </button>
-        </div>
-      </div>
-
-      <!-- Odalar & Özel Sohbetler Listesi -->
-      <div class="room-selector" id="rooms-bar"></div>
-
-      <div class="ai-topbar" style="margin-bottom:10px">
-        <div style="font-size:0.88rem;color:var(--text-muted)" id="current-room-title">
-          🌐 <b>Genel Topluluk:</b> Herkese açık oda.
-        </div>
+  canvas.innerHTML = `
+    <div class="chat-container">
+      <!-- Odalar ve Hızlı Aksiyonlar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+        <div class="room-selector" id="rooms-bar" style="flex:1;min-width:200px"></div>
         <div style="display:flex;gap:6px">
-          <button class="btn-ghost btn-sm" id="btn-quick-ai">🤖 @ai'ya Sor</button>
+          <button class="btn-primary btn-sm" id="btn-open-add-friend">➕ Arkadaş / DM</button>
+          <button class="btn-ghost btn-sm" id="btn-open-create-group-top">👥 Yeni Grup</button>
         </div>
       </div>
 
       <div class="chat-locked-bar ${appSettings.chatLocked ? 'active' : ''}" id="chat-lock-msg">
-        🔒 Sohbet şu anda kilitlidir ${isAdmin ? "(Üyeler yazamaz, sadece siz yazabilirsiniz)" : "(Yönetici tarafından geçici olarak kilitlenmiştir)"}.
+        🔒 Sohbet kilitlidir ${isAdmin ? "(Yalnızca admin yazabilir)" : "(Geçici olarak kilitli)"}.
       </div>
 
-      <div class="chat-box" id="group-chat-box" style="height:52vh"></div>
+      <!-- Koca Sohbet Akışı -->
+      <div class="chat-box" id="group-chat-box"></div>
 
-      <div class="attachment-preview" id="attachment-preview">
-        <span id="attachment-preview-text">📎 Seçilen dosya</span>
-        <button id="btn-remove-attachment" style="background:none;border:none;color:var(--danger);cursor:pointer;font-weight:900">&times; Kaldır</button>
-      </div>
+      <div class="input-area">
+        <div class="attachment-preview" id="attachment-preview">
+          <span id="attachment-preview-text">📄 Seçilen PDF</span>
+          <button id="btn-remove-attachment" style="background:none;border:none;color:var(--danger);cursor:pointer;font-weight:900">&times; Kaldır</button>
+        </div>
 
-      <input type="file" id="chat-file-input" accept="image/*,application/pdf" style="display:none">
+        <input type="file" id="chat-file-input" accept="application/pdf" style="display:none">
 
-      <div class="input-bar">
-        <button class="btn-attach" id="btn-open-file" title="Görsel veya PDF Ekle (100 Sayfaya Kadar Destekler)">📎</button>
-        <textarea id="group-input" rows="1" ${isAdmin ? 'maxlength="10000"' : 'maxlength="500"'} placeholder="Mesaj yaz veya AI'ya sormak için @ai ekle..."></textarea>
-        <button class="btn-ghost" id="btn-ask-ai-direct" style="border-color:var(--accent);color:var(--accent);font-weight:700" title="Yapay Zekanın yanıtlaması için doğrudan sor">🤖 AI'ya Sor</button>
-        <button class="btn-primary" id="btn-send-group">Gönder</button>
+        <div class="input-bar">
+          <button class="btn-attach" id="btn-open-file" title="PDF Belgesi Ekle (100 Sayfaya Kadar)">📎</button>
+          <textarea id="group-input" rows="1" ${isAdmin ? 'maxlength="10000"' : 'maxlength="500"'} placeholder="Mesaj yaz veya AI'ya sormak için @ai ekle..."></textarea>
+          <button class="btn-ghost" id="btn-ask-ai-direct" style="border-color:var(--accent);color:var(--accent);font-weight:700">🤖 AI'ya Sor</button>
+          <button class="btn-primary" id="btn-send-group">Gönder</button>
+        </div>
       </div>
     </div>
   `;
-
-  $("#btn-copy-id-chat").onclick = () => {
-    navigator.clipboard.writeText(myTag);
-    showToast(`ID panoya kopyalandı: ${myTag}`);
-  };
 
   $("#btn-open-add-friend").onclick = () => {
     $("#add-friend-modal").classList.add("active");
     $("#input-search-friend-id").focus();
   };
-  $("#btn-open-create-group-top").onclick = () => {
-    $("#new-group-modal").classList.add("active");
-  };
-
-  $("#btn-quick-ai").onclick = () => {
-    const input = $("#group-input");
-    input.value = "@ai " + input.value.replace(/^@ai\s*/i, "");
-    input.focus();
-  };
+  $("#btn-open-create-group-top").onclick = () => $("#new-group-modal").classList.add("active");
 
   $("#btn-ask-ai-direct").onclick = () => {
     window.__forceAiGroup = true;
@@ -1018,72 +1169,46 @@ function renderChatView() {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (file.size > 8 * 1024 * 1024) {
-      showToast("Lütfen 8 MB'tan küçük bir dosya seçin.");
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      showToast("Yalnızca PDF belgeleri kabul edilmektedir.");
+      e.target.value = "";
       return;
     }
 
-    const isImage = file.type.startsWith("image/");
-    const isPdf = file.type === "application/pdf";
-
-    if (!isImage && !isPdf) {
-      showToast("Sadece resim veya PDF yükleyebilirsiniz.");
+    if (file.size > 15 * 1024 * 1024) {
+      showToast("Lütfen 15 MB'tan küçük bir PDF belgesi seçin.");
+      e.target.value = "";
       return;
     }
 
-    if (isImage) {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const maxSide = 900;
-        let w = img.width, h = img.height;
-        if (w > maxSide || h > maxSide) {
-          if (w > h) { h = Math.round((h * maxSide) / w); w = maxSide; }
-          else { w = Math.round((w * maxSide) / h); h = maxSide; }
-        }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-        const b64 = canvas.toDataURL("image/jpeg", 0.72);
-        pendingAttachment = {
-          type: "image",
-          data: b64,
-          name: file.name,
+    showToast("PDF taranıyor (100 sayfaya kadar)...");
+    try {
+      const { numPages, text } = await extractTextFromPdf(file);
+      const reader = new FileReader();
+      reader.onload = ev => {
+        pendingPdfDetails = {
+          file,
+          numPages,
+          extractedText: text,
+          dataUrl: ev.target.result,
           size: Math.round(file.size / 1024) + " KB"
         };
-        $("#attachment-preview-text").innerHTML = `📷 <b>Görsel Eklendi:</b> ${esc(file.name)} (${pendingAttachment.size})`;
-        $("#attachment-preview").classList.add("active");
+
+        const total = DEFAULT_DAILY_CREDITS + myBonusCredits;
+        const remaining = Math.max(0, total - (currentUsageToday.spentCredits || 0));
+
+        $("#pdf-modal-desc").innerHTML = `<b>${esc(file.name)}</b> (${numPages} sayfa) belgesi tespit edildi. Baştan sona taranıp yapay zekaya aktarılacaktır.`;
+        $("#pdf-pro-status").innerHTML = isAdmin 
+          ? `<b style="color:var(--accent)">👑 Admin Ayrıcalığı: Sizin için analiz tamamen ücretsiz ve sınırsızdır!</b>`
+          : `Kalan Krediniz: <b>${remaining} / ${total}</b>`;
+        if (isAdmin) {
+          $("#btn-confirm-pdf-pro").innerHTML = "⚡ Hemen Analiz Et (Sınırsız Admin) 🚀";
+        }
+        $("#pdf-confirm-modal").classList.add("active");
       };
-      img.src = URL.createObjectURL(file);
-    } else {
-      showToast("PDF taranıyor, lütfen bekleyin...");
-      try {
-        const { numPages, text } = await extractTextFromPdf(file);
-        const reader = new FileReader();
-        reader.onload = ev => {
-          pendingPdfDetails = {
-            file,
-            numPages,
-            extractedText: text,
-            dataUrl: ev.target.result,
-            size: Math.round(file.size / 1024) + " KB"
-          };
-
-          const total = DEFAULT_DAILY_CREDITS + myBonusCredits;
-          const remaining = Math.max(0, total - (currentUsageToday.spentCredits || 0));
-
-          $("#pdf-modal-desc").innerHTML = `<b>${esc(file.name)}</b> (${numPages} sayfa) belgesi tespit edildi. Baştan sona taranıp yapay zekaya aktarılacaktır.`;
-          $("#pdf-pro-status").innerHTML = isAdmin 
-            ? `<b style="color:var(--accent)">👑 Admin Ayrıcalığı: Sizin için analiz tamamen ücretsiz ve sınırsızdır!</b>`
-            : `Kalan Krediniz: <b>${remaining} / ${total}</b>`;
-          if (isAdmin) {
-            $("#btn-confirm-pdf-pro").innerHTML = "⚡ Hemen Analiz Et (Sınırsız Admin) 🚀";
-          }
-          $("#pdf-confirm-modal").classList.add("active");
-        };
-        reader.readAsDataURL(file);
-      } catch (err) {
-        showToast("PDF okunamadı veya taranamadı.");
-      }
+      reader.readAsDataURL(file);
+    } catch (err) {
+      showToast("PDF okunamadı veya taranamadı.");
     }
   };
 
@@ -1124,7 +1249,6 @@ function renderChatView() {
     showToast("PDF hazır! Mesajınızı yazıp Gönder'e basarak analizi başlatabilirsiniz.");
   };
 
-  // Odalar & DM Listesini Çiz
   const drawRoomsBar = () => {
     const bar = $("#rooms-bar");
     if (!bar) return;
@@ -1140,7 +1264,7 @@ function renderChatView() {
       if (r.type === "dm") {
         const otherUid = Object.keys(r.members || {}).find(u => u !== currentUser.uid) || currentUser.uid;
         const otherName = userProfiles[otherUid]?.name || allUsersData[otherUid]?.name || "Arkadaş";
-        displayName = `💬 ${esc(otherName)} (${esc(genUserTag(otherUid))})`;
+        displayName = `💬 ${esc(otherName)}`;
       } else {
         displayName = `👥 ${esc(r.name)} ${r.isAiIncluded ? '🤖' : ''}`;
       }
@@ -1171,18 +1295,9 @@ function renderChatView() {
     drawRoomsBar();
   }));
 
-  // Mesajları Dinle & Çiz
   let messagesUnsub = null;
   const bindChatMessages = () => {
     if (messagesUnsub) messagesUnsub();
-
-    const titleEl = $("#current-room-title");
-    if (currentRoomId === "global") {
-      titleEl.innerHTML = `🌐 <b>Genel Topluluk:</b> Herkese açık oda.`;
-    } else {
-      const activeRoom = myRooms.find(r => r.id === currentRoomId);
-      titleEl.innerHTML = `💬 <b>Oda: ${esc(activeRoom?.name || 'Özel')}</b> ${activeRoom?.isAiIncluded ? '<span class="badge" style="background:var(--accent);color:#10121a">AI Aktif</span>' : ''}`;
-    }
 
     const messagesRef = currentRoomId === "global" ? query(ref(db, "chat"), limitToLast(120)) : query(ref(db, `rooms/${currentRoomId}/messages`), limitToLast(120));
 
@@ -1196,17 +1311,16 @@ function renderChatView() {
         const isAi = !!m.isAi;
         const userPic = isAi ? null : userProfiles[m.uid]?.pp;
         const userTag = userProfiles[m.uid]?.tag || genUserTag(m.uid);
+        const userIsPro = allUsersData[m.uid]?.isPro || (m.uid === currentUser.uid && (isAdmin || isPro));
 
         let mediaHtml = "";
-        if (m.fileType === "image" && m.fileData) {
-          mediaHtml = `<img src="${esc(m.fileData)}" class="msg-media-img" data-open-img="${esc(m.fileData)}">`;
-        } else if (m.fileType === "pdf" && m.fileData) {
+        if (m.fileType === "pdf" && m.fileData) {
           mediaHtml = `
             <a href="${esc(m.fileData)}" download="${esc(m.fileName || 'belge.pdf')}" class="msg-media-pdf">
               <span class="pdf-icon">📄</span>
               <div class="pdf-meta">
                 <b>${esc(m.fileName || 'Belge.pdf')}</b>
-                <small>${esc(m.fileSize || 'PDF')} · İndir / Aç</small>
+                <small>${esc(m.fileSize || 'PDF')} · İndir / İncele</small>
               </div>
             </a>
           `;
@@ -1217,14 +1331,19 @@ function renderChatView() {
             ${isAi ? `<div class="msg-av" style="background:var(--accent)">🤖</div>` : av(m.uid, m.name, userPic)}
             <div class="msg-bubble">
               <div class="msg-meta">
-                <b>${esc(m.name)} <small style="color:var(--text-sub)">${esc(userTag)}</small> ${isAi ? '<span class="badge" style="background:var(--accent);color:#10121a">BOT</span>' : ''}</b>
+                <b>
+                  ${esc(m.name)} 
+                  <small style="color:var(--text-sub)">${esc(userTag)}</small> 
+                  ${userIsPro ? `<span class="badge-pro">PRO</span>` : ''}
+                  ${isAi ? '<span class="badge" style="background:var(--accent);color:#10121a">BOT</span>' : ''}
+                </b>
                 <span>${new Date(m.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>
               </div>
               ${m.text ? `<div>${esc(m.text)}</div>` : ''}
               ${mediaHtml}
               ${isAdmin ? `
-                <div style="margin-top:8px;border-top:1px solid var(--border-subtle);padding-top:4px;display:flex;gap:6px">
-                  <button class="btn-danger btn-sm" data-del-chat-msg="${id}">Mesajı Sil</button>
+                <div style="margin-top:6px;border-top:1px solid var(--border-subtle);padding-top:4px">
+                  <button class="btn-danger btn-sm" data-del-chat-msg="${id}">Sil</button>
                 </div>
               ` : ''}
             </div>
@@ -1233,11 +1352,6 @@ function renderChatView() {
       }).join("");
 
       box.scrollTop = box.scrollHeight;
-
-      $$("[data-open-img]").forEach(img => img.onclick = () => {
-        $("#viewer-img").src = img.dataset.openImg;
-        $("#media-viewer-modal").classList.add("active");
-      });
 
       if (isAdmin) {
         $$("[data-del-chat-msg]").forEach(b => b.onclick = () => {
@@ -1250,7 +1364,6 @@ function renderChatView() {
 
   bindChatMessages();
 
-  // Mesaj Gönderme
   const sendGroup = async () => {
     if (appSettings.chatLocked && !isAdmin && currentRoomId === "global") {
       showToast("Genel sohbet şu anda kilitli.");
@@ -1266,7 +1379,7 @@ function renderChatView() {
     }
 
     const now = Date.now();
-    const interval = (appSettings.slowmode || 0) * 1000;
+    const interval = isAdmin ? 0 : ((appSettings.slowmode || 0) * 1000);
     if (!isAdmin && currentRoomId === "global" && now - lastMsgTime < Math.max(interval, 2000)) {
       const waitSec = Math.ceil((Math.max(interval, 2000) - (now - lastMsgTime)) / 1000);
       showToast(`Lütfen ${waitSec} saniye bekleyin (Spam Koruması).`);
@@ -1311,7 +1424,6 @@ function renderChatView() {
     const targetRef = currentRoomId === "global" ? ref(db, "chat") : ref(db, `rooms/${currentRoomId}/messages`);
     await push(targetRef, msgPayload);
 
-    // AI Tetikleme
     const cleanLower = filtered.toLowerCase().trim();
     const hasAiTag = (/@ai\b|@yapay\b|^ai\b|^yapay\b|\bai\s|\byapay\s/i.test(cleanLower)) || !!window.__forceAiGroup;
     window.__forceAiGroup = false;
@@ -1367,148 +1479,218 @@ function renderChatView() {
   };
 }
 
-// Arkadaş Arama ve DM Başlatma
-$("#btn-close-friend-modal").onclick = () => $("#add-friend-modal").classList.remove("active");
+// ----------------- 3. 💎 NE YAPAY PRO (DİSCORD NİTRO & UZAY TEMALARI) -----------------
+function renderProView() {
+  const canvas = $("#tab-canvas");
+  const currentTheme = document.body.dataset.theme || "default";
 
-const searchFriendInput = $("#input-search-friend-id");
-const doSearchFriend = () => {
-  const query = (searchFriendInput.value || "").trim().toLowerCase();
-  const resultsDiv = $("#friend-search-results");
-  if (!query) {
-    resultsDiv.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-sub);font-size:0.85rem">Aramak için yukarıya arkadaşının ID'sini yazın.</div>`;
-    return;
-  }
+  canvas.innerHTML = `
+    <div style="flex:1;overflow-y:auto;padding:20px;max-width:800px;margin:0 auto;width:100%">
+      <div class="pro-hero">
+        <div style="font-size:2.8rem;margin-bottom:8px">💎</div>
+        <h2 style="font-size:1.6rem;font-weight:900;letter-spacing:-0.03em;margin-bottom:6px">Ne Yapay <span style="background:linear-gradient(135deg,#ff007f,#7c4dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">PRO</span></h2>
+        <p style="color:var(--text-muted);font-size:0.9rem;max-width:480px;margin:0 auto 16px">
+          Tıpkı Discord Nitro gibi profilini hareketli GIF ile süsle, kozmik uzay temalarını aç ve ayrıcalıkların tadını çıkar!
+        </p>
 
-  const matches = Object.entries(allUsersData).filter(([uid, u]) => {
-    if (uid === currentUser.uid) return false;
-    const tag = (u.tag || genUserTag(uid)).toLowerCase();
-    const name = (u.name || "").toLowerCase();
-    const email = (u.email || "").toLowerCase();
-    return tag.includes(query) || name.includes(query) || email.includes(query);
-  });
-
-  if (!matches.length) {
-    resultsDiv.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-sub);font-size:0.85rem">Bu ID veya isimle eşleşen kullanıcı bulunamadı.</div>`;
-    return;
-  }
-
-  resultsDiv.innerHTML = matches.map(([uid, u]) => {
-    const pic = userProfiles[uid]?.pp;
-    const tag = u.tag || genUserTag(uid);
-    return `
-      <div class="list-item" style="background:var(--surface);border-radius:var(--radius-sm);padding:10px 14px">
-        <div class="item-info">
-          ${av(uid, u.name, pic)}
-          <div>
-            <b>${esc(u.name || u.email)} <span class="user-id-tag">${esc(tag)}</span></b>
-            <small>${esc(u.email)}</small>
-          </div>
+        <div style="display:flex;justify-content:center;gap:12px;margin-bottom:14px">
+          ${(isAdmin || isPro) ? `
+            <div style="background:rgba(61,214,140,0.15);border:1px solid var(--success);color:var(--success);padding:8px 18px;border-radius:24px;font-weight:800;font-size:0.9rem">
+              ${isAdmin ? "👑 Admin: Sınırsız & Ömür Boyu Aktif" : "✅ Ne Yapay Pro Aktif (Günlük 25 Kredi)"}
+            </div>
+          ` : `
+            <button class="btn-primary" id="btn-activate-pro" style="background:linear-gradient(135deg,#ff007f,#7c4dff);color:#fff;padding:12px 24px;font-size:0.95rem">
+              💎 Pro'ya Geç (Günde 25 Kredi)
+            </button>
+          `}
         </div>
-        <button class="btn-primary btn-sm" data-start-dm="${uid}">💬 DM Başlat</button>
       </div>
-    `;
-  }).join("");
 
-  $$("[data-start-dm]").forEach(btn => btn.onclick = async () => {
-    const targetUid = btn.dataset.startDm;
-    const targetUser = allUsersData[targetUid] || {};
-    const targetName = targetUser.name || "Arkadaş";
+      <!-- PRO AYRICALIKLARI KARTLARI -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px">
+        <div style="background:var(--surface);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm)">
+          <div style="font-size:1.5rem;margin-bottom:6px">🎬</div>
+          <b style="font-size:0.95rem;display:block;margin-bottom:4px">Hareketli GIF Avatar</b>
+          <p style="font-size:0.8rem;color:var(--text-muted)">Profiline istediğin hareketli .GIF dosyasını veya GIF linkini yükle.</p>
+          <button class="btn-ghost btn-sm" id="btn-open-gif-modal" style="margin-top:10px;width:100%" ${(isAdmin || isPro) ? '' : 'disabled'}>
+            ${(isAdmin || isPro) ? "GIF Avatarı Ayarla" : "🔒 Pro Gerekir"}
+          </button>
+        </div>
 
-    let existingRoom = myRooms.find(r => r.type === "dm" && r.members && r.members[targetUid] && r.members[currentUser.uid]);
-    
-    if (existingRoom) {
-      currentRoomId = existingRoom.id;
-      showToast(`${targetName} ile mevcut sohbete geçildi.`);
-    } else {
-      const newRoom = await push(ref(db, "rooms"), {
-        type: "dm",
-        name: targetName,
-        createdBy: currentUser.uid,
-        isAiIncluded: true,
-        members: {
-          [currentUser.uid]: true,
-          [targetUid]: true
-        },
-        createdAt: Date.now()
-      });
-      currentRoomId = newRoom.key;
-      showToast(`${targetName} ile yeni özel sohbet başlatıldı!`);
+        <div style="background:var(--surface);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm)">
+          <div style="font-size:1.5rem;margin-bottom:6px">💎</div>
+          <b style="font-size:0.95rem;display:block;margin-bottom:4px">Özel Pro Rozeti</b>
+          <p style="font-size:0.8rem;color:var(--text-muted)">Sohbetlerde ve profilinde adının yanında parlayan havalı PRO rozeti.</p>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm)">
+          <div style="font-size:1.5rem;margin-bottom:6px">🌌</div>
+          <b style="font-size:0.95rem;display:block;margin-bottom:4px">Kozmik Uzay Temaları</b>
+          <p style="font-size:0.8rem;color:var(--text-muted)">Arka planı Nebula, Mars, Siber Galaksi ve OLED yıldızlarıyla yenile.</p>
+        </div>
+      </div>
+
+      <!-- UZAY VE KOZMİK TEMA SEÇİCİ -->
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3 style="font-size:1.1rem;font-weight:800">🌌 Harika Uzay ve Galaksi Temaları</h3>
+          <small style="color:var(--text-muted)">${(isAdmin || isPro) ? "Tek tıkla değiştir" : "🔒 Pro Kilidi"}</small>
+        </div>
+
+        <div class="theme-grid">
+          ${THEMES.map(th => `
+            <div class="theme-card ${currentTheme === th.id ? 'active' : ''}" data-theme-id="${th.id}">
+              <div class="theme-dot" style="background:${th.color}"></div>
+              <b style="font-size:0.85rem">${esc(th.name)}</b>
+              <small style="font-size:0.72rem;color:var(--text-muted)">${esc(th.desc)}</small>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Tema Değiştirme Aksiyonu
+  $$("[data-theme-id]").forEach(card => card.onclick = async () => {
+    const tid = card.dataset.themeId;
+    if (tid !== "default" && !isAdmin && !isPro) {
+      showToast("Bu özel uzay temasını kullanmak için Ne Yapay Pro üyesi olmalısınız!");
+      return;
     }
-
-    $("#add-friend-modal").classList.remove("active");
-    renderChatView();
+    applyTheme(tid);
+    $$(".theme-card").forEach(c => c.classList.toggle("active", c.dataset.themeId === tid));
+    if (currentUser) {
+      await update(ref(db, `profiles/${currentUser.uid}`), { theme: tid });
+    }
+    showToast(`${THEMES.find(t=>t.id===tid)?.name} teması uygulandı!`);
   });
+
+  // Pro Satın Alma / Başlatma
+  const btnAct = $("#btn-activate-pro");
+  if (btnAct) {
+    btnAct.onclick = async () => {
+      const total = DEFAULT_DAILY_CREDITS + myBonusCredits;
+      const remaining = Math.max(0, total - (currentUsageToday.spentCredits || 0));
+
+      if (remaining < PRO_DAILY_COST) {
+        showToast(`Yetersiz kredi! Pro için günlük ${PRO_DAILY_COST} kredi gerekiyor. Kalan: ${remaining}`);
+        return;
+      }
+
+      if (!confirm(`Ne Yapay Pro'yu günlük ${PRO_DAILY_COST} kredi karşılığında aktif etmek istiyor musunuz?`)) return;
+
+      const dayStr = getUsageDay();
+      const newSpent = (currentUsageToday.spentCredits || 0) + PRO_DAILY_COST;
+
+      await update(ref(db), {
+        [`users/${currentUser.uid}/isPro`]: true,
+        [`users/${currentUser.uid}/proActivatedAt`]: Date.now(),
+        [`profiles/${currentUser.uid}/isPro`]: true,
+        [`usage/${currentUser.uid}/${dayStr}/spentCredits`]: newSpent
+      });
+
+      isPro = true;
+      updateProStatusUI();
+      updateCreditBadge();
+      showToast("Tebrikler! Ne Yapay Pro üyeliğiniz aktif edildi! 💎");
+      renderProView();
+    };
+  }
+
+  // GIF Avatar Modalı Açma
+  const btnGif = $("#btn-open-gif-modal");
+  if (btnGif) {
+    btnGif.onclick = () => {
+      $("#gif-avatar-modal").classList.add("active");
+    };
+  }
+}
+
+// ----------------- GIF AVATAR İŞLEMLERİ (PRO / ADMİN) -----------------
+$("#btn-close-gif-modal").onclick = () => $("#gif-avatar-modal").classList.remove("active");
+$("#btn-cancel-gif").onclick = () => $("#gif-avatar-modal").classList.remove("active");
+$("#btn-pick-gif-file").onclick = () => $("#gif-file-input").click();
+
+let pendingBase64Gif = null;
+$("#gif-file-input").onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!file.name.toLowerCase().endsWith(".gif") && file.type !== "image/gif") {
+    showToast("Lütfen geçerli bir .GIF dosyası seçin.");
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    showToast("GIF boyutu 5 MB'tan küçük olmalıdır.");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingBase64Gif = ev.target.result;
+    $("#input-gif-url").value = file.name;
+    showToast("GIF dosyası yüklendi! Kaydet'e basabilirsiniz.");
+  };
+  reader.readAsDataURL(file);
 };
 
-$("#btn-search-friend").onclick = doSearchFriend;
-searchFriendInput.oninput = doSearchFriend;
-
-// Yeni Grup Oluşturma
-$("#btn-cancel-group").onclick = () => $("#new-group-modal").classList.remove("active");
-$("#btn-create-group").onclick = async () => {
-  const name = $("#input-group-name").value.trim();
-  const rawIds = $("#input-group-member-ids").value.trim();
-  const aiIncluded = $("#check-group-ai").checked;
-
-  if (!name) {
-    showToast("Lütfen bir grup adı girin.");
+$("#btn-save-gif").onclick = async () => {
+  if (!isAdmin && !isPro) {
+    showToast("Hareketli GIF avatar kullanmak için Ne Yapay Pro gerekir.");
     return;
   }
 
-  const memberTags = rawIds.split(",").map(s => s.trim().toUpperCase()).filter(Boolean);
-  const members = { [currentUser.uid]: true };
+  let finalGif = pendingBase64Gif;
+  const urlVal = $("#input-gif-url").value.trim();
 
-  Object.entries(allUsersData).forEach(([uid, u]) => {
-    const tag = (u.tag || genUserTag(uid)).toUpperCase();
-    if (memberTags.includes(tag)) {
-      members[uid] = true;
-    }
+  if (!finalGif && urlVal.startsWith("http")) {
+    finalGif = urlVal;
+  }
+
+  if (!finalGif) {
+    showToast("Lütfen bir GIF URL'si girin veya dosya seçin.");
+    return;
+  }
+
+  await update(ref(db), {
+    [`profiles/${currentUser.uid}/pp`]: finalGif,
+    [`users/${currentUser.uid}/pp`]: finalGif,
+    [`pending/${currentUser.uid}`]: null
   });
 
-  const newRoomRef = await push(ref(db, "rooms"), {
-    name,
-    createdBy: currentUser.uid,
-    isAiIncluded: aiIncluded,
-    members,
-    createdAt: Date.now()
-  });
-
-  $("#new-group-modal").classList.remove("active");
-  $("#input-group-name").value = "";
-  $("#input-group-member-ids").value = "";
-  showToast(`"${name}" grubu kuruldu!`);
-  currentRoomId = newRoomRef.key;
-  renderChatView();
+  $("#gif-avatar-modal").classList.remove("active");
+  pendingBase64Gif = null;
+  $("#input-gif-url").value = "";
+  updateUserAvatarUI();
+  showToast("Hareketli GIF avatarınız başarıyla güncellendi! 🎬");
 };
 
-$("#btn-close-viewer").onclick = () => $("#media-viewer-modal").classList.remove("active");
-
-// ----------------- VİEW 3: PROFİLİM -----------------
+// ----------------- 4. PROFİLİM VE DİĞER VİEW'LAR -----------------
 function renderProfileView() {
-  const c = $("#tab-content");
+  const canvas = $("#tab-canvas");
   const myTag = genUserTag(currentUser.uid);
 
-  c.innerHTML = `
-    <div class="ai-card" style="max-width:550px;margin:0 auto">
-      <div style="text-align:center;padding:20px 0">
+  canvas.innerHTML = `
+    <div style="flex:1;overflow-y:auto;padding:20px;max-width:550px;margin:0 auto;width:100%">
+      <div style="text-align:center;padding:16px 0">
         <div id="profile-pic-large" style="margin-bottom:14px;display:flex;justify-content:center"></div>
-        <h2 style="font-size:1.3rem;margin-bottom:4px">${esc(currentUser.displayName || currentUser.email)}</h2>
-        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:12px">${esc(currentUser.email)}</p>
+        <h2 style="font-size:1.3rem;margin-bottom:4px">
+          ${esc(currentUser.displayName || currentUser.email)}
+          ${(isAdmin || isPro) ? `<span class="badge-pro">PRO</span>` : ''}
+        </h2>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:14px">${esc(currentUser.email)}</p>
         
         <!-- Benzersiz ID Kutusu -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;text-align:left">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;text-align:left">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
-              <span style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;display:block">Benzersiz Kullanıcı ID'n:</span>
-              <b style="font-family:monospace;font-size:1.2rem;color:var(--accent)">${esc(myTag)}</b>
+              <span style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;display:block">Benzersiz ID'n:</span>
+              <b style="font-family:monospace;font-size:1.15rem;color:var(--accent)">${esc(myTag)}</b>
             </div>
-            <button class="btn-ghost btn-sm" id="btn-copy-tag-prof">ID'yi Kopyala</button>
+            <button class="btn-ghost btn-sm" id="btn-copy-tag-prof">Kopyala</button>
           </div>
-          <small style="color:var(--text-sub);display:block;margin-top:6px">Arkadaşların grup kurarken bu ID'yi yazarak seni ekleyebilir.</small>
         </div>
 
-        <!-- İsim Değiştirme Kutusu (Maks 2 Kez) -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;text-align:left">
+        <!-- İsim Değiştirme Kutusu -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;text-align:left">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <span style="font-size:0.8rem;color:var(--text-muted);text-transform:uppercase;font-weight:700">Görünen İsim:</span>
             <span class="badge" style="background:rgba(255,184,77,0.15);color:var(--accent)" id="name-change-badge">Kalan Hak: 2/2</span>
@@ -1517,20 +1699,23 @@ function renderProfileView() {
             <input type="text" id="input-new-name" maxlength="35" placeholder="Yeni ismini yaz..." style="flex:1;padding:8px 12px;font-size:0.88rem">
             <button class="btn-primary btn-sm" id="btn-save-new-name">Kaydet</button>
           </div>
-          <small style="color:var(--text-sub);display:block;margin-top:6px" id="name-change-hint">
-            Topluluk düzeni ve güvenliği için isim en fazla 2 kez değiştirilebilir.
-          </small>
         </div>
 
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;text-align:left;font-size:0.83rem">
-          <b style="color:var(--text)">🕒 Günlük Kotalar:</b> Her sabah <b>09:00'da</b> 100 kredi sıfırlanır.<br>
-          <b style="color:var(--text)">📩 Destek:</b> Sorunlar ve öneriler için <code style="color:var(--accent)">coslxofficial@gmail.com</code> adresine mail atabilirsiniz.
+        <!-- GIF Avatar Butonu (Pro & Admin) -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;text-align:left">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <b style="font-size:0.9rem">🎬 Hareketli GIF Avatar</b>
+              <small style="color:var(--text-muted);display:block">Discord Nitro benzeri canlı hareketli avatar</small>
+            </div>
+            <button class="btn-primary btn-sm" id="btn-prof-gif-act" ${(isAdmin || isPro) ? '' : 'disabled'}>
+              ${(isAdmin || isPro) ? "GIF Ayarla" : "🔒 Pro"}
+            </button>
+          </div>
         </div>
 
-        <div id="avatar-status-box" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;font-size:0.85rem;color:var(--text-muted);margin-bottom:18px"></div>
-        
         <input type="file" id="avatar-file-input" accept="image/*" style="display:none">
-        <button class="btn-primary" style="width:100%" id="btn-pick-avatar">Yeni Profil Fotoğrafı Yükle</button>
+        <button class="btn-ghost" style="width:100%" id="btn-pick-avatar">Standart Fotoğraf Yükle</button>
       </div>
     </div>
   `;
@@ -1540,6 +1725,13 @@ function renderProfileView() {
     showToast(`ID kopyalandı: ${myTag}`);
   };
 
+  const btnProfGif = $("#btn-prof-gif-act");
+  if (btnProfGif) {
+    btnProfGif.onclick = () => {
+      $("#gif-avatar-modal").classList.add("active");
+    };
+  }
+
   const updateNameUI = () => {
     const userRec = allUsersData[currentUser.uid] || {};
     const changeCount = userRec.nameChangeCount || 0;
@@ -1547,7 +1739,6 @@ function renderProfileView() {
     const badge = $("#name-change-badge");
     const input = $("#input-new-name");
     const saveBtn = $("#btn-save-new-name");
-    const hint = $("#name-change-hint");
     const currentName = userProfiles[currentUser.uid]?.name || currentUser.displayName || "";
 
     if (input && !input.matches(':focus')) input.value = currentName;
@@ -1556,7 +1747,6 @@ function renderProfileView() {
     if (!isAdmin && remaining <= 0) {
       if (input) input.disabled = true;
       if (saveBtn) saveBtn.disabled = true;
-      if (hint) hint.innerHTML = `<span style="color:var(--danger)">2 defalık isim değiştirme hakkınızı kullandınız.</span>`;
     }
   };
   updateNameUI();
@@ -1577,21 +1767,13 @@ function renderProfileView() {
       return;
     }
 
-    const currentName = userProfiles[currentUser.uid]?.name || "";
-    if (newName === currentName) {
-      showToast("Mevcut isminizle aynı.");
-      return;
-    }
-
     await update(ref(db), {
       [`profiles/${currentUser.uid}/name`]: newName,
       [`users/${currentUser.uid}/name`]: newName,
       [`users/${currentUser.uid}/nameChangeCount`]: changeCount + 1
     });
 
-    showToast(`İsminiz güncellendi! Kalan hak: ${Math.max(0, 1 - changeCount)}`);
-    const chipName = document.querySelector(".chip-name");
-    if (chipName) chipName.textContent = newName;
+    showToast(`İsminiz güncellendi!`);
     updateNameUI();
   };
 
@@ -1604,18 +1786,6 @@ function renderProfileView() {
       : `<div style="width:96px;height:96px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:2.2rem;font-weight:900">${(currentUser.displayName||"?")[0].toUpperCase()}</div>`;
   };
   drawPic();
-
-  unsubs.push(onValue(ref(db, "pending/" + currentUser.uid), snap => {
-    const stBox = $("#avatar-status-box");
-    if (!stBox) return;
-    if (isAdmin) {
-      stBox.innerHTML = `👑 <b style="color:var(--accent)">Admin Ayrıcalığı:</b> Yüklediğiniz profil fotoğrafları anında yayına girer, onay beklemezsiniz.`;
-    } else if (snap.exists()) {
-      stBox.innerHTML = `⏳ <b style="color:var(--warning)">Fotoğraf Onayda:</b> Yüklediğin fotoğraf yönetici onayından sonra toplulukta yayınlanacaktır.`;
-    } else {
-      stBox.innerHTML = `Fotoğrafını değiştirdiğinde troll veya uygunsuz görselleri önlemek için yönetici onayından geçer.`;
-    }
-  }));
 
   $("#btn-pick-avatar").onclick = () => $("#avatar-file-input").click();
   $("#avatar-file-input").onchange = e => {
@@ -1645,289 +1815,91 @@ function renderProfileView() {
   };
 }
 
-// ----------------- VİEW 4: GELİŞMİŞ ADMİN MASASI -----------------
+// ----------------- 5. ADMİN MASASI -----------------
 function renderAdminView() {
   if (!isAdmin) return;
-  const c = $("#tab-content");
+  const canvas = $("#tab-canvas");
 
-  c.innerHTML = `
-    <div class="admin-badge-strip">
-      <span>🛡️ <b>Yönetim Masası Aktif:</b> Oturum ${esc(ADMIN_EMAIL)} ile doğrulandı.</span>
-      <span class="badge badge-ok">Tam Yetki</span>
+  canvas.innerHTML = `
+    <div style="flex:1;overflow-y:auto;padding:16px">
+      <div style="background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+        <span>🛡️ <b>Admin Masası Aktif:</b> Sınırsız yetki & Pro erişim devrede.</span>
+        <span class="badge badge-ok">Yetkili</span>
+      </div>
+
+      <div style="display:flex;gap:6px;margin-bottom:14px;overflow-x:auto">
+        <button class="subnav-btn active" data-sub="users">👥 Kullanıcılar & Pro & Kredi</button>
+        <button class="subnav-btn" data-sub="photos">🖼️ Fotoğraf Onayları</button>
+        <button class="subnav-btn" data-sub="codes">🎟️ Davet Kodları</button>
+      </div>
+
+      <div id="admin-sub-content"></div>
     </div>
-
-    <div class="stats-grid">
-      <div class="stat-card">
-        <span class="lbl">Toplam Kullanıcı</span>
-        <span class="val" id="stat-total-users">-</span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">🚨 Şüpheli / Alarmlar</span>
-        <span class="val" id="stat-flagged-count" style="color:var(--danger)">0</span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">Bekleyen Fotoğraflar</span>
-        <span class="val" id="stat-pending-photos" style="color:var(--warning)">-</span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">Kullanılabilir Kodlar</span>
-        <span class="val" id="stat-active-codes" style="color:var(--accent)">-</span>
-      </div>
-    </div>
-
-    <div class="admin-subnav">
-      <button class="subnav-btn active" data-sub="logs">🚨 Kelime Alarmları & Loglar</button>
-      <button class="subnav-btn" data-sub="users">👥 Kullanıcılar & Kredi</button>
-      <button class="subnav-btn" data-sub="mod">🛑 Troll & Sohbet Kalkanı</button>
-      <button class="subnav-btn" data-sub="photos">🖼️ Fotoğraf Onayları</button>
-      <button class="subnav-btn" data-sub="codes">🎟️ Davet Kodları</button>
-      <button class="subnav-btn" data-sub="ai-set">📢 Canlı Duyuru</button>
-    </div>
-
-    <div id="admin-sub-content"></div>
   `;
 
   const switchSub = subId => {
     $$(".subnav-btn").forEach(b => b.classList.toggle("active", b.dataset.sub === subId));
-    const views = {
-      logs: renderAdminLogsAndAlerts,
-      users: renderAdminUsers,
-      mod: renderAdminModeration,
-      photos: renderAdminPhotos,
-      codes: renderAdminCodes,
-      "ai-set": renderAdminSettings
-    };
-    if (views[subId]) views[subId]();
+    if (subId === "users") renderAdminUsers();
+    else if (subId === "photos") renderAdminPhotos();
+    else if (subId === "codes") renderAdminCodes();
   };
 
   $$(".subnav-btn").forEach(b => b.onclick = () => switchSub(b.dataset.sub));
-
-  unsubs.push(onValue(ref(db, "users"), s => {
-    $("#stat-total-users").textContent = Object.keys(s.val() || {}).length;
-  }));
-  unsubs.push(onValue(ref(db, "pending"), s => {
-    $("#stat-pending-photos").textContent = Object.keys(s.val() || {}).length;
-  }));
-  unsubs.push(onValue(ref(db, "codes"), s => {
-    const list = Object.values(s.val() || {});
-    $("#stat-active-codes").textContent = list.filter(x => !x.used).length;
-  }));
-  unsubs.push(onValue(ref(db, "logs/ai"), s => {
-    const list = Object.values(s.val() || {});
-    const flagged = list.filter(x => x.flagged).length;
-    $("#stat-flagged-count").textContent = flagged;
-  }));
-
-  switchSub("logs");
+  switchSub("users");
 }
-
-// 4.1. Alarmlar & Loglar
-function renderAdminLogsAndAlerts() {
-  const c = $("#admin-sub-content");
-  c.innerHTML = `
-    <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
-      <h3 style="margin-bottom:8px">🎯 Tetikleyici Kelime Alarmı (Watchlist)</h3>
-      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">
-        Kullanıcılar yapay zekaya veya sohbete bu kelimelerden birini yazarsa anında <b>KIRMIZI ALARM</b> olarak işaretlenir.
-      </p>
-
-      <div style="display:flex;gap:8px;margin-bottom:14px">
-        <input id="input-watch-word" placeholder="Takibe alınacak kelime (Örn: admin, şifre, küfür, para, tel)..." style="flex:1">
-        <button class="btn-primary" id="btn-add-watch-word">Alarm Listesine Ekle</button>
-      </div>
-
-      <div id="watch-words-chips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
-    </div>
-
-    <div class="data-table-wrap">
-      <div class="table-header">
-        <h3>🔍 Ne Yazdılar? (Yapay Zeka ve Sohbet Logları)</h3>
-        <div style="display:flex;gap:8px">
-          <button class="btn-ghost btn-sm" id="btn-filter-flagged">Yalnızca Alarmları Göster</button>
-          <button class="btn-danger btn-sm" id="btn-clear-logs">Tüm Logları Temizle</button>
-        </div>
-      </div>
-      <div id="ai-logs-list" style="max-height:550px;overflow-y:auto"></div>
-    </div>
-  `;
-
-  const drawWatchWords = () => {
-    const div = $("#watch-words-chips");
-    if (!div) return;
-    const words = appSettings.watchWords || [];
-    div.innerHTML = words.map(w => `
-      <div style="background:rgba(255,82,99,0.15);border:1px solid var(--danger);color:var(--danger);padding:4px 10px;border-radius:20px;font-size:0.82rem;display:flex;align-items:center;gap:6px">
-        <span>🚨 ${esc(w)}</span>
-        <button data-del-watch="${esc(w)}" style="background:none;border:none;color:var(--danger);cursor:pointer;font-weight:900">&times;</button>
-      </div>
-    `).join("") || `<span style="color:var(--text-sub);font-size:0.82rem">Henüz takip edilen kelime yok.</span>`;
-
-    $$("[data-del-watch]").forEach(b => b.onclick = () => {
-      const target = b.dataset.delWatch;
-      const updated = words.filter(x => x !== target);
-      set(ref(db, "settings/global/watchWords"), updated);
-    });
-  };
-  drawWatchWords();
-
-  $("#btn-add-watch-word").onclick = () => {
-    const input = $("#input-watch-word");
-    const val = input.value.trim().toLowerCase();
-    if (!val) return;
-    const words = appSettings.watchWords || [];
-    if (!words.includes(val)) {
-      words.push(val);
-      set(ref(db, "settings/global/watchWords"), words);
-    }
-    input.value = "";
-    drawWatchWords();
-  };
-
-  let onlyFlagged = false;
-  let allLogs = [];
-
-  const drawLogs = () => {
-    const list = $("#ai-logs-list");
-    if (!list) return;
-
-    const filtered = onlyFlagged ? allLogs.filter(([_, l]) => l.flagged) : allLogs;
-    if (!filtered.length) {
-      list.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-sub)">Henüz kaydedilmiş log bulunmuyor.</div>`;
-      return;
-    }
-
-    list.innerHTML = filtered.map(([id, l]) => `
-      <div class="list-item" style="align-items:flex-start;${l.flagged ? 'background:rgba(255,82,99,0.06);border-left:4px solid var(--danger)' : ''}">
-        <div style="flex:1">
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <div>
-              <b>${esc(l.name || l.email)}</b>
-              <small>${esc(l.email)} · ${new Date(l.ts).toLocaleString()} · Model: <b style="color:var(--accent)">${esc(l.modelName || l.model || "AI")}</b> (${l.spentCost || 1} Kredi) ${l.isGroup ? '· Grup AI' : ''}</small>
-            </div>
-            <div>
-              ${l.flagged ? `<span class="badge badge-flagged">🚨 ALARM: ${esc(l.triggeredWord)}</span>` : `<span class="badge badge-ok">Temiz</span>`}
-            </div>
-          </div>
-          <div style="background:var(--surface);padding:8px 12px;border-radius:var(--radius-sm);font-size:0.88rem;margin-bottom:6px;border:1px solid var(--border)">
-            <b style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase">Kullanıcının Yazdığı / Belge:</b><br>
-            ${esc(l.prompt)}
-          </div>
-          <div style="font-size:0.8rem;color:var(--text-muted)">
-            <b>AI Yanıtı (Özet):</b> ${esc(l.replySnippet || "")}
-          </div>
-        </div>
-        <div class="item-actions" style="margin-left:12px">
-          <button class="btn-danger btn-sm" data-quick-ban="${l.uid}">Banla</button>
-        </div>
-      </div>
-    `).join("");
-
-    $$("[data-quick-ban]").forEach(b => b.onclick = () => {
-      const uid = b.dataset.quickBan;
-      if (!confirm("Bu kullanıcıyı banlamak istediğine emin misin?")) return;
-      update(ref(db, "users/" + uid), { banned: true });
-      showToast("Kullanıcı banlandı!");
-    });
-  };
-
-  unsubs.push(onValue(query(ref(db, "logs/ai"), limitToLast(80)), snap => {
-    allLogs = Object.entries(snap.val() || {}).sort((a,b) => b[1].ts - a[1].ts);
-    drawLogs();
-  }));
-
-  $("#btn-filter-flagged").onclick = () => {
-    onlyFlagged = !onlyFlagged;
-    $("#btn-filter-flagged").textContent = onlyFlagged ? "Tüm Logları Göster" : "Yalnızca Alarmları Göster";
-    drawLogs();
-  };
-
-  $("#btn-clear-logs").onclick = async () => {
-    if (!confirm("Tüm logları silmek istediğine emin misin?")) return;
-    await remove(ref(db, "logs/ai"));
-    showToast("Loglar temizlendi.");
-  };
-}
-
-// 4.2. Kullanıcılar & Kredi
-let targetCreditUid = null;
 
 function renderAdminUsers() {
   const c = $("#admin-sub-content");
   c.innerHTML = `
     <div class="data-table-wrap">
-      <div class="table-header">
-        <h3>Kayıtlı Kullanıcılar & Kredi Tanımlama</h3>
-        <input id="search-users" placeholder="İsim, ID veya e-posta ara..." style="max-width:240px;padding:6px 12px;font-size:0.85rem">
+      <div class="table-header" style="padding:10px 14px">
+        <h3>Kayıtlı Kullanıcılar & Pro Durumları</h3>
+        <input id="search-users" placeholder="Ara..." style="max-width:200px;padding:6px 10px;font-size:0.85rem">
       </div>
       <div id="users-table-list"></div>
     </div>
   `;
 
   let users = [];
-  const drawUsers = (filter = "") => {
+  const drawUsers = (q = "") => {
     const list = $("#users-table-list");
     if (!list) return;
-
     const filtered = users.filter(([id, u]) => {
-      const q = filter.toLowerCase();
-      const tag = (u.tag || genUserTag(id)).toLowerCase();
-      return (u.name || "").toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q) || tag.includes(q);
+      const s = q.toLowerCase();
+      return (u.name || "").toLowerCase().includes(s) || (u.email || "").toLowerCase().includes(s) || (u.tag || "").toLowerCase().includes(s);
     });
 
-    list.innerHTML = filtered.map(([id, u]) => {
-      const isMuted = u.mutedUntil && u.mutedUntil > Date.now();
-      const userPic = userProfiles[id]?.pp;
-      const userTag = u.tag || genUserTag(id);
-      const bBonus = u.bonusCredits?.total || u.bonusCredits?.free || 0;
-      return `
-        <div class="list-item">
-          <div class="item-info">
-            ${av(id, u.name, userPic)}
-            <div>
-              <b>${esc(u.name || "İsimsiz")} <span class="user-id-tag">${esc(userTag)}</span> ${u.banned ? `<span class="badge badge-banned">Banlı</span>` : ''} ${isMuted ? `<span class="badge badge-muted">Susturuldu</span>` : ''}</b>
-              <small>${esc(u.email)} · Kod: ${esc(u.code || "-")}</small>
-              <div style="margin-top:3px">
-                <span class="badge badge-bonus">Hediye Kredi: +${bBonus} Kredi</span>
-              </div>
-            </div>
-          </div>
-          <div class="item-actions">
-            <button class="btn-ghost btn-sm" data-grant-credit="${id}" style="color:var(--accent);border-color:var(--accent)">
-              🎁 Kredi Ver
-            </button>
-            <button class="btn-ghost btn-sm" data-mute-user="${id}" data-muted="${isMuted ? 1 : 0}">
-              ${isMuted ? "Susturmayı Aç" : "1 Sa Sustur"}
-            </button>
-            <button class="${u.banned ? 'btn-ghost' : 'btn-danger'} btn-sm" data-ban-user="${id}" data-banned="${u.banned ? 1 : 0}">
-              ${u.banned ? "Banı Kaldır" : "Banla"}
-            </button>
+    list.innerHTML = filtered.map(([id, u]) => `
+      <div class="list-item" style="padding:10px 14px;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:10px">
+          ${av(id, u.name, userProfiles[id]?.pp)}
+          <div>
+            <b>${esc(u.name || "İsimsiz")} <small style="color:var(--accent)">${esc(u.tag || genUserTag(id))}</small> ${u.isPro ? '<span class="badge-pro">PRO</span>' : ''}</b>
+            <small style="color:var(--text-muted);display:block">${esc(u.email)}</small>
           </div>
         </div>
-      `;
-    }).join("") || `<div style="padding:20px;text-align:center;color:var(--text-sub)">Kullanıcı bulunamadı.</div>`;
+        <div style="display:flex;gap:6px">
+          <button class="btn-ghost btn-sm" data-toggle-pro="${id}">${u.isPro ? 'Pro Kaldır' : 'Pro Ver'}</button>
+          <button class="${u.banned ? 'btn-ghost' : 'btn-danger'} btn-sm" data-ban-user="${id}">${u.banned ? 'Ban Aç' : 'Banla'}</button>
+        </div>
+      </div>
+    `).join("") || `<div style="padding:16px;text-align:center;color:var(--text-sub)">Kullanıcı bulunamadı.</div>`;
 
-    $$("[data-grant-credit]").forEach(b => b.onclick = () => {
-      const uid = b.dataset.grantCredit;
-      const u = users.find(x => x[0] === uid)?.[1];
-      targetCreditUid = uid;
-      $("#modal-user-target").textContent = `${u.name || u.email} (${u.tag || genUserTag(uid)})`;
-      $("#input-bonus-credits").value = u.bonusCredits?.total || u.bonusCredits?.free || 0;
-      $("#credit-modal").classList.add("active");
+    $$("[data-toggle-pro]").forEach(b => b.onclick = () => {
+      const uid = b.dataset.togglePro;
+      const cur = allUsersData[uid]?.isPro;
+      update(ref(db), {
+        [`users/${uid}/isPro`]: !cur,
+        [`profiles/${uid}/isPro`]: !cur
+      });
+      showToast(!cur ? "Kullanıcıya Pro tanımlandı! 💎" : "Pro üyeliği kaldırıldı.");
     });
 
     $$("[data-ban-user]").forEach(b => b.onclick = () => {
       const uid = b.dataset.banUser;
-      const willBan = b.dataset.banned !== "1";
+      const willBan = !allUsersData[uid]?.banned;
       update(ref(db, "users/" + uid), { banned: willBan });
-      showToast(willBan ? "Kullanıcı banlandı!" : "Kullanıcının banı kaldırıldı!");
-    });
-
-    $$("[data-mute-user]").forEach(b => b.onclick = () => {
-      const uid = b.dataset.muteUser;
-      const isMuted = b.dataset.muted === "1";
-      const mutedUntil = isMuted ? 0 : (Date.now() + 3600 * 1000);
-      update(ref(db, "users/" + uid), { mutedUntil });
-      showToast(isMuted ? "Susturma kaldırıldı." : "Kullanıcı 1 saat susturuldu.");
+      showToast(willBan ? "Kullanıcı banlandı!" : "Ban kaldırıldı.");
     });
   };
 
@@ -1939,118 +1911,11 @@ function renderAdminUsers() {
   $("#search-users").oninput = e => drawUsers(e.target.value);
 }
 
-$("#btn-cancel-modal").onclick = () => $("#credit-modal").classList.remove("active");
-$("#btn-save-credits").onclick = async () => {
-  if (!targetCreditUid) return;
-  const val = parseInt($("#input-bonus-credits").value) || 0;
-
-  await update(ref(db, `users/${targetCreditUid}/bonusCredits`), {
-    total: Math.max(0, val)
-  });
-
-  $("#credit-modal").classList.remove("active");
-  showToast("Kullanıcı kredisi başarıyla güncellendi!");
-};
-
-// 4.3. Troll Kalkanı
-function renderAdminModeration() {
-  const c = $("#admin-sub-content");
-  c.innerHTML = `
-    <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
-      <h3 style="margin-bottom:14px">🛡️ Acil Durum & Hız Kısıtlamaları</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:16px">
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-          <label class="switch">
-            <input type="checkbox" id="toggle-lock-chat" ${appSettings.chatLocked ? "checked" : ""}>
-            <span class="slider"></span>
-          </label>
-          <b>Genel Sohbeti Kilitle (Sadece Admin Yazabilir)</b>
-        </label>
-      </div>
-
-      <div style="margin-bottom:16px">
-        <label style="font-size:0.85rem;color:var(--text-muted);display:block;margin-bottom:6px">Yavaş Mod (Slowmode):</label>
-        <select id="select-slowmode" style="padding:8px 12px">
-          <option value="0" ${appSettings.slowmode === 0 ? "selected" : ""}>Kapalı (Varsayılan 2 sn)</option>
-          <option value="5" ${appSettings.slowmode === 5 ? "selected" : ""}>5 Saniye Arayla</option>
-          <option value="10" ${appSettings.slowmode === 10 ? "selected" : ""}>10 Saniye Arayla</option>
-          <option value="30" ${appSettings.slowmode === 30 ? "selected" : ""}>30 Saniye Arayla</option>
-          <option value="60" ${appSettings.slowmode === 60 ? "selected" : ""}>1 Dakika Arayla</option>
-        </select>
-      </div>
-
-      <div style="display:flex;gap:10px">
-        <button class="btn-danger" id="btn-nuke-chat">💣 Genel Sohbeti Sıfırla (Temizle)</button>
-      </div>
-    </div>
-
-    <div class="data-table-wrap" style="padding:18px">
-      <h3 style="margin-bottom:10px">🚫 Sansürlenecek Kelimeler (Sohbette *** Olur)</h3>
-      <div style="display:flex;gap:8px;margin-bottom:14px">
-        <input id="input-bad-word" placeholder="Sansürlenecek kelime ekle..." style="flex:1">
-        <button class="btn-primary" id="btn-add-bad-word">Ekle</button>
-      </div>
-      <div id="bad-words-chips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
-    </div>
-  `;
-
-  $("#toggle-lock-chat").onchange = e => {
-    update(ref(db, "settings/global"), { chatLocked: e.target.checked });
-    showToast(e.target.checked ? "Sohbet kilitlendi!" : "Sohbet kilidi kaldırıldı!");
-  };
-
-  $("#select-slowmode").onchange = e => {
-    update(ref(db, "settings/global"), { slowmode: Number(e.target.value) });
-    showToast("Yavaş mod güncellendi.");
-  };
-
-  $("#btn-nuke-chat").onclick = async () => {
-    if (!confirm("DİKKAT: Genel sohbetteki TÜM mesajlar kalıcı olarak silinecek! Onaylıyor musun?")) return;
-    await remove(ref(db, "chat"));
-    showToast("Genel sohbet tamamen temizlendi!");
-  };
-
-  const drawWords = () => {
-    const div = $("#bad-words-chips");
-    if (!div) return;
-    const words = appSettings.badWords || [];
-    div.innerHTML = words.map(w => `
-      <div style="background:var(--surface);border:1px solid var(--border);padding:4px 10px;border-radius:20px;font-size:0.82rem;display:flex;align-items:center;gap:6px">
-        <span>${esc(w)}</span>
-        <button data-del-word="${esc(w)}" style="background:none;border:none;color:var(--danger);cursor:pointer;font-weight:900">&times;</button>
-      </div>
-    `).join("") || `<span style="color:var(--text-sub);font-size:0.82rem">Henüz sansür kelimesi eklenmedi.</span>`;
-
-    $$("[data-del-word]").forEach(b => b.onclick = () => {
-      const target = b.dataset.delWord;
-      const updated = words.filter(x => x !== target);
-      set(ref(db, "settings/global/badWords"), updated);
-    });
-  };
-  drawWords();
-
-  $("#btn-add-bad-word").onclick = () => {
-    const input = $("#input-bad-word");
-    const val = input.value.trim().toLowerCase();
-    if (!val) return;
-    const words = appSettings.badWords || [];
-    if (!words.includes(val)) {
-      words.push(val);
-      set(ref(db, "settings/global/badWords"), words);
-    }
-    input.value = "";
-    drawWords();
-  };
-}
-
-// 4.4. Fotoğraf Onay Masası
 function renderAdminPhotos() {
   const c = $("#admin-sub-content");
   c.innerHTML = `
     <div class="data-table-wrap">
-      <div class="table-header">
-        <h3>Onay Bekleyen Profil Fotoğrafları</h3>
-      </div>
+      <div class="table-header" style="padding:10px 14px"><h3>Onay Bekleyen Fotoğraflar</h3></div>
       <div id="pending-photos-list"></div>
     </div>
   `;
@@ -2060,28 +1925,21 @@ function renderAdminPhotos() {
     if (!list) return;
     const data = Object.entries(snap.val() || {});
     if (!data.length) {
-      list.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-sub)">Onay bekleyen yeni fotoğraf yok. Hepsi temiz! 🎉</div>`;
+      list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-sub)">Bekleyen fotoğraf yok.</div>`;
       return;
     }
-
-    list.innerHTML = data.map(([uid, imgB64]) => {
-      const uName = userProfiles[uid]?.name || "Bilinmeyen Kullanıcı";
-      return `
-        <div class="list-item">
-          <div class="item-info">
-            <img src="${esc(imgB64)}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--border)">
-            <div>
-              <b>${esc(uName)}</b>
-              <small>UID: ${esc(uid)}</small>
-            </div>
-          </div>
-          <div class="item-actions">
-            <button class="btn-primary btn-sm" data-approve-photo="${uid}">Onayla</button>
-            <button class="btn-danger btn-sm" data-reject-photo="${uid}">Reddet</button>
-          </div>
+    list.innerHTML = data.map(([uid, imgB64]) => `
+      <div class="list-item" style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-subtle)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <img src="${esc(imgB64)}" style="width:48px;height:48px;border-radius:50%;object-fit:cover">
+          <b>${esc(userProfiles[uid]?.name || uid)}</b>
         </div>
-      `;
-    }).join("");
+        <div style="display:flex;gap:6px">
+          <button class="btn-primary btn-sm" data-approve-photo="${uid}">Onayla</button>
+          <button class="btn-danger btn-sm" data-reject-photo="${uid}">Reddet</button>
+        </div>
+      </div>
+    `).join("");
 
     $$("[data-approve-photo]").forEach(b => b.onclick = () => {
       const uid = b.dataset.approvePhoto;
@@ -2091,7 +1949,7 @@ function renderAdminPhotos() {
           [`profiles/${uid}/pp`]: s.val(),
           [`pending/${uid}`]: null
         });
-        showToast("Fotoğraf onaylandı ve yayına alındı.");
+        showToast("Fotoğraf onaylandı.");
       });
     });
 
@@ -2102,23 +1960,14 @@ function renderAdminPhotos() {
   }));
 }
 
-// 4.5. Davet Kodları Masası
 function renderAdminCodes() {
   const c = $("#admin-sub-content");
   c.innerHTML = `
-    <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
-      <h3 style="margin-bottom:12px">🎟️ Yeni Davet Kodu Üret</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:10px">
-        <button class="btn-primary" id="btn-gen-single">1 Adet Kod Üret</button>
-        <button class="btn-ghost" id="btn-gen-5">5 Adet Kod Paketi Üret</button>
-        <button class="btn-ghost" id="btn-copy-unused">Kullanılmayan Kodları Kopyala</button>
-      </div>
+    <div style="padding:12px 0;display:flex;gap:8px">
+      <button class="btn-primary btn-sm" id="btn-gen-single">1 Kod Üret</button>
+      <button class="btn-ghost btn-sm" id="btn-gen-5">5 Kod Üret</button>
     </div>
-
     <div class="data-table-wrap">
-      <div class="table-header">
-        <h3>Mevcut Davet Kodları</h3>
-      </div>
       <div id="codes-table-list"></div>
     </div>
   `;
@@ -2129,91 +1978,48 @@ function renderAdminCodes() {
   };
 
   $("#btn-gen-single").onclick = () => {
-    const c = makeCode();
-    set(ref(db, "codes/" + c), { used: false, usedBy: "", createdAt: Date.now() });
-    showToast("Kod üretildi: " + c);
+    const cd = makeCode();
+    set(ref(db, "codes/" + cd), { used: false, usedBy: "", createdAt: Date.now() });
+    showToast("Kod üretildi: " + cd);
   };
 
   $("#btn-gen-5").onclick = () => {
     const updates = {};
     for (let i = 0; i < 5; i++) {
-      const c = makeCode();
-      updates["codes/" + c] = { used: false, usedBy: "", createdAt: Date.now() };
+      const cd = makeCode();
+      updates["codes/" + cd] = { used: false, usedBy: "", createdAt: Date.now() };
     }
     update(ref(db), updates);
-    showToast("5 adet yeni kod başarıyla üretildi.");
+    showToast("5 adet kod üretildi.");
   };
 
-  let cachedCodes = [];
   unsubs.push(onValue(ref(db, "codes"), snap => {
     const list = $("#codes-table-list");
     if (!list) return;
-    cachedCodes = Object.entries(snap.val() || {}).sort((a,b) => b[1].createdAt - a[1].createdAt);
-
-    list.innerHTML = cachedCodes.map(([code, d]) => `
-      <div class="list-item">
-        <div class="item-info">
-          <div style="font-family:monospace;font-size:1.1rem;font-weight:800;letter-spacing:0.1em;color:var(--accent)">${esc(code)}</div>
-          <div>
-            ${d.used ? `<span class="badge" style="background:var(--surface)">Kullanıldı (${esc(userProfiles[d.usedBy]?.name || d.usedBy)})</span>` : `<span class="badge badge-ok">Kullanılabilir</span>`}
-          </div>
-        </div>
-        <div class="item-actions">
-          <button class="btn-ghost btn-sm" data-copy-c="${esc(code)}">Kopyala</button>
-          <button class="btn-danger btn-sm" data-del-c="${esc(code)}">Sil</button>
+    const codes = Object.entries(snap.val() || {}).sort((a,b) => b[1].createdAt - a[1].createdAt);
+    list.innerHTML = codes.map(([code, d]) => `
+      <div class="list-item" style="padding:8px 14px;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center">
+        <b style="font-family:monospace;color:var(--accent)">${esc(code)}</b>
+        <div>
+          ${d.used ? `<span class="badge" style="background:var(--surface)">Kullanıldı</span>` : `<span class="badge badge-ok">Aktif</span>`}
+          <button class="btn-ghost btn-sm" data-copy-c="${esc(code)}" style="margin-left:6px">Kopyala</button>
         </div>
       </div>
-    `).join("") || `<div style="padding:20px;text-align:center;color:var(--text-sub)">Henüz kod üretilmedi.</div>`;
+    `).join("");
 
     $$("[data-copy-c]").forEach(b => b.onclick = () => {
       navigator.clipboard.writeText(b.dataset.copyC);
-      showToast("Kod panoya kopyalandı!");
-    });
-    $$("[data-del-c]").forEach(b => b.onclick = () => {
-      remove(ref(db, "codes/" + b.dataset.delC));
+      showToast("Kopyalandı: " + b.dataset.copyC);
     });
   }));
-
-  $("#btn-copy-unused").onclick = () => {
-    const unused = cachedCodes.filter(([_, d]) => !d.used).map(([c]) => c);
-    if (!unused.length) {
-      showToast("Kullanılmayan kod bulunmuyor.");
-      return;
-    }
-    navigator.clipboard.writeText(unused.join("\n"));
-    showToast(`${unused.length} adet kod panoya kopyalandı!`);
-  };
 }
 
-// 4.6. Duyuru Ayarları
-function renderAdminSettings() {
-  const c = $("#admin-sub-content");
-  c.innerHTML = `
-    <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
-      <h3 style="margin-bottom:10px">📢 Tüm Kullanıcılara Canlı Duyuru Yayınla</h3>
-      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">Buraya yazacağınız duyuru tüm kullanıcıların ekranının en üstünde sarı şerit olarak görünür. Kaldırmak için boş bırakıp kaydedin.</p>
-      <div style="display:flex;gap:10px">
-        <input id="input-announcement" value="${esc(appSettings.announcement)}" placeholder="Örn: Akşam saat 22:00'de planlı sistem güncellemesi yapılacaktır." style="flex:1">
-        <button class="btn-primary" id="btn-save-announcement">Kaydet</button>
-      </div>
-    </div>
-  `;
-
-  $("#btn-save-announcement").onclick = () => {
-    const val = $("#input-announcement").value.trim();
-    set(ref(db, "settings/global/announcement"), val);
-    showToast(val ? "Duyuru yayına alındı!" : "Duyuru kaldırıldı.");
-  };
-}
-
-// ----------------- BAŞLATMA DÖNGÜSÜ -----------------
+// ----------------- OTURUM BAŞLATMA DÖNGÜSÜ -----------------
 onAuthStateChanged(auth, async u => {
   if (!u) return renderLogin();
   try {
     const adminMode = (u.email === ADMIN_EMAIL);
-    if (adminMode) {
-      return initAppShell(u, true);
-    }
+    if (adminMode) return initAppShell(u, true);
 
     const snap = await get(ref(db, "users/" + u.uid));
     if (!snap.exists()) return renderInvite(u);
