@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#0d0f17">
 <title>Ne Yapay? — AI & Topluluk Portalı</title>
 <link rel="manifest" href="manifest.json">
+<!-- PDF.js CDN (Çok Sayfalı PDF Okuma İçin) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root {
   --bg: #0b0d14;
@@ -31,17 +33,15 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
 
-/* Arka plan ışık efektleri */
 .ambient {position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
 .ambient-glow {position:absolute;border-radius:50%;filter:blur(90px);opacity:0.22}
 .g1 {width:50vw;height:50vw;background:var(--primary);top:-15vw;left:-10vw;animation:orbit 24s ease-in-out infinite alternate}
 .g2 {width:45vw;height:45vw;background:var(--accent);bottom:-10vw;right:-10vw;animation:orbit 28s ease-in-out infinite alternate-reverse}
 @keyframes orbit {to{transform:translate(10vw, 8vw) scale(1.15)}}
 
-/* Ana Taşıyıcı */
 .app-container {max-width:1050px;margin:0 auto;padding:16px 14px 60px}
 
-/* Üst Bar & Marka */
+/* Header */
 .header {display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(19,23,34,0.75);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;box-shadow:0 8px 30px rgba(0,0,0,0.35)}
 .brand {display:flex;align-items:center;gap:12px}
 .brand-icon {width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--primary));display:grid;place-items:center;font-weight:900;color:#0d0f17;font-size:1.3rem;box-shadow:0 4px 14px var(--accent-glow)}
@@ -50,25 +50,24 @@ html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:sys
 .brand-text p {font-size:0.75rem;color:var(--text-muted)}
 .header-actions {display:flex;align-items:center;gap:10px}
 
-/* Kullanıcı Çipi */
 .user-chip {display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--border);padding:5px 12px 5px 6px;border-radius:30px}
 .chip-av {width:30px;height:30px;border-radius:50%;object-fit:cover;display:grid;place-items:center;font-size:0.8rem;font-weight:800;color:#10121a}
-.chip-name {font-size:0.85rem;font-weight:600;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip-name {font-size:0.85rem;font-weight:600;max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-id-tag {font-family:monospace;font-size:0.72rem;background:rgba(255,184,77,0.15);color:var(--accent);padding:2px 6px;border-radius:6px;border:1px solid var(--accent);cursor:pointer}
 .badge-admin {background:var(--accent);color:#1a1300;font-size:0.65rem;font-weight:800;padding:2px 7px;border-radius:6px;text-transform:uppercase;letter-spacing:0.04em}
 
-/* Global Duyuru Şeridi */
 .banner-alert {display:none;background:linear-gradient(90deg,rgba(255,184,77,0.15),rgba(124,102,220,0.15));border:1px solid var(--accent);color:var(--text);padding:10px 16px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:0.88rem;align-items:center;gap:10px;animation:slideDown .3s ease}
 .banner-alert.active {display:flex}
 .banner-icon {font-size:1.1rem;color:var(--accent)}
 
-/* Sekmeler (Tabs) */
+/* Sekmeler */
 .tabs {display:flex;gap:8px;background:var(--panel);border:1px solid var(--border);padding:6px;border-radius:var(--radius);margin-bottom:18px;overflow-x:auto}
 .tab-btn {flex:1;min-width:max-content;background:transparent;border:0;color:var(--text-muted);padding:10px 16px;border-radius:var(--radius-sm);font-weight:700;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s ease}
 .tab-btn:hover {color:var(--text);background:rgba(255,255,255,0.03)}
 .tab-btn.active {background:var(--surface);color:var(--accent);border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.25)}
 .tab-btn .badge-count {background:var(--danger);color:#fff;font-size:0.7rem;padding:2px 6px;border-radius:10px;font-weight:800}
 
-/* Genel Buton ve Giriş Elemanları */
+/* Buton ve Girdiler */
 button {font:inherit;cursor:pointer;border:0;border-radius:var(--radius-sm);transition:all .18s ease}
 button:active {transform:scale(0.97)}
 .btn-primary {background:var(--accent);color:#181200;font-weight:700;padding:10px 16px;box-shadow:0 4px 14px var(--accent-glow)}
@@ -83,22 +82,20 @@ button:active {transform:scale(0.97)}
 input,textarea,select {font:inherit;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;transition:border-color .2s}
 input:focus,textarea:focus,select:focus {outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 
-/* Toast Bildirim */
-#toast {position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--panel);border:1px solid var(--border);color:var(--text);padding:12px 22px;border-radius:30px;font-size:0.9rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.5);display:flex;align-items:center;gap:10px;z-index:9999;transition:transform .3s cubic-bezier(0.18, 0.89, 0.32, 1.28);pointer-events:none}
+#toast {position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--panel);border:1px solid var(--border);color:var(--text);padding:12px 22px;border-radius:30px;font-size:0.9rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.5);display:flex;align-items:center;gap:10px;z-index:99999;transition:transform .3s cubic-bezier(0.18, 0.89, 0.32, 1.28);pointer-events:none}
 #toast.show {transform:translateX(-50%) translateY(0)}
 
-/* Modal / Diyalog Kutusu */
-.modal-overlay {position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);display:none;place-items:center;z-index:10000;padding:16px}
+/* Modallar */
+.modal-overlay {position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);display:none;place-items:center;z-index:10000;padding:16px}
 .modal-overlay.active {display:grid}
-.modal-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:440px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,0.6);animation:slideDown .25s ease}
+.modal-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);width:100%;max-width:480px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,0.6);animation:slideDown .25s ease}
 
-/* Kartlar ve Mesajlaşma */
+/* Kartlar & Mesajlaşma */
 .ai-card {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:0 12px 36px rgba(0,0,0,0.25)}
 .ai-topbar {display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border-subtle)}
-.model-select {display:flex;align-items:center;gap:8px}
 .quota-badge {font-size:0.82rem;color:var(--text-muted);background:var(--surface);padding:6px 12px;border-radius:20px;border:1px solid var(--border)}
 
-.chat-box {height:58vh;overflow-y:auto;padding-right:6px;display:flex;flex-direction:column;gap:14px;margin-bottom:14px;scroll-behavior:smooth}
+.chat-box {height:56vh;overflow-y:auto;padding-right:6px;display:flex;flex-direction:column;gap:14px;margin-bottom:14px;scroll-behavior:smooth}
 .msg-wrap {display:flex;gap:10px;max-width:85%;animation:fadeIn .25s ease both}
 .msg-wrap.me {align-self:flex-end;flex-direction:row-reverse}
 .msg-wrap.ai-bot {align-self:flex-start}
@@ -109,23 +106,35 @@ input:focus,textarea:focus,select:focus {outline:none;border-color:var(--accent)
 .msg-wrap.ai-bot .msg-bubble {background:rgba(255,184,77,0.08);border:1px solid rgba(255,184,77,0.35);border-bottom-left-radius:3px}
 .msg-meta {font-size:0.72rem;color:var(--text-sub);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
 
-.input-bar {display:flex;gap:10px;align-items:flex-end}
+/* Medya & Dosya Ekleri */
+.msg-media-img {max-width:260px;max-height:220px;border-radius:8px;object-fit:cover;margin-top:6px;cursor:pointer;border:1px solid var(--border)}
+.msg-media-pdf {display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.25);border:1px solid var(--border);padding:8px 12px;border-radius:8px;margin-top:6px;text-decoration:none;color:inherit}
+.msg-media-pdf .pdf-icon {font-size:1.4rem}
+.msg-media-pdf .pdf-meta b {font-size:0.82rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.msg-media-pdf .pdf-meta small {font-size:0.72rem;color:var(--text-muted)}
+
+/* Grup / Oda Seçici Çubuğu */
+.room-selector {display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--border-subtle)}
+.room-pill {background:var(--surface);color:var(--text-muted);border:1px solid var(--border);padding:6px 14px;border-radius:20px;font-size:0.83rem;font-weight:600;white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:6px}
+.room-pill.active {background:var(--accent);color:#10121a;border-color:var(--accent)}
+.room-pill.new-btn {border-style:dashed;color:var(--accent)}
+
+.input-bar {display:flex;gap:8px;align-items:flex-end}
 .input-bar textarea {flex:1;resize:none;max-height:120px;border-radius:var(--radius-sm)}
 
-/* Sohbet Kilit Çubuğu */
-.chat-locked-bar {background:rgba(255,82,99,0.12);border:1px solid var(--danger);color:var(--danger);padding:10px;border-radius:var(--radius-sm);text-align:center;font-size:0.88rem;font-weight:600;margin-bottom:12px;display:none}
-.chat-locked-bar.active {display:block}
+.btn-attach {width:44px;height:44px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-muted);font-size:1.2rem;cursor:pointer}
+.btn-attach:hover {color:var(--accent);border-color:var(--accent)}
 
-/* Admin Paneli */
-.admin-badge-strip {background:linear-gradient(90deg,rgba(255,184,77,0.1),rgba(124,102,220,0.1));border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem}
-.admin-subnav {display:flex;gap:6px;overflow-x:auto;margin-bottom:16px;padding-bottom:4px}
-.subnav-btn {background:var(--surface);color:var(--text-muted);border:1px solid var(--border);padding:8px 14px;border-radius:var(--radius-sm);font-size:0.84rem;font-weight:600;cursor:pointer}
-.subnav-btn.active {background:var(--accent);color:#181200;border-color:var(--accent)}
+.attachment-preview {display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:8px;align-items:center;justify-content:space-between;font-size:0.82rem}
+.attachment-preview.active {display:flex}
 
-.stats-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
-.stat-card {background:var(--panel);border:1px solid var(--border);padding:16px;border-radius:var(--radius);display:flex;flex-direction:column;gap:6px}
-.stat-card .val {font-size:1.8rem;font-weight:800;color:var(--text)}
-.stat-card .lbl {font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em}
+/* Rozetler & Tablo */
+.badge {font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase}
+.badge-banned {background:rgba(255,82,99,0.2);color:var(--danger);border:1px solid var(--danger)}
+.badge-muted {background:rgba(255,169,64,0.2);color:var(--warning);border:1px solid var(--warning)}
+.badge-ok {background:rgba(61,214,140,0.15);color:var(--success);border:1px solid var(--success)}
+.badge-bonus {background:rgba(124,102,220,0.2);color:#b3a2ff;border:1px solid var(--primary)}
+.badge-flagged {background:rgba(255,82,99,0.25);color:var(--danger);border:1px solid var(--danger);font-weight:800}
 
 .data-table-wrap {background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
 .table-header {padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -138,15 +147,17 @@ input:focus,textarea:focus,select:focus {outline:none;border-color:var(--accent)
 .item-info small {color:var(--text-muted);font-size:0.78rem}
 .item-actions {display:flex;gap:6px;flex-shrink:0}
 
-/* Rozetler */
-.badge {font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase}
-.badge-banned {background:rgba(255,82,99,0.2);color:var(--danger);border:1px solid var(--danger)}
-.badge-muted {background:rgba(255,169,64,0.2);color:var(--warning);border:1px solid var(--warning)}
-.badge-ok {background:rgba(61,214,140,0.15);color:var(--success);border:1px solid var(--success)}
-.badge-bonus {background:rgba(124,102,220,0.2);color:#b3a2ff;border:1px solid var(--primary)}
-.badge-flagged {background:rgba(255,82,99,0.25);color:var(--danger);border:1px solid var(--danger);font-weight:800}
+/* Admin */
+.admin-badge-strip {background:linear-gradient(90deg,rgba(255,184,77,0.1),rgba(124,102,220,0.1));border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem}
+.admin-subnav {display:flex;gap:6px;overflow-x:auto;margin-bottom:16px;padding-bottom:4px}
+.subnav-btn {background:var(--surface);color:var(--text-muted);border:1px solid var(--border);padding:8px 14px;border-radius:var(--radius-sm);font-size:0.84rem;font-weight:600;cursor:pointer}
+.subnav-btn.active {background:var(--accent);color:#181200;border-color:var(--accent)}
 
-/* Switch */
+.stats-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.stat-card {background:var(--panel);border:1px solid var(--border);padding:16px;border-radius:var(--radius);display:flex;flex-direction:column;gap:6px}
+.stat-card .val {font-size:1.8rem;font-weight:800;color:var(--text)}
+.stat-card .lbl {font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em}
+
 .switch {position:relative;display:inline-block;width:44px;height:24px}
 .switch input {opacity:0;width:0;height:0}
 .slider {position:absolute;cursor:pointer;inset:0;background-color:var(--surface);border:1px solid var(--border);border-radius:24px;transition:.25s}
@@ -154,7 +165,6 @@ input:focus,textarea:focus,select:focus {outline:none;border-color:var(--accent)
 input:checked + .slider {background-color:var(--accent);border-color:var(--accent)}
 input:checked + .slider:before {transform:translateX(20px);background-color:#181200}
 
-/* Giriş Ekranı */
 .auth-center {min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .auth-box {width:100%;max-width:380px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:30px 24px;box-shadow:0 16px 40px rgba(0,0,0,0.5)}
 .auth-title {font-size:2.2rem;font-weight:900;letter-spacing:-0.03em;margin-bottom:8px}
@@ -174,7 +184,85 @@ input:checked + .slider:before {transform:translateX(20px);background-color:#181
 
 <div id="toast"></div>
 
-<!-- Kredi Verme Modalı -->
+<!-- 1. YENİ ÜYE KARŞILAMA VE REHBER MODALI -->
+<div class="modal-overlay" id="welcome-modal">
+  <div class="modal-card">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:2.5rem;margin-bottom:8px">🎉</div>
+      <h2 style="font-size:1.4rem;font-weight:900">Ne Yapay?'a Hoş Geldin!</h2>
+      <p style="font-size:0.85rem;color:var(--text-muted)">Topluluğumuza katıldığın için teşekkürler. İşte hızlı başlangıç rehberin:</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;background:var(--surface);padding:14px;border-radius:var(--radius-sm);font-size:0.85rem;margin-bottom:16px;border:1px solid var(--border)">
+      <div>🤖 <b>Yapay Zeka Asistanı:</b> Standart ve Akıl Yürüten Pro modellerle sorularına anında yanıt al.</div>
+      <div>💬 <b>Grup & Özel Sohbetler:</b> Profilindeki benzersiz <b>#NY-XXXX</b> ID'n ile arkadaşlarınla özel gruplar kurabilir, <code style="color:var(--accent)">@ai</code> yazarak yapay zekayı sohbetinize dahil edebilirsiniz.</div>
+      <div>📄 <b>100 Sayfaya Kadar PDF:</b> Kapsamlı PDF belgelerini yükleyip Pro model ile baştan sona özetletebilirsiniz.</div>
+      <div>⏰ <b>Kotalar Sabah 09:00'da Yenilenir:</b> Günlük ücretsiz hakların her sabah tam saat <b>09:00'da</b> sıfırlanır.</div>
+      <div style="border-top:1px solid var(--border-subtle);padding-top:8px;color:var(--accent)">
+        📩 <b>Destek & İletişim:</b> Bir sorun, öneri veya hata ile karşılaşırsan <b>coslxofficial@gmail.com</b> adresine e-posta atabilirsin.
+      </div>
+    </div>
+
+    <button class="btn-primary" style="width:100%" id="btn-close-welcome">Anladım, Uygulamayı Başlat! 🚀</button>
+  </div>
+</div>
+
+<!-- 2. PDF İŞLEME VE PRO KREDİ ONAY MODALI -->
+<div class="modal-overlay" id="pdf-confirm-modal">
+  <div class="modal-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <span style="font-size:1.8rem">⚠️</span>
+      <h3 style="font-size:1.15rem">Kapsamlı PDF Analiz Uyarısı</h3>
+    </div>
+    <p style="font-size:0.88rem;color:var(--text);margin-bottom:12px" id="pdf-modal-desc">
+      Bu PDF belgesi baştan sona taranacak ve işlenecektir.
+    </p>
+    <div style="background:rgba(255,184,77,0.12);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:12px;margin-bottom:16px;font-size:0.84rem">
+      <b style="color:var(--accent)">📌 Kredi Bilgilendirmesi:</b><br>
+      Kapsamlı belge analizi yüksek sunucu ve token gücü tükettiği için bu işlem <b>1 adet PRO KREDİNİZİ</b> harcayacaktır.
+      <div style="margin-top:6px" id="pdf-pro-status">Mevcut Pro Krediniz: Yükleniyor...</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="btn-primary" id="btn-confirm-pdf-pro">Onayla ve Pro Model ile İşle (1 Kredi) 🚀</button>
+      <button class="btn-ghost" id="btn-upload-pdf-only">Yalnızca Sohbete Yükle (AI Analizi Yapma)</button>
+      <button class="btn-danger btn-sm" id="btn-cancel-pdf-modal" style="margin-top:4px">İptal Et</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. YENİ GRUP KURMA MODALI -->
+<div class="modal-overlay" id="new-group-modal">
+  <div class="modal-card">
+    <h3 style="margin-bottom:8px">👥 Yeni Özel Grup / Sohbet Kur</h3>
+    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:14px">Arkadaşlarının ID'lerini girerek sadece grubunuza özel oda oluşturun.</p>
+    
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+      <div>
+        <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Grup Adı:</label>
+        <input type="text" id="input-group-name" placeholder="Örn: Proje Ekibi, Kahve Grubu..." style="width:100%">
+      </div>
+      <div>
+        <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Eklenecek Üye ID'leri (Virgülle ayır):</label>
+        <input type="text" id="input-group-member-ids" placeholder="Örn: #NY-9482, #NY-1102" style="width:100%">
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;background:var(--surface);padding:10px;border-radius:var(--radius-sm)">
+        <input type="checkbox" id="check-group-ai" checked style="width:18px;height:18px">
+        <label for="check-group-ai" style="font-size:0.85rem;cursor:pointer">
+          <b>🤖 Yapay Zeka (AI) Gruba Dahil Edilsin</b>
+          <small style="display:block;color:var(--text-muted)">Grupta @ai ile doğrudan yapay zekaya danışabilirsiniz.</small>
+        </label>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:10px">
+      <button class="btn-ghost" id="btn-cancel-group">İptal</button>
+      <button class="btn-primary" id="btn-create-group">Grubu Oluştur</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. KREDİ VERME MODALI (ADMİN) -->
 <div class="modal-overlay" id="credit-modal">
   <div class="modal-card">
     <h3 style="margin-bottom:8px">🎁 Kullanıcıya Ekstra Kredi Tanımla</h3>
@@ -198,6 +286,14 @@ input:checked + .slider:before {transform:translateX(20px);background-color:#181
   </div>
 </div>
 
+<!-- 5. MEDYA BÜYÜTME MODALI -->
+<div class="modal-overlay" id="media-viewer-modal">
+  <div style="max-width:90vw;max-height:90vh;position:relative">
+    <button id="btn-close-viewer" style="position:absolute;top:-40px;right:0;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer">&times;</button>
+    <img id="viewer-img" style="max-width:100%;max-height:85vh;border-radius:10px;object-fit:contain">
+  </div>
+</div>
+
 <div id="app" class="app-container">
   <div class="auth-center"><div class="auth-desc">Yükleniyor…</div></div>
 </div>
@@ -206,6 +302,11 @@ input:checked + .slider:before {transform:translateX(20px);background-color:#181
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getDatabase, ref, get, set, update, remove, onValue, push, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+// PDF.js Çalışanı Ayarı
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+}
 
 const cfg = {
   apiKey: "AIzaSyAOA_EKD-uJQrQWxVO1zlVTrgxBbcCpKug",
@@ -243,10 +344,18 @@ const av = (uid, name, pp) => pp
   ? `<img class="chip-av" src="${esc(pp)}" alt="av">`
   : `<div class="chip-av" style="background:hsl(${[...uid].reduce((a,c)=>a+c.charCodeAt(0),0)%360} 70% 65%)">${esc((name||"?")[0].toUpperCase())}</div>`;
 
+const genUserTag = uid => "#NY-" + [...uid.slice(0, 5)].map(c => c.charCodeAt(0) % 10).join("");
+
+// Her sabah saat 09:00'da sıfırlanan gün tespiti (UTC+3 Türkiye bazında)
+const getUsageDay = () => new Date(Date.now() - 6 * 3600 * 1000).toISOString().slice(0, 10);
+
 let currentUser = null;
 let isAdmin = false;
 let userProfiles = {};
+let allUsersData = {};
 let myBonusCredits = { free: 0, pro: 0 };
+let currentRoomId = "global";
+let currentUsageToday = { free: 0, pro: 0 };
 let appSettings = {
   chatLocked: false,
   slowmode: 0,
@@ -298,6 +407,7 @@ function renderInvite(u) {
         $("#inv-err").textContent = "Bu kod geçersiz ya da daha önce kullanılmış.";
         return;
       }
+      const myTag = genUserTag(u.uid);
       await update(ref(db), {
         [`codes/${code}/used`]: true,
         [`codes/${code}/usedBy`]: u.uid,
@@ -305,6 +415,7 @@ function renderInvite(u) {
         [`users/${u.uid}`]: {
           email: u.email,
           name: u.displayName || u.email.split("@")[0],
+          tag: myTag,
           banned: false,
           mutedUntil: 0,
           bonusCredits: { free: 0, pro: 0 },
@@ -339,17 +450,27 @@ function initAppShell(u, admin) {
   currentUser = u;
   isAdmin = admin;
 
+  const myTag = genUserTag(u.uid);
   update(ref(db, `profiles/${u.uid}`), {
-    name: (u.displayName || u.email.split("@")[0]).slice(0, 40)
+    name: (u.displayName || u.email.split("@")[0]).slice(0, 40),
+    tag: myTag
   });
 
-  // Kullanıcının kendi hediye kredisini dinle
+  // Karşılama Ekranı Kontrolü (Sadece ilk girişte çıkar)
+  const welcomeKey = "welcome_seen_" + u.uid;
+  if (!localStorage.getItem(welcomeKey)) {
+    $("#welcome-modal").classList.add("active");
+  }
+  $("#btn-close-welcome").onclick = () => {
+    localStorage.setItem(welcomeKey, "true");
+    $("#welcome-modal").classList.remove("active");
+  };
+
   unsubs.push(onValue(ref(db, `users/${u.uid}/bonusCredits`), snap => {
     myBonusCredits = snap.val() || { free: 0, pro: 0 };
     refreshAiQuotaDisplay();
   }));
 
-  // Genel ayarları dinle
   unsubs.push(onValue(ref(db, "settings/global"), snap => {
     const data = snap.val() || {};
     appSettings.chatLocked = !!data.chatLocked;
@@ -365,9 +486,13 @@ function initAppShell(u, admin) {
     userProfiles = snap.val() || {};
   }));
 
+  unsubs.push(onValue(ref(db, "users"), snap => {
+    allUsersData = snap.val() || {};
+  }));
+
   const navItems = [
     { id: "ai", label: "🤖 AI Asistan" },
-    { id: "chat", label: "💬 Genel Sohbet & AI" },
+    { id: "chat", label: "💬 Sohbetler & Gruplar" },
     { id: "me", label: "👤 Profilim" }
   ];
   if (isAdmin) {
@@ -387,6 +512,7 @@ function initAppShell(u, admin) {
         <div class="user-chip">
           <div id="header-avatar">${av(u.uid, u.displayName)}</div>
           <span class="chip-name">${esc(u.displayName || u.email)}</span>
+          <span class="user-id-tag" id="btn-copy-my-tag" title="ID'yi Kopyala">${esc(myTag)}</span>
           ${isAdmin ? `<span class="badge-admin">Admin</span>` : ""}
         </div>
         <button class="btn-ghost btn-sm" id="btn-logout" title="Çıkış Yap">Çıkış</button>
@@ -411,6 +537,10 @@ function initAppShell(u, admin) {
   `;
 
   $("#btn-logout").onclick = () => signOut(auth);
+  $("#btn-copy-my-tag").onclick = () => {
+    navigator.clipboard.writeText(myTag);
+    showToast(`ID panoya kopyalandı: ${myTag}`);
+  };
 
   const switchTab = tabId => {
     $$(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tabId));
@@ -448,7 +578,6 @@ function updateAnnouncementUI() {
 // ----------------- VİEW 1: AI ASİSTAN -----------------
 let aiHistory = [];
 let aiBusy = false;
-let currentUsageToday = { free: 0, pro: 0 };
 
 function refreshAiQuotaDisplay() {
   const qBadge = $("#ai-quota-badge");
@@ -458,7 +587,7 @@ function refreshAiQuotaDisplay() {
   const totalFree = DEFAULT_LIMITS.freeDaily + freeBonus;
   const totalPro = DEFAULT_LIMITS.proDaily + proBonus;
   
-  qBadge.innerHTML = `Bugün: Standart ${currentUsageToday.free || 0}/${totalFree} ${freeBonus ? `<b style="color:var(--accent)">(+${freeBonus} Ek)</b>` : ''} · Pro ${currentUsageToday.pro || 0}/${totalPro} ${proBonus ? `<b style="color:var(--accent)">(+${proBonus} Ek)</b>` : ''}`;
+  qBadge.innerHTML = `Bugün: Standart ${currentUsageToday.free || 0}/${totalFree} · Pro ${currentUsageToday.pro || 0}/${totalPro} ${proBonus ? `<b style="color:var(--accent)">(+${proBonus} Pro Ek)</b>` : ''} <small style="display:block;font-size:0.7rem;color:var(--text-sub)">Kotalar her sabah 09:00'da yenilenir</small>`;
 }
 
 function renderAiView() {
@@ -470,7 +599,7 @@ function renderAiView() {
           <label style="font-size:0.85rem;font-weight:700;color:var(--text-muted)">Model:</label>
           <select id="ai-tier" style="font-size:0.88rem;padding:6px 12px">
             <option value="free">DeepSeek Chat (Hızlı · Ücretsiz)</option>
-            <option value="pro">DeepSeek Reasoner (Düşünce / Akıl Yürütme · Pro)</option>
+            <option value="pro">DeepSeek Reasoner (Akıl Yürütme · Pro)</option>
           </select>
         </div>
         <div class="quota-badge" id="ai-quota-badge">Kotalar yükleniyor…</div>
@@ -480,7 +609,7 @@ function renderAiView() {
       <div class="chat-box" id="ai-chat-box"></div>
 
       <div class="input-bar">
-        <textarea id="ai-input" rows="2" maxlength="500" placeholder="Sorunu sor veya bir görev ver (En fazla 500 karakter)..."></textarea>
+        <textarea id="ai-input" rows="2" maxlength="500" placeholder="Sorunu sor veya görev ver (En fazla 500 karakter)..."></textarea>
         <button class="btn-primary" id="btn-send-ai" style="height:48px;padding:0 22px">Gönder</button>
       </div>
     </div>
@@ -501,8 +630,8 @@ function renderAiView() {
   };
   drawAi();
 
-  const todayStr = new Date(Date.now() + 10800e3).toISOString().slice(0, 10);
-  unsubs.push(onValue(ref(db, `usage/${currentUser.uid}/${todayStr}`), snap => {
+  const usageDay = getUsageDay();
+  unsubs.push(onValue(ref(db, `usage/${currentUser.uid}/${usageDay}`), snap => {
     currentUsageToday = snap.val() || { free: 0, pro: 0 };
     refreshAiQuotaDisplay();
   }));
@@ -519,6 +648,7 @@ function renderAiView() {
     }
 
     aiBusy = true;
+    $("#btn-send-ai").disabled = true;
     aiHistory.push({ role: "user", content: text }, { role: "assistant", content: "Düşünüyor…" });
     input.value = "";
     drawAi();
@@ -539,6 +669,7 @@ function renderAiView() {
       aiHistory[aiHistory.length - 1].content = "⚠ Sunucuya ulaşılamadı veya bağlantı koptu.";
     }
     aiBusy = false;
+    $("#btn-send-ai").disabled = false;
     drawAi();
   };
 
@@ -556,9 +687,12 @@ function renderAiView() {
   };
 }
 
-// ----------------- VİEW 2: GENEL SOHBET & ORTAK AI -----------------
+// ----------------- VİEW 2: GENEL SOHBET, GRUPLAR & PDF/MEDYA -----------------
 let lastMsgTime = 0;
 let groupAiBusy = false;
+let pendingAttachment = null;
+let pendingPdfDetails = null; // { file, numPages, extractedText, base64 }
+let myRooms = [];
 
 function filterBadWords(t) {
   let res = t;
@@ -571,28 +705,57 @@ function filterBadWords(t) {
   return res;
 }
 
+// 100 Sayfaya Kadar PDF Metin Çıkarıcı
+async function extractTextFromPdf(file) {
+  if (!window.pdfjsLib) throw new Error("PDF kütüphanesi yüklenemedi.");
+  const arrayBuffer = await file.arrayBuffer();
+  const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+  const pdf = await loadingTask.promise;
+  const totalPages = Math.min(pdf.numPages, 100);
+  let text = `[Belge Adı: ${file.name} | Toplam Sayfa: ${pdf.numPages} (${totalPages} sayfa tarandı)]\n\n`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageStrings = content.items.map(it => it.str);
+    text += `--- Sayfa ${i} ---\n` + pageStrings.join(" ") + "\n\n";
+  }
+  return { numPages: pdf.numPages, text: text.slice(0, 28000) };
+}
+
 function renderChatView() {
   const c = $("#tab-content");
   c.innerHTML = `
     <div class="ai-card">
+      <div class="room-selector" id="rooms-bar"></div>
+
       <div class="ai-topbar" style="margin-bottom:10px">
-        <div style="font-size:0.88rem;color:var(--text-muted)">
-          💡 <b>Ortak Yapay Zeka:</b> Mesajında <code style="color:var(--accent);font-weight:700">@ai</code> etiketi kullanırsan yapay zeka sohbete doğrudan katılıp yanıt verir!
+        <div style="font-size:0.88rem;color:var(--text-muted)" id="current-room-title">
+          🌐 <b>Genel Topluluk:</b> Herkese açık oda. <code style="color:var(--accent);font-weight:700">@ai</code> ile yapay zekayı dahil edebilirsin!
         </div>
-        <button class="btn-ghost btn-sm" id="btn-quick-ai">🤖 @ai'ya Sor</button>
+        <div style="display:flex;gap:6px">
+          <button class="btn-ghost btn-sm" id="btn-quick-ai">🤖 @ai'ya Sor</button>
+        </div>
       </div>
 
       <div class="chat-locked-bar ${appSettings.chatLocked && !isAdmin ? 'active' : ''}" id="chat-lock-msg">
         🔒 Sohbet şu anda yönetici tarafından geçici olarak kilitlenmiştir.
       </div>
 
-      <div class="chat-box" id="group-chat-box" style="height:60vh"></div>
+      <div class="chat-box" id="group-chat-box" style="height:54vh"></div>
+
+      <div class="attachment-preview" id="attachment-preview">
+        <span id="attachment-preview-text">📎 Seçilen dosya</span>
+        <button id="btn-remove-attachment" style="background:none;border:none;color:var(--danger);cursor:pointer;font-weight:900">&times; Kaldır</button>
+      </div>
+
+      <input type="file" id="chat-file-input" accept="image/*,application/pdf" style="display:none">
 
       <div class="input-bar">
-        <textarea id="group-input" rows="1" maxlength="300" placeholder="Topluluğa yaz veya @ai ile yapay zekaya sor..."></textarea>
+        <button class="btn-attach" id="btn-open-file" title="Görsel veya PDF Ekle (100 Sayfaya Kadar Destekler)">📎</button>
+        <textarea id="group-input" rows="1" maxlength="300" placeholder="Mesaj yaz veya PDF/Görsel ekle... (@ai ile sorabilirsin)"></textarea>
         <button class="btn-primary" id="btn-send-group">Gönder</button>
       </div>
-      <div id="slowmode-hint" style="font-size:0.75rem;color:var(--text-sub);margin-top:6px"></div>
     </div>
   `;
 
@@ -602,60 +765,262 @@ function renderChatView() {
     input.focus();
   };
 
-  let messages = [];
-  const drawChat = () => {
-    const box = $("#group-chat-box");
-    if (!box) return;
-    box.innerHTML = messages.map(([id, m]) => {
-      const isMe = m.uid === currentUser.uid;
-      const isAi = !!m.isAi;
-      const userPic = isAi ? null : userProfiles[m.uid]?.pp;
-      return `
-        <div class="msg-wrap ${isMe ? 'me' : ''} ${isAi ? 'ai-bot' : ''}">
-          ${isAi ? `<div class="msg-av" style="background:var(--accent)">🤖</div>` : av(m.uid, m.name, userPic)}
-          <div class="msg-bubble">
-            <div class="msg-meta">
-              <b>${esc(m.name)} ${isAi ? '<span class="badge" style="background:var(--accent);color:#10121a">Bot</span>' : ''}</b>
-              <span>${new Date(m.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>
-            </div>
-            <div>${esc(m.text)}</div>
-            ${isAdmin ? `
-              <div style="margin-top:8px;border-top:1px solid var(--border-subtle);padding-top:4px;display:flex;gap:6px">
-                <button class="btn-danger btn-sm" data-del-msg="${id}">Mesajı Sil</button>
-                ${!isAi ? `<button class="btn-ghost btn-sm" data-purge-user="${m.uid}" style="font-size:0.75rem">Tümünü Sil</button>` : ''}
-              </div>
-            ` : ''}
-          </div>
-        </div>
-      `;
-    }).join("");
-    box.scrollTop = box.scrollHeight;
+  $("#btn-open-file").onclick = () => $("#chat-file-input").click();
+  $("#btn-remove-attachment").onclick = () => {
+    pendingAttachment = null;
+    pendingPdfDetails = null;
+    $("#attachment-preview").classList.remove("active");
+    $("#chat-file-input").value = "";
+  };
 
-    if (isAdmin) {
-      $$("[data-del-msg]").forEach(b => b.onclick = () => remove(ref(db, "chat/" + b.dataset.delMsg)));
-      $$("[data-purge-user]").forEach(b => b.onclick = async () => {
-        if (!confirm("Bu kullanıcının attığı tüm mesajları silmek istediğine emin misin?")) return;
-        const uid = b.dataset.purgeUser;
-        const snap = await get(ref(db, "chat"));
-        const all = snap.val() || {};
-        const updates = {};
-        Object.entries(all).forEach(([mid, msg]) => {
-          if (msg.uid === uid) updates[`chat/${mid}`] = null;
-        });
-        await update(ref(db), updates);
-        showToast("Kullanıcının mesajları temizlendi.");
-      });
+  // Dosya Seçim & PDF Analiz Tetikleme
+  $("#chat-file-input").onchange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 8 * 1024 * 1024) {
+      showToast("Lütfen 8 MB'tan küçük bir dosya seçin.");
+      return;
+    }
+
+    const isImage = file.type.startsWith("image/");
+    const isPdf = file.type === "application/pdf";
+
+    if (!isImage && !isPdf) {
+      showToast("Sadece resim (JPEG, PNG) veya PDF yükleyebilirsiniz.");
+      return;
+    }
+
+    if (isImage) {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const maxSide = 900;
+        let w = img.width, h = img.height;
+        if (w > maxSide || h > maxSide) {
+          if (w > h) { h = Math.round((h * maxSide) / w); w = maxSide; }
+          else { w = Math.round((w * maxSide) / h); h = maxSide; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        const b64 = canvas.toDataURL("image/jpeg", 0.72);
+        pendingAttachment = {
+          type: "image",
+          data: b64,
+          name: file.name,
+          size: Math.round(file.size / 1024) + " KB"
+        };
+        $("#attachment-preview-text").innerHTML = `📷 <b>Görsel Eklendi:</b> ${esc(file.name)} (${pendingAttachment.size})`;
+        $("#attachment-preview").classList.add("active");
+      };
+      img.src = URL.createObjectURL(file);
+    } else {
+      // PDF Dosyası: 100 Sayfaya Kadar Metin Çıkarımı
+      showToast("PDF sayfaları taranıyor, lütfen bekleyin...");
+      try {
+        const { numPages, text } = await extractTextFromPdf(file);
+        
+        // Base64 oluştur (sohbette indirmek/açmak için)
+        const reader = new FileReader();
+        reader.onload = ev => {
+          pendingPdfDetails = {
+            file,
+            numPages,
+            extractedText: text,
+            dataUrl: ev.target.result,
+            size: Math.round(file.size / 1024) + " KB"
+          };
+
+          // PDF Onay Modalı Aç
+          const totalProLimit = DEFAULT_LIMITS.proDaily + (myBonusCredits.pro || 0);
+          const remainingPro = Math.max(0, totalProLimit - (currentUsageToday.pro || 0));
+          
+          $("#pdf-modal-desc").innerHTML = `<b>${esc(file.name)}</b> (${numPages} sayfa) belgesi tespit edildi. Baştan sona tüm sayfalar taranacak ve yapay zekaya aktarılacaktır.`;
+          $("#pdf-pro-status").innerHTML = `Kalan Pro Krediniz: <b>${remainingPro} / ${totalProLimit}</b>`;
+          $("#pdf-confirm-modal").classList.add("active");
+        };
+        reader.readAsDataURL(file);
+      } catch (err) {
+        showToast("PDF okunamadı veya taranamadı.");
+      }
     }
   };
 
-  unsubs.push(onValue(query(ref(db, "chat"), limitToLast(120)), snap => {
-    messages = Object.entries(snap.val() || {});
-    drawChat();
+  // PDF Modalı Aksiyonları
+  $("#btn-cancel-pdf-modal").onclick = () => {
+    $("#pdf-confirm-modal").classList.remove("active");
+    $("#btn-remove-attachment").click();
+  };
+
+  $("#btn-upload-pdf-only").onclick = () => {
+    if (!pendingPdfDetails) return;
+    pendingAttachment = {
+      type: "pdf",
+      data: pendingPdfDetails.dataUrl,
+      name: pendingPdfDetails.file.name,
+      size: pendingPdfDetails.size,
+      shouldAnalyze: false
+    };
+    $("#attachment-preview-text").innerHTML = `📄 <b>PDF:</b> ${esc(pendingPdfDetails.file.name)} (${pendingAttachment.size})`;
+    $("#attachment-preview").classList.add("active");
+    $("#pdf-confirm-modal").classList.remove("active");
+    showToast("PDF sohbete eklendi (AI analizi yapılmayacak).");
+  };
+
+  $("#btn-confirm-pdf-pro").onclick = () => {
+    if (!pendingPdfDetails) return;
+    const totalProLimit = DEFAULT_LIMITS.proDaily + (myBonusCredits.pro || 0);
+    const remainingPro = Math.max(0, totalProLimit - (currentUsageToday.pro || 0));
+
+    if (!isAdmin && remainingPro <= 0) {
+      showToast("Yetersiz Pro kredisi! PDF analizi için Pro krediye ihtiyacınız var.");
+      return;
+    }
+
+    pendingAttachment = {
+      type: "pdf",
+      data: pendingPdfDetails.dataUrl,
+      name: pendingPdfDetails.file.name,
+      size: pendingPdfDetails.size,
+      shouldAnalyze: true,
+      extractedText: pendingPdfDetails.extractedText,
+      numPages: pendingPdfDetails.numPages
+    };
+    $("#attachment-preview-text").innerHTML = `⚡ <b>PRO PDF Analiz Modu:</b> ${esc(pendingPdfDetails.file.name)} (${pendingPdfDetails.numPages} sayfa)`;
+    $("#attachment-preview").classList.add("active");
+    $("#pdf-confirm-modal").classList.remove("active");
+    showToast("PDF hazır! Mesajınızı yazıp Gönder'e basarak analizi başlatabilirsiniz.");
+  };
+
+  // Odaları (Grupları) Dinle ve Çiz
+  const drawRoomsBar = () => {
+    const bar = $("#rooms-bar");
+    if (!bar) return;
+
+    let html = `
+      <div class="room-pill ${currentRoomId === 'global' ? 'active' : ''}" data-room="global">
+        🌐 Genel Topluluk
+      </div>
+    `;
+
+    myRooms.forEach(r => {
+      html += `
+        <div class="room-pill ${currentRoomId === r.id ? 'active' : ''}" data-room="${esc(r.id)}">
+          💬 ${esc(r.name)} ${r.isAiIncluded ? '🤖' : ''}
+        </div>
+      `;
+    });
+
+    html += `
+      <div class="room-pill new-btn" id="btn-open-create-group">
+        ➕ Yeni Grup Kur
+      </div>
+    `;
+
+    bar.innerHTML = html;
+
+    $$("[data-room]").forEach(b => b.onclick = () => {
+      currentRoomId = b.dataset.room;
+      drawRoomsBar();
+      bindChatMessages();
+    });
+
+    $("#btn-open-create-group").onclick = () => {
+      $("#new-group-modal").classList.add("active");
+    };
+  };
+
+  unsubs.push(onValue(ref(db, "rooms"), snap => {
+    const all = snap.val() || {};
+    myRooms = Object.entries(all)
+      .map(([id, r]) => ({ id, ...r }))
+      .filter(r => isAdmin || r.createdBy === currentUser.uid || (r.members && r.members[currentUser.uid]));
+    drawRoomsBar();
   }));
 
+  // Mesajları Dinle ve Çiz
+  let messagesUnsub = null;
+  const bindChatMessages = () => {
+    if (messagesUnsub) messagesUnsub();
+
+    const titleEl = $("#current-room-title");
+    if (currentRoomId === "global") {
+      titleEl.innerHTML = `🌐 <b>Genel Topluluk:</b> Herkese açık oda. <code style="color:var(--accent);font-weight:700">@ai</code> ile yapay zekaya danışabilirsin.`;
+    } else {
+      const activeRoom = myRooms.find(r => r.id === currentRoomId);
+      titleEl.innerHTML = `👥 <b>Grup: ${esc(activeRoom?.name || 'Özel Oda')}</b> ${activeRoom?.isAiIncluded ? '<span class="badge" style="background:var(--accent);color:#10121a">AI Aktif</span>' : ''}`;
+    }
+
+    const messagesRef = currentRoomId === "global" ? query(ref(db, "chat"), limitToLast(120)) : query(ref(db, `rooms/${currentRoomId}/messages`), limitToLast(120));
+
+    messagesUnsub = onValue(messagesRef, snap => {
+      const msgs = Object.entries(snap.val() || {});
+      const box = $("#group-chat-box");
+      if (!box) return;
+
+      box.innerHTML = msgs.map(([id, m]) => {
+        const isMe = m.uid === currentUser.uid;
+        const isAi = !!m.isAi;
+        const userPic = isAi ? null : userProfiles[m.uid]?.pp;
+        const userTag = userProfiles[m.uid]?.tag || genUserTag(m.uid);
+
+        let mediaHtml = "";
+        if (m.fileType === "image" && m.fileData) {
+          mediaHtml = `<img src="${esc(m.fileData)}" class="msg-media-img" data-open-img="${esc(m.fileData)}">`;
+        } else if (m.fileType === "pdf" && m.fileData) {
+          mediaHtml = `
+            <a href="${esc(m.fileData)}" download="${esc(m.fileName || 'belge.pdf')}" class="msg-media-pdf">
+              <span class="pdf-icon">📄</span>
+              <div class="pdf-meta">
+                <b>${esc(m.fileName || 'Belge.pdf')}</b>
+                <small>${esc(m.fileSize || 'PDF')} · İndir / Aç</small>
+              </div>
+            </a>
+          `;
+        }
+
+        return `
+          <div class="msg-wrap ${isMe ? 'me' : ''} ${isAi ? 'ai-bot' : ''}">
+            ${isAi ? `<div class="msg-av" style="background:var(--accent)">🤖</div>` : av(m.uid, m.name, userPic)}
+            <div class="msg-bubble">
+              <div class="msg-meta">
+                <b>${esc(m.name)} <small style="color:var(--text-sub)">${esc(userTag)}</small> ${isAi ? '<span class="badge" style="background:var(--accent);color:#10121a">Bot</span>' : ''}</b>
+                <span>${new Date(m.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>
+              </div>
+              ${m.text ? `<div>${esc(m.text)}</div>` : ''}
+              ${mediaHtml}
+              ${isAdmin ? `
+                <div style="margin-top:8px;border-top:1px solid var(--border-subtle);padding-top:4px;display:flex;gap:6px">
+                  <button class="btn-danger btn-sm" data-del-chat-msg="${id}">Mesajı Sil</button>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      box.scrollTop = box.scrollHeight;
+
+      $$("[data-open-img]").forEach(img => img.onclick = () => {
+        $("#viewer-img").src = img.dataset.openImg;
+        $("#media-viewer-modal").classList.add("active");
+      });
+
+      if (isAdmin) {
+        $$("[data-del-chat-msg]").forEach(b => b.onclick = () => {
+          const path = currentRoomId === "global" ? `chat/${b.dataset.delChatMsg}` : `rooms/${currentRoomId}/messages/${b.dataset.delChatMsg}`;
+          remove(ref(db, path));
+        });
+      }
+    });
+  };
+
+  bindChatMessages();
+
+  // Mesaj Gönderme
   const sendGroup = async () => {
-    if (appSettings.chatLocked && !isAdmin) {
-      showToast("Sohbet şu anda kilitli.");
+    if (appSettings.chatLocked && !isAdmin && currentRoomId === "global") {
+      showToast("Genel sohbet şu anda kilitli.");
       return;
     }
 
@@ -669,40 +1034,70 @@ function renderChatView() {
 
     const now = Date.now();
     const interval = (appSettings.slowmode || 0) * 1000;
-    if (!isAdmin && now - lastMsgTime < Math.max(interval, 2000)) {
+    if (!isAdmin && currentRoomId === "global" && now - lastMsgTime < Math.max(interval, 2000)) {
       const waitSec = Math.ceil((Math.max(interval, 2000) - (now - lastMsgTime)) / 1000);
-      showToast(`Lütfen ${waitSec} saniye bekleyin.`);
+      showToast(`Lütfen ${waitSec} saniye bekleyin (Spam Koruması).`);
       return;
     }
 
     const input = $("#group-input");
     const rawText = input.value.trim();
-    if (!rawText) return;
+    if (!rawText && !pendingAttachment) return;
+
+    // Spam / Çift Tıklama Koruması
+    $("#btn-send-group").disabled = true;
 
     const filtered = filterBadWords(rawText);
     lastMsgTime = now;
     input.value = "";
 
-    // 1. Kullanıcının mesajını gruba gönder
-    await push(ref(db, "chat"), {
+    const msgPayload = {
       uid: currentUser.uid,
       name: (userProfiles[currentUser.uid]?.name || currentUser.displayName || "Kullanıcı").slice(0, 40),
       text: filtered,
       ts: now
-    });
+    };
 
-    // 2. @ai Etiketi Var mı? (Ortak Yapay Zeka Çağrısı)
-    if (/\b@ai\b/i.test(filtered) || /\b@yapay\b/i.test(filtered)) {
-      if (groupAiBusy) return;
+    let isPdfProAnalysis = false;
+    let pdfAnalysisPrompt = "";
+
+    if (pendingAttachment) {
+      msgPayload.fileType = pendingAttachment.type;
+      msgPayload.fileData = pendingAttachment.data;
+      msgPayload.fileName = pendingAttachment.name;
+      msgPayload.fileSize = pendingAttachment.size;
+      
+      if (pendingAttachment.shouldAnalyze) {
+        isPdfProAnalysis = true;
+        pdfAnalysisPrompt = `Belge Adı: ${pendingAttachment.name} (${pendingAttachment.numPages} sayfa)\nKullanıcı Notu: ${filtered || "Lütfen bu belgeyi detaylıca özetle ve analiz et."}\n\nBelge İçeriği:\n${pendingAttachment.extractedText}`;
+      }
+
+      pendingAttachment = null;
+      $("#attachment-preview").classList.remove("active");
+      $("#chat-file-input").value = "";
+    }
+
+    const targetRef = currentRoomId === "global" ? ref(db, "chat") : ref(db, `rooms/${currentRoomId}/messages`);
+    await push(targetRef, msgPayload);
+
+    // AI Çağrısı (PDF Analizi veya @ai Çağrısı)
+    const activeRoom = myRooms.find(r => r.id === currentRoomId);
+    const hasAiTag = (/\b@ai\b/i.test(filtered) || /\b@yapay\b/i.test(filtered));
+    const shouldInvokeAi = isPdfProAnalysis || (currentRoomId === "global" && hasAiTag) || (currentRoomId !== "global" && activeRoom?.isAiIncluded && hasAiTag);
+
+    if (shouldInvokeAi) {
+      if (groupAiBusy) {
+        $("#btn-send-group").disabled = false;
+        return;
+      }
       groupAiBusy = true;
-      const question = filtered.replace(/@ai|@yapay/gi, "").trim();
+      const question = isPdfProAnalysis ? pdfAnalysisPrompt : filtered.replace(/@ai|@yapay/gi, "").trim();
 
-      // Geçici düşünme mesajı
-      const tempRef = await push(ref(db, "chat"), {
+      const tempRef = await push(targetRef, {
         uid: "system_ai",
         isAi: true,
-        name: "Ne Yapay (AI)",
-        text: "Grup sorusunu düşünüyor… 💭",
+        name: isPdfProAnalysis ? "Ne Yapay (Pro Belge Analizi)" : "Ne Yapay (AI)",
+        text: isPdfProAnalysis ? "100 sayfaya kadar PDF taranıyor ve Pro model ile inceleniyor… ⏳" : "Düşünüyor… 💭",
         ts: Date.now()
       });
 
@@ -712,19 +1107,22 @@ function renderChatView() {
           method: "POST",
           headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
           body: JSON.stringify({
-            tier: "free",
+            tier: isPdfProAnalysis ? "pro" : "free",
             isGroup: true,
+            isPdfAnalysis: isPdfProAnalysis,
             messages: [{ role: "user", content: question || "Merhaba" }]
           })
         });
         const d = await res.json();
-        const reply = d.reply || "Üzgünüm, şu anda yanıt üretemedim.";
-        await update(ref(db, `chat/${tempRef.key}`), { text: reply });
+        const reply = d.reply || ("⚠ " + (d.error || "Üzgünüm, şu anda yanıt üretemedim."));
+        await update(ref(db, `${currentRoomId === 'global' ? 'chat' : `rooms/${currentRoomId}/messages`}/${tempRef.key}`), { text: reply });
       } catch {
-        await update(ref(db, `chat/${tempRef.key}`), { text: "⚠ AI sunucusuna ulaşılamadı." });
+        await update(ref(db, `${currentRoomId === 'global' ? 'chat' : `rooms/${currentRoomId}/messages`}/${tempRef.key}`), { text: "⚠ AI sunucusuna ulaşılamadı." });
       }
       groupAiBusy = false;
     }
+
+    $("#btn-send-group").disabled = false;
   };
 
   $("#btn-send-group").onclick = sendGroup;
@@ -736,16 +1134,74 @@ function renderChatView() {
   };
 }
 
+// Yeni Grup Oluşturma Modalı
+$("#btn-cancel-group").onclick = () => $("#new-group-modal").classList.remove("active");
+$("#btn-create-group").onclick = async () => {
+  const name = $("#input-group-name").value.trim();
+  const rawIds = $("#input-group-member-ids").value.trim();
+  const aiIncluded = $("#check-group-ai").checked;
+
+  if (!name) {
+    showToast("Lütfen bir grup adı girin.");
+    return;
+  }
+
+  const memberTags = rawIds.split(",").map(s => s.trim().toUpperCase()).filter(Boolean);
+  const members = { [currentUser.uid]: true };
+
+  Object.entries(allUsersData).forEach(([uid, u]) => {
+    const tag = (u.tag || genUserTag(uid)).toUpperCase();
+    if (memberTags.includes(tag)) {
+      members[uid] = true;
+    }
+  });
+
+  const newRoomRef = await push(ref(db, "rooms"), {
+    name,
+    createdBy: currentUser.uid,
+    isAiIncluded: aiIncluded,
+    members,
+    createdAt: Date.now()
+  });
+
+  $("#new-group-modal").classList.remove("active");
+  $("#input-group-name").value = "";
+  $("#input-group-member-ids").value = "";
+  showToast(`"${name}" grubu kuruldu!`);
+  currentRoomId = newRoomRef.key;
+  renderChatView();
+};
+
+$("#btn-close-viewer").onclick = () => $("#media-viewer-modal").classList.remove("active");
+
 // ----------------- VİEW 3: PROFİLİM -----------------
 function renderProfileView() {
   const c = $("#tab-content");
+  const myTag = genUserTag(currentUser.uid);
+
   c.innerHTML = `
     <div class="ai-card" style="max-width:550px;margin:0 auto">
       <div style="text-align:center;padding:20px 0">
         <div id="profile-pic-large" style="margin-bottom:14px;display:flex;justify-content:center"></div>
         <h2 style="font-size:1.3rem;margin-bottom:4px">${esc(currentUser.displayName || currentUser.email)}</h2>
-        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:16px">${esc(currentUser.email)}</p>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:12px">${esc(currentUser.email)}</p>
         
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;text-align:left">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <span style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;display:block">Benzersiz Kullanıcı ID'n:</span>
+              <b style="font-family:monospace;font-size:1.2rem;color:var(--accent)">${esc(myTag)}</b>
+            </div>
+            <button class="btn-ghost btn-sm" id="btn-copy-tag-prof">ID'yi Kopyala</button>
+          </div>
+          <small style="color:var(--text-sub);display:block;margin-top:6px">Arkadaşların grup kurarken bu ID'yi yazarak seni ekleyebilir.</small>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;text-align:left;font-size:0.83rem">
+          <b style="color:var(--text)">🕒 Günlük Kotalar:</b> Her sabah <b>09:00'da</b> sıfırlanır.<br>
+          <b style="color:var(--text)">📩 Destek:</b> Sorunlar için <code style="color:var(--accent)">coslxofficial@gmail.com</code> adresine mail atabilirsiniz.
+        </div>
+
         <div id="avatar-status-box" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;font-size:0.85rem;color:var(--text-muted);margin-bottom:18px"></div>
         
         <input type="file" id="avatar-file-input" accept="image/*" style="display:none">
@@ -753,6 +1209,11 @@ function renderProfileView() {
       </div>
     </div>
   `;
+
+  $("#btn-copy-tag-prof").onclick = () => {
+    navigator.clipboard.writeText(myTag);
+    showToast(`ID kopyalandı: ${myTag}`);
+  };
 
   const drawPic = () => {
     const picDiv = $("#profile-pic-large");
@@ -804,7 +1265,6 @@ function renderAdminView() {
       <span class="badge badge-ok">Tam Yetki</span>
     </div>
 
-    <!-- İstatistikler -->
     <div class="stats-grid">
       <div class="stat-card">
         <span class="lbl">Toplam Kullanıcı</span>
@@ -824,7 +1284,6 @@ function renderAdminView() {
       </div>
     </div>
 
-    <!-- Alt Sekmeler -->
     <div class="admin-subnav">
       <button class="subnav-btn active" data-sub="logs">🚨 Kelime Alarmları & Loglar</button>
       <button class="subnav-btn" data-sub="users">👥 Kullanıcılar & Kredi</button>
@@ -871,15 +1330,14 @@ function renderAdminView() {
   switchSub("logs");
 }
 
-// 4.1. Kelime Alarmları & AI Prompt Denetim Masası
+// 4.1. Alarmlar & Loglar
 function renderAdminLogsAndAlerts() {
   const c = $("#admin-sub-content");
   c.innerHTML = `
-    <!-- Alarm Kelimeleri Listesi -->
     <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
       <h3 style="margin-bottom:8px">🎯 Tetikleyici Kelime Alarmı (Watchlist)</h3>
       <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">
-        Kullanıcılar yapay zekaya veya sohbete bu kelimelerden birini yazarsa anında aşağıdaki listede <b>KIRMIZI ALARM</b> olarak işaretlenir ve bildirilir.
+        Kullanıcılar yapay zekaya veya sohbete bu kelimelerden birini yazarsa anında <b>KIRMIZI ALARM</b> olarak işaretlenir.
       </p>
 
       <div style="display:flex;gap:8px;margin-bottom:14px">
@@ -890,7 +1348,6 @@ function renderAdminLogsAndAlerts() {
       <div id="watch-words-chips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
     </div>
 
-    <!-- Canlı Log ve Alarm Akışı -->
     <div class="data-table-wrap">
       <div class="table-header">
         <h3>🔍 Ne Yazdılar? (Yapay Zeka ve Sohbet Logları)</h3>
@@ -903,7 +1360,6 @@ function renderAdminLogsAndAlerts() {
     </div>
   `;
 
-  // Alarm Kelimeleri
   const drawWatchWords = () => {
     const div = $("#watch-words-chips");
     if (!div) return;
@@ -936,7 +1392,6 @@ function renderAdminLogsAndAlerts() {
     drawWatchWords();
   };
 
-  // Logları Çiz
   let onlyFlagged = false;
   let allLogs = [];
 
@@ -956,14 +1411,14 @@ function renderAdminLogsAndAlerts() {
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
             <div>
               <b>${esc(l.name || l.email)}</b>
-              <small>${esc(l.email)} · ${new Date(l.ts).toLocaleString()} · ${l.isGroup ? '<b style="color:var(--accent)">Grup AI</b>' : 'Özel AI'}</small>
+              <small>${esc(l.email)} · ${new Date(l.ts).toLocaleString()} · ${l.isGroup ? '<b style="color:var(--accent)">Grup AI</b>' : 'Özel AI'} ${l.isPdfAnalysis ? '· <b style="color:var(--danger)">PDF Analizi</b>' : ''}</small>
             </div>
             <div>
               ${l.flagged ? `<span class="badge badge-flagged">🚨 ALARM: ${esc(l.triggeredWord)}</span>` : `<span class="badge badge-ok">Temiz</span>`}
             </div>
           </div>
           <div style="background:var(--surface);padding:8px 12px;border-radius:var(--radius-sm);font-size:0.88rem;margin-bottom:6px;border:1px solid var(--border)">
-            <b style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase">Kullanıcının Yazdığı:</b><br>
+            <b style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase">Kullanıcının Yazdığı / Belge:</b><br>
             ${esc(l.prompt)}
           </div>
           <div style="font-size:0.8rem;color:var(--text-muted)">
@@ -1002,7 +1457,7 @@ function renderAdminLogsAndAlerts() {
   };
 }
 
-// 4.2. Kullanıcı Masası (Kredi Verme + Ban + Susturma)
+// 4.2. Kullanıcılar & Kredi
 let targetCreditUid = null;
 
 function renderAdminUsers() {
@@ -1011,7 +1466,7 @@ function renderAdminUsers() {
     <div class="data-table-wrap">
       <div class="table-header">
         <h3>Kayıtlı Kullanıcılar & Kredi Tanımlama</h3>
-        <input id="search-users" placeholder="İsim veya e-posta ara..." style="max-width:240px;padding:6px 12px;font-size:0.85rem">
+        <input id="search-users" placeholder="İsim, ID veya e-posta ara..." style="max-width:240px;padding:6px 12px;font-size:0.85rem">
       </div>
       <div id="users-table-list"></div>
     </div>
@@ -1024,12 +1479,14 @@ function renderAdminUsers() {
 
     const filtered = users.filter(([id, u]) => {
       const q = filter.toLowerCase();
-      return (u.name || "").toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q);
+      const tag = (u.tag || genUserTag(id)).toLowerCase();
+      return (u.name || "").toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q) || tag.includes(q);
     });
 
     list.innerHTML = filtered.map(([id, u]) => {
       const isMuted = u.mutedUntil && u.mutedUntil > Date.now();
       const userPic = userProfiles[id]?.pp;
+      const userTag = u.tag || genUserTag(id);
       const bFree = u.bonusCredits?.free || 0;
       const bPro = u.bonusCredits?.pro || 0;
       return `
@@ -1037,7 +1494,7 @@ function renderAdminUsers() {
           <div class="item-info">
             ${av(id, u.name, userPic)}
             <div>
-              <b>${esc(u.name || "İsimsiz")} ${u.banned ? `<span class="badge badge-banned">Banlı</span>` : ''} ${isMuted ? `<span class="badge badge-muted">Susturuldu</span>` : ''}</b>
+              <b>${esc(u.name || "İsimsiz")} <span class="user-id-tag">${esc(userTag)}</span> ${u.banned ? `<span class="badge badge-banned">Banlı</span>` : ''} ${isMuted ? `<span class="badge badge-muted">Susturuldu</span>` : ''}</b>
               <small>${esc(u.email)} · Kod: ${esc(u.code || "-")}</small>
               <div style="margin-top:3px">
                 <span class="badge badge-bonus">Ekstra Hak: +${bFree} Free · +${bPro} Pro</span>
@@ -1059,12 +1516,11 @@ function renderAdminUsers() {
       `;
     }).join("") || `<div style="padding:20px;text-align:center;color:var(--text-sub)">Kullanıcı bulunamadı.</div>`;
 
-    // Kredi Modalı Açma
     $$("[data-grant-credit]").forEach(b => b.onclick = () => {
       const uid = b.dataset.grantCredit;
       const u = users.find(x => x[0] === uid)?.[1];
       targetCreditUid = uid;
-      $("#modal-user-target").textContent = `${u.name || u.email} (${u.email})`;
+      $("#modal-user-target").textContent = `${u.name || u.email} (${u.tag || genUserTag(uid)})`;
       $("#input-bonus-free").value = u.bonusCredits?.free || 0;
       $("#input-bonus-pro").value = u.bonusCredits?.pro || 0;
       $("#credit-modal").classList.add("active");
@@ -1094,7 +1550,6 @@ function renderAdminUsers() {
   $("#search-users").oninput = e => drawUsers(e.target.value);
 }
 
-// Modal Kapatma & Kaydetme
 $("#btn-cancel-modal").onclick = () => $("#credit-modal").classList.remove("active");
 $("#btn-save-credits").onclick = async () => {
   if (!targetCreditUid) return;
@@ -1122,7 +1577,7 @@ function renderAdminModeration() {
             <input type="checkbox" id="toggle-lock-chat" ${appSettings.chatLocked ? "checked" : ""}>
             <span class="slider"></span>
           </label>
-          <b>Sohbeti Tamamen Kilitle (Sadece Admin Yazabilir)</b>
+          <b>Genel Sohbeti Kilitle (Sadece Admin Yazabilir)</b>
         </label>
       </div>
 
@@ -1132,17 +1587,16 @@ function renderAdminModeration() {
           <option value="0" ${appSettings.slowmode === 0 ? "selected" : ""}>Kapalı (Varsayılan 2 sn)</option>
           <option value="5" ${appSettings.slowmode === 5 ? "selected" : ""}>5 Saniye Arayla</option>
           <option value="10" ${appSettings.slowmode === 10 ? "selected" : ""}>10 Saniye Arayla</option>
-          <option value="30" ${appSettings.slowmode === 30 ? "selected" : ""}>30 Saniye Arayla (Spam Koruması)</option>
+          <option value="30" ${appSettings.slowmode === 30 ? "selected" : ""}>30 Saniye Arayla</option>
           <option value="60" ${appSettings.slowmode === 60 ? "selected" : ""}>1 Dakika Arayla</option>
         </select>
       </div>
 
       <div style="display:flex;gap:10px">
-        <button class="btn-danger" id="btn-nuke-chat">💣 Tüm Sohbeti Sıfırla (Temizle)</button>
+        <button class="btn-danger" id="btn-nuke-chat">💣 Genel Sohbeti Sıfırla (Temizle)</button>
       </div>
     </div>
 
-    <!-- Yasaklı Kelime Listesi -->
     <div class="data-table-wrap" style="padding:18px">
       <h3 style="margin-bottom:10px">🚫 Sansürlenecek Kelimeler (Sohbette *** Olur)</h3>
       <div style="display:flex;gap:8px;margin-bottom:14px">
@@ -1164,9 +1618,9 @@ function renderAdminModeration() {
   };
 
   $("#btn-nuke-chat").onclick = async () => {
-    if (!confirm("DİKKAT: Sohbetteki TÜM mesajlar kalıcı olarak silinecek! Onaylıyor musun?")) return;
+    if (!confirm("DİKKAT: Genel sohbetteki TÜM mesajlar kalıcı olarak silinecek! Onaylıyor musun?")) return;
     await remove(ref(db, "chat"));
-    showToast("Sohbet tamamen temizlendi!");
+    showToast("Genel sohbet tamamen temizlendi!");
   };
 
   const drawWords = () => {
@@ -1348,7 +1802,6 @@ function renderAdminCodes() {
 function renderAdminSettings() {
   const c = $("#admin-sub-content");
   c.innerHTML = `
-    <!-- Global Duyuru -->
     <div class="data-table-wrap" style="padding:18px;margin-bottom:16px">
       <h3 style="margin-bottom:10px">📢 Tüm Kullanıcılara Canlı Duyuru Yayınla</h3>
       <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">Buraya yazacağınız duyuru tüm kullanıcıların ekranının en üstünde sarı şerit olarak görünür. Kaldırmak için boş bırakıp kaydedin.</p>
@@ -1358,7 +1811,6 @@ function renderAdminSettings() {
       </div>
     </div>
 
-    <!-- Modelleri Aç / Kapat -->
     <div class="data-table-wrap" style="padding:18px">
       <h3 style="margin-bottom:12px">🤖 Model Kullanım İzinleri</h3>
       <div style="display:flex;flex-direction:column;gap:14px">
@@ -1373,8 +1825,8 @@ function renderAdminSettings() {
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-subtle);padding-top:14px">
           <div>
-            <b>DeepSeek Reasoner (Pro Model)</b>
-            <small style="display:block;color:var(--text-muted)">Varsayılan günlük 4 mesaj hakkı · Akıl yürütme</small>
+            <b>DeepSeek Reasoner (Pro Model & PDF Analizi)</b>
+            <small style="display:block;color:var(--text-muted)">Varsayılan günlük 4 mesaj hakkı · 100 sayfa PDF desteği</small>
           </div>
           <button class="btn-sm ${appSettings.models.pro !== false ? 'btn-ghost' : 'btn-primary'}" id="btn-toggle-pro">
             ${appSettings.models.pro !== false ? "Kullanıma Kapat" : "Kullanıma Aç"}
