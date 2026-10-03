@@ -173,6 +173,10 @@ input:checked + .slider:before {transform:translateX(20px);background-color:#181
 
 @keyframes fadeIn {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideDown {from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+.chat-locked-bar {display:none;background:rgba(255,82,99,0.12);border:1px solid var(--danger);color:var(--danger);padding:10px 14px;border-radius:var(--radius-sm);text-align:center;font-size:0.88rem;font-weight:600;margin-bottom:12px}
+.chat-locked-bar.active {display:block}
+
 </style>
 </head>
 <body>
@@ -227,6 +231,36 @@ input:checked + .slider:before {transform:translateX(20px);background-color:#181
       <button class="btn-primary" id="btn-confirm-pdf-pro">Onayla ve Pro Model ile İşle (1 Kredi) 🚀</button>
       <button class="btn-ghost" id="btn-upload-pdf-only">Yalnızca Sohbete Yükle (AI Analizi Yapma)</button>
       <button class="btn-danger btn-sm" id="btn-cancel-pdf-modal" style="margin-top:4px">İptal Et</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 2.5. ARKADAŞ EKLE VE DM BAŞLAT MODALI -->
+<div class="modal-overlay" id="add-friend-modal">
+  <div class="modal-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <span style="font-size:1.8rem">🔍</span>
+      <div>
+        <h3 style="font-size:1.15rem">Arkadaş Ekle & Özel Sohbet (DM)</h3>
+        <small style="color:var(--text-muted)">Arkadaşının ID'sini girerek doğrudan 1'e 1 özel sohbet başlat.</small>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <label style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:4px">Arkadaşının Kullanıcı ID'si veya İsmi:</label>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="input-search-friend-id" placeholder="Örn: #NY-80072 veya isim..." style="flex:1">
+        <button class="btn-primary" id="btn-search-friend">Ara</button>
+      </div>
+    </div>
+
+    <div id="friend-search-results" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+      <div style="padding:16px;text-align:center;color:var(--text-sub);font-size:0.85rem">Aramak için yukarıya arkadaşının ID'sini yazın.</div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end">
+      <button class="btn-ghost" id="btn-close-friend-modal">Kapat</button>
     </div>
   </div>
 </div>
@@ -666,7 +700,8 @@ function renderAiView() {
       const data = await res.json();
       aiHistory[aiHistory.length - 1].content = data.reply || ("⚠ " + (data.error || "Bilinmeyen hata"));
     } catch (err) {
-      aiHistory[aiHistory.length - 1].content = "⚠ Sunucuya ulaşılamadı veya bağlantı koptu.";
+      console.error("AI Fetch Hatası:", err);
+      aiHistory[aiHistory.length - 1].content = "⚠ Sunucuya ulaşılamadı: " + (err.message || "Bağlantı hatası");
     }
     aiBusy = false;
     $("#btn-send-ai").disabled = false;
@@ -727,19 +762,37 @@ function renderChatView() {
   const c = $("#tab-content");
   c.innerHTML = `
     <div class="ai-card">
+      <!-- ID ve Hızlı Aksiyon Kutusu -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:0.85rem;color:var(--text-muted)">Senin ID'n:</span>
+          <b style="font-family:monospace;color:var(--accent);font-size:0.95rem;background:rgba(255,184,77,0.12);padding:2px 8px;border-radius:6px;border:1px solid var(--accent)" id="chat-my-id-display">-</b>
+          <button class="btn-ghost btn-sm" id="btn-copy-id-chat" style="padding:4px 8px;font-size:0.75rem">Kopyala</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-primary btn-sm" id="btn-open-add-friend" style="display:flex;align-items:center;gap:6px">
+            <span>➕</span> <b>Arkadaş Ekle / DM Başlat</b>
+          </button>
+          <button class="btn-ghost btn-sm" id="btn-open-create-group-top" style="display:flex;align-items:center;gap:6px">
+            <span>👥</span> <b>Yeni Grup Kur</b>
+          </button>
+        </div>
+      </div>
+
+      <!-- Odalar & Özel Sohbetler Listesi -->
       <div class="room-selector" id="rooms-bar"></div>
 
       <div class="ai-topbar" style="margin-bottom:10px">
         <div style="font-size:0.88rem;color:var(--text-muted)" id="current-room-title">
-          🌐 <b>Genel Topluluk:</b> Herkese açık oda. <code style="color:var(--accent);font-weight:700">@ai</code> ile yapay zekayı dahil edebilirsin!
+          🌐 <b>Genel Topluluk:</b> Herkese açık oda.
         </div>
         <div style="display:flex;gap:6px">
           <button class="btn-ghost btn-sm" id="btn-quick-ai">🤖 @ai'ya Sor</button>
         </div>
       </div>
 
-      <div class="chat-locked-bar ${appSettings.chatLocked && !isAdmin ? 'active' : ''}" id="chat-lock-msg">
-        🔒 Sohbet şu anda yönetici tarafından geçici olarak kilitlenmiştir.
+      <div class="chat-locked-bar ${appSettings.chatLocked ? 'active' : ''}" id="chat-lock-msg">
+        🔒 Sohbet şu anda kilitlidir ${isAdmin ? "(Üyeler yazamaz, sadece siz yazabilirsiniz)" : "(Yönetici tarafından geçici olarak kilitlenmiştir)"}.
       </div>
 
       <div class="chat-box" id="group-chat-box" style="height:54vh"></div>
@@ -892,7 +945,28 @@ function renderChatView() {
     showToast("PDF hazır! Mesajınızı yazıp Gönder'e basarak analizi başlatabilirsiniz.");
   };
 
-  // Odaları (Grupları) Dinle ve Çiz
+  // Kullanıcı ID'sini Başlıkta Göster
+  const myTag = genUserTag(currentUser.uid);
+  const myIdDisplay = $("#chat-my-id-display");
+  if (myIdDisplay) myIdDisplay.textContent = myTag;
+  const copyBtn = $("#btn-copy-id-chat");
+  if (copyBtn) copyBtn.onclick = () => {
+    navigator.clipboard.writeText(myTag);
+    showToast(`ID panoya kopyalandı: ${myTag}`);
+  };
+
+  // Buton Olayları (Modal Açma)
+  const openFriendBtn = $("#btn-open-add-friend");
+  if (openFriendBtn) openFriendBtn.onclick = () => {
+    $("#add-friend-modal").classList.add("active");
+    $("#input-search-friend-id").focus();
+  };
+  const openGroupBtn = $("#btn-open-create-group-top");
+  if (openGroupBtn) openGroupBtn.onclick = () => {
+    $("#new-group-modal").classList.add("active");
+  };
+
+  // Odaları (Genel, DM ve Gruplar) Çiz
   const drawRoomsBar = () => {
     const bar = $("#rooms-bar");
     if (!bar) return;
@@ -904,18 +978,21 @@ function renderChatView() {
     `;
 
     myRooms.forEach(r => {
+      let displayName = esc(r.name || "Sohbet");
+      if (r.type === "dm") {
+        const otherUid = Object.keys(r.members || {}).find(u => u !== currentUser.uid) || currentUser.uid;
+        const otherName = userProfiles[otherUid]?.name || allUsersData[otherUid]?.name || "Arkadaş";
+        displayName = `💬 ${esc(otherName)} (${esc(genUserTag(otherUid))})`;
+      } else {
+        displayName = `👥 ${esc(r.name)} ${r.isAiIncluded ? '🤖' : ''}`;
+      }
+
       html += `
         <div class="room-pill ${currentRoomId === r.id ? 'active' : ''}" data-room="${esc(r.id)}">
-          💬 ${esc(r.name)} ${r.isAiIncluded ? '🤖' : ''}
+          ${displayName}
         </div>
       `;
     });
-
-    html += `
-      <div class="room-pill new-btn" id="btn-open-create-group">
-        ➕ Yeni Grup Kur
-      </div>
-    `;
 
     bar.innerHTML = html;
 
@@ -924,11 +1001,10 @@ function renderChatView() {
       drawRoomsBar();
       bindChatMessages();
     });
-
-    $("#btn-open-create-group").onclick = () => {
-      $("#new-group-modal").classList.add("active");
-    };
   };
+
+  // İlk açılışta hemen çiz
+  drawRoomsBar();
 
   unsubs.push(onValue(ref(db, "rooms"), snap => {
     const all = snap.val() || {};
@@ -1173,6 +1249,84 @@ $("#btn-create-group").onclick = async () => {
 };
 
 $("#btn-close-viewer").onclick = () => $("#media-viewer-modal").classList.remove("active");
+
+// Arkadaş Arama ve DM Başlatma Mantığı
+$("#btn-close-friend-modal").onclick = () => $("#add-friend-modal").classList.remove("active");
+
+const searchFriendInput = $("#input-search-friend-id");
+const doSearchFriend = () => {
+  const query = (searchFriendInput.value || "").trim().toLowerCase();
+  const resultsDiv = $("#friend-search-results");
+  if (!query) {
+    resultsDiv.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-sub);font-size:0.85rem">Aramak için yukarıya arkadaşının ID'sini yazın.</div>`;
+    return;
+  }
+
+  const matches = Object.entries(allUsersData).filter(([uid, u]) => {
+    if (uid === currentUser.uid) return false;
+    const tag = (u.tag || genUserTag(uid)).toLowerCase();
+    const name = (u.name || "").toLowerCase();
+    const email = (u.email || "").toLowerCase();
+    return tag.includes(query) || name.includes(query) || email.includes(query);
+  });
+
+  if (!matches.length) {
+    resultsDiv.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-sub);font-size:0.85rem">Bu ID veya isimle eşleşen kullanıcı bulunamadı.</div>`;
+    return;
+  }
+
+  resultsDiv.innerHTML = matches.map(([uid, u]) => {
+    const pic = userProfiles[uid]?.pp;
+    const tag = u.tag || genUserTag(uid);
+    return `
+      <div class="list-item" style="background:var(--surface);border-radius:var(--radius-sm);padding:10px 14px">
+        <div class="item-info">
+          ${av(uid, u.name, pic)}
+          <div>
+            <b>${esc(u.name || u.email)} <span class="user-id-tag">${esc(tag)}</span></b>
+            <small>${esc(u.email)}</small>
+          </div>
+        </div>
+        <button class="btn-primary btn-sm" data-start-dm="${uid}">💬 DM Başlat</button>
+      </div>
+    `;
+  }).join("");
+
+  $$("[data-start-dm]").forEach(btn => btn.onclick = async () => {
+    const targetUid = btn.dataset.startDm;
+    const targetUser = allUsersData[targetUid] || {};
+    const targetName = targetUser.name || "Arkadaş";
+
+    // Daha önce aralarında DM odası kurulmuş mu kontrol et
+    let existingRoom = myRooms.find(r => r.type === "dm" && r.members && r.members[targetUid] && r.members[currentUser.uid]);
+    
+    if (existingRoom) {
+      currentRoomId = existingRoom.id;
+      showToast(`${targetName} ile mevcut sohbete geçildi.`);
+    } else {
+      const newRoom = await push(ref(db, "rooms"), {
+        type: "dm",
+        name: targetName,
+        createdBy: currentUser.uid,
+        isAiIncluded: true,
+        members: {
+          [currentUser.uid]: true,
+          [targetUid]: true
+        },
+        createdAt: Date.now()
+      });
+      currentRoomId = newRoom.key;
+      showToast(`${targetName} ile yeni özel sohbet başlatıldı!`);
+    }
+
+    $("#add-friend-modal").classList.remove("active");
+    renderChatView();
+  });
+};
+
+$("#btn-search-friend").onclick = doSearchFriend;
+searchFriendInput.oninput = doSearchFriend;
+
 
 // ----------------- VİEW 3: PROFİLİM -----------------
 function renderProfileView() {
